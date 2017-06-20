@@ -19,7 +19,7 @@ namespace TweetGazer.Behaviors
         }
 
         public static readonly DependencyProperty AddingScrollProperty =
-            DependencyProperty.RegisterAttached("AddingScroll", typeof(Types), typeof(ItemsControlBehavior), new PropertyMetadata(Types.Null, AddingScroll_Changed));
+            DependencyProperty.RegisterAttached("AddingScroll", typeof(Types), typeof(ItemsControlBehavior), new PropertyMetadata(Types.Others, AddingScroll_Changed));
 
         private static void AddingScroll_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
@@ -81,12 +81,12 @@ namespace TweetGazer.Behaviors
                 }
             }
         }
+    }
 
-        public enum Types
-        {
-            Null,
-            Timeline,
-            Statuses
-        }
+    public enum Types
+    {
+        Timeline,
+        Statuses,
+        Others
     }
 }

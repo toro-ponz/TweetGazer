@@ -40,7 +40,7 @@ namespace TweetGazer.Models.MainWindow
         /// <summary>
         /// Flyoutを開けるかどうかの判定
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Flyoutを開けるかどうか</returns>
         public virtual bool OpenConditions()
         {
             if (AccountTokens.TokensCount == 0)

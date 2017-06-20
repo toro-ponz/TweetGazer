@@ -7,9 +7,9 @@
     xmlns:ViewModels="clr-namespace:TweetGazer.ViewModels"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    Title="TweetGazer"
     Width="1000"
     Height="700"
-    Title="TweetGazer"
     SaveWindowPosition="True"
     WindowStartupLocation="CenterScreen">
 
@@ -66,7 +66,9 @@
             <StaticResource ResourceKey="AddTimelineFlyout" />
             <StaticResource ResourceKey="MentionsFlyout" />
             <StaticResource ResourceKey="NoticeFlyout" />
+            <StaticResource ResourceKey="DirectMessagesFlyout" />
             <StaticResource ResourceKey="AccountSettingsFlyout" />
+            <StaticResource ResourceKey="SearchFlyout" />
             <StaticResource ResourceKey="ApplicationSettingsFlyout" />
         </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
@@ -164,6 +166,11 @@
                         </Grid>
                     </Button>
                     <Button Height="50" Style="{StaticResource UwpLikeButtonStyle2}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="ToggleOpen" TargetObject="{Binding Path=DirectMessages}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <ContentControl Margin="10" ContentTemplate="{StaticResource FrontColorDirectMessageIcon}" />
                     </Button>
                     <Button Height="50" Style="{StaticResource UwpLikeButtonStyle2}">
@@ -184,10 +191,12 @@
                         </i:Interaction.Triggers>
                         <ContentControl Margin="10" ContentTemplate="{StaticResource FrontColorLinkIcon}" />
                     </Button>
-                    <Button
-                        Height="50"
-                        IsEnabled="False"
-                        Style="{StaticResource UwpLikeButtonStyle2}">
+                    <Button Height="50" Style="{StaticResource UwpLikeButtonStyle2}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="ToggleOpen" TargetObject="{Binding Path=Search}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <ContentControl Margin="10" ContentTemplate="{StaticResource FrontColorSearchIcon}" />
                     </Button>
                     <Button Height="50" Style="{StaticResource UwpLikeButtonStyle2}">
@@ -605,8 +614,8 @@
                             HorizontalAlignment="Stretch"
                             Background="White"
                             FontSize="20"
-                            IsEnabled="{Binding Path=IsPinTextBoxEnabled, Mode=OneWay}"
                             Foreground="Black"
+                            IsEnabled="{Binding Path=IsPinTextBoxEnabled, Mode=OneWay}"
                             Text="{Binding Path=Pin, Mode=TwoWay}" />
                         <TextBlock
                             HorizontalAlignment="Stretch"
@@ -617,8 +626,8 @@
                         <Button
                             HorizontalAlignment="Stretch"
                             Content="認証"
-                            IsEnabled="{Binding Path=IsPinTextBoxEnabled, Mode=OneWay}"
                             FontSize="20"
+                            IsEnabled="{Binding Path=IsPinTextBoxEnabled, Mode=OneWay}"
                             Style="{StaticResource AccentedSquareButtonStyle}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">

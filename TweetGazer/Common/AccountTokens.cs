@@ -193,7 +193,7 @@ namespace TweetGazer.Common
             }
         }
 
-        public static async Task<ListedResponse<DirectMessage>> LoadReceiveDirectMessagesAsync(int suffix)
+        public static async Task<ListedResponse<CoreTweet.DirectMessage>> LoadReceiveDirectMessagesAsync(int suffix)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
                 return null;
@@ -209,7 +209,7 @@ namespace TweetGazer.Common
             }
         }
 
-        public static async Task<ListedResponse<DirectMessage>> LoadSentDirectMessagesAsync(int suffix)
+        public static async Task<ListedResponse<CoreTweet.DirectMessage>> LoadSentDirectMessagesAsync(int suffix)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
                 return null;
