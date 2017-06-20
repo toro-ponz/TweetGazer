@@ -1,0 +1,1188 @@
+﻿using CoreTweet;
+using CoreTweet.Streaming;
+using Livet;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Windows;
+using System.Windows.Data;
+using TweetGazer.Common;
+using TweetGazer.Models.Timeline;
+using TweetGazer.ViewModels;
+
+namespace TweetGazer.Models
+{
+    public class TimelineModel : NotificationObject, IDisposable
+    {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="data">タイムラインデータ</param>
+        public TimelineModel(TimelineData data)
+        {
+            this.Data = data;
+
+            this.Disposables = new List<IDisposable>();
+            this.Timers = new List<Timer>();
+            this._ProgressRingVisibility = Visibility.Collapsed;
+            this._IsVisibleSettings = false;
+
+            this._IsVisibleRetweet = true;
+            this._IsVisibleReply = true;
+            this._IsVisibleIncludeImagesStatus = true;
+            this._IsVisibleIncludeGifStatus = true;
+            this._IsVisibleIncludeVideoStatus = true;
+            this._IsVisibleIncludeLinkStatus = true;
+            this._IsVisibleOtherStatus = true;
+
+            this.TimelineItems = new ObservableCollection<TimelineItemProperties>();
+            BindingOperations.EnableCollectionSynchronization(this.TimelineItems, new object());
+            this.TimelineNotice = new ObservableCollection<TimelineNotice>();
+            BindingOperations.EnableCollectionSynchronization(this.TimelineNotice, new object());
+
+            if (this.Data == null)
+                this.Data = new TimelineData();
+
+            this.Data.SinceId = null;
+            this.Data.PageSuffix = this.Data.PageSuffix;
+
+            this.Initialize(this.Data.CurrentPage);
+            this.Filtering();
+        }
+
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="pageData">タイムラインデータ</param>
+        public async void Initialize(TimelinePageData pageData)
+        {
+            //ストリームを切断
+            if (this.Disposables != null)
+            {
+                foreach (var disposable in this.Disposables)
+                {
+                    disposable.Dispose();
+                }
+            }
+
+            //タイマーを削除
+            if (this.Timers != null)
+            {
+                foreach (var timer in this.Timers)
+                {
+                    timer.Stop();
+                }
+            }
+
+            this.SetTitle();
+            this.StartStreaming();
+            await this.Update();
+        }
+
+        /// <summary>
+        /// TLを最初のページの最上部にする
+        /// </summary>
+        public void Home()
+        {
+            this.Up();
+            if (this.Data.PageSuffix == 0 || this.Data.Pages.Count < 2)
+                return;
+
+            while (1 < this.Data.Pages.Count)
+                this.Data.Pages.RemoveAt(1);
+
+            this.Data.PageSuffix = 0;
+            this.TimelineItems.Clear();
+            this.Initialize(this.Data.CurrentPage);
+            this.VerticalOffset = 0;
+        }
+
+        /// <summary>
+        /// 更新する
+        /// </summary>
+        /// <param name="maxId">取得するツイートの最大値(ID)</param>
+        /// <returns></returns>
+        public async Task<bool> Update(long? maxId = null)
+        {
+            if (maxId == null)
+                this.TimelineItems.Clear();
+
+            if (this.IsLoading)
+                return false;
+
+            this.IsLoading = true;
+            if (maxId == null)
+            {
+                ProgressRingVisibility = Visibility.Visible;
+                CommonMethods.UpdateUI();
+            }
+
+            IEnumerable<Status> loadedTimeline = null;
+            try
+            {
+                switch (this.Data.CurrentPage.TimelineType)
+                {
+                    case TimelineType.Home:
+                        loadedTimeline = await AccountTokens.LoadHomeTimelineAsync(this.Data.TokenSuffix, maxId);
+                        break;
+                    case TimelineType.User:
+                        var user = await AccountTokens.ShowUserAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId);
+                        if (user != null)
+                        {
+                            //ユーザー概要がない場合は追加
+                            if (this.TimelineItems.Count == 0)
+                            {
+                                this.TimelineItems.Add(new TimelineItemProperties(this, user));
+                                this.TimelineItems.Add(new TimelineItemProperties(this, this.Data.CurrentPage.UserTimelineTab));
+                            }
+
+                            var excludeReplies = false;
+                            //リプライを省く時
+                            if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Tweets)
+                                excludeReplies = true;
+
+                            //いいねタブの時
+                            if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Favorites)
+                                loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, maxId);
+                            //メディアタブの時
+                            else if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Media)
+                            {
+                                loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, maxId, null, false);
+                                if (loadedTimeline != null && loadedTimeline.Count() != 0)
+                                {
+                                    var nextMaxId = loadedTimeline.Last().Id - 1;
+                                    loadedTimeline = loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).ToList();
+
+                                    //メディアの数は最低15件ずつ読み込む
+                                    while (loadedTimeline.Count() < 15)
+                                    {
+                                        var nextStatuses = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, nextMaxId, null, false);
+                                        if (nextStatuses == null || nextStatuses.Count() == 0)
+                                            break;
+
+                                        nextMaxId = nextStatuses.Last().Id - 1;
+                                        loadedTimeline = loadedTimeline.Concat(nextStatuses.Where(x => x.Entities != null && x.Entities.Media != null).ToList());
+                                    }
+                                    //もっと読むの時
+                                    if (maxId != null)
+                                        this.TimelineItems.Last().LoadingProperties.Parameter = nextMaxId;
+                                }
+                            }
+                            else
+                                loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, maxId);
+                        }
+                        break;
+                    case TimelineType.List:
+                        loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, maxId);
+                        break;
+                    case TimelineType.Mention:
+                        loadedTimeline = await AccountTokens.LoadMentionsTimelineAsync(this.Data.TokenSuffix, maxId);
+                        break;
+                    case TimelineType.Favorite:
+                        loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, maxId);
+                        break;
+                    case TimelineType.DirectMessage:
+                        {
+                            //var loadedDirectMessages = await AccountTokens.LoadDirectMessageListAsync(this.Data.TokenSuffix);
+                            //this.InsertDirectMessage(loadedDirectMessages);
+                            break;
+                        }
+                    case TimelineType.Trend:
+                        {
+                            var loadedTrends = await AccountTokens.LoadTrendsAsync(this.Data.TokenSuffix);
+                            if (loadedTrends != null)
+                                InsertTrends(loadedTrends);
+                            else
+                            {
+                                this.IsLoading = false;
+                                return false;
+                            }
+                            break;
+                        }
+                    case TimelineType.Search:
+                        loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId);
+                        break;
+                    case TimelineType.Notice:
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                this.ProgressRingVisibility = Visibility.Collapsed;
+                this.IsLoading = false;
+                return false;
+            }
+
+            //読み込めていれば追加する
+            if (loadedTimeline != null && loadedTimeline.Count() > 1)
+            {
+                if (maxId == null)
+                {
+                    this.InsertStatus(loadedTimeline);
+                    //もっと読むボタン
+                    if (this.Data.CurrentPage.TimelineType != TimelineType.DirectMessage && this.Data.CurrentPage.TimelineType != TimelineType.Trend && this.Data.CurrentPage.TimelineType != TimelineType.Search && this.Data.CurrentPage.TimelineType != TimelineType.Notice)
+                    {
+                        this.TimelineItems.Add(new TimelineItemProperties(this, LoadingType.ReadMore, loadedTimeline.Last().Id - 1));
+                    }
+                }
+                //もっと読むの時
+                else
+                {
+                    //最新ツイートを更新しないように追加
+                    this.InsertStatus(loadedTimeline, true);
+                    //ボタンのパラメータを設定
+                    this.TimelineItems.Last().LoadingProperties.Parameter = loadedTimeline.Last().Id - 1;
+                }
+            }
+            else
+            {
+                this.ProgressRingVisibility = Visibility.Collapsed;
+                this.IsLoading = false;
+                return false;
+            }
+
+            if (maxId == null)
+                this.ProgressRingVisibility = Visibility.Collapsed;
+            this.IsLoading = false;
+            return true;
+        }
+
+        /// <summary>
+        /// 個別アカウントページの表示
+        /// </summary>
+        /// <param name="user">対象ユーザーのパラメーター</param>
+        public void ShowUserTimeline(UserOverviewProperties user)
+        {
+            //今のページと同じなら追加しない
+            if (this.Data.CurrentPage.TimelineType == TimelineType.User)
+            {
+                if (user != null && this.Data.CurrentPage.TargetUserId == user.Id)
+                    return;
+            }
+
+            if (user == null)
+                return;
+
+            this.Data.Pages.Add(new TimelinePageData()
+            {
+                TimelineType = TimelineType.User,
+                TargetUserId = user.Id,
+                TargetUserName = user.Name,
+                TargetUserScreenName = user.ScreenName,
+                UserTimelineTab = UserTimelineTab.Tweets
+            });
+            this.Data.PageSuffix++;
+            this.TimelineItems.Clear();
+            this.Initialize(Data.CurrentPage);
+        }
+
+        /// <summary>
+        /// 検索タイムラインへ遷移
+        /// </summary>
+        /// <param name="text">検索文字列</param>
+        public void ShowSearchTimeline(string text)
+        {
+            this.Data.Pages.Add(new TimelinePageData()
+            {
+                TimelineType = TimelineType.Search,
+                SearchText = text
+            });
+            this.Data.PageSuffix++;
+            this.TimelineItems.Clear();
+            this.Initialize(Data.CurrentPage);
+        }
+
+        /// <summary>
+        /// ユーザーページのタブを変更したとき
+        /// </summary>
+        /// <param name="tab">変更後のタブ</param>
+        public void ChangeUserTimelineTab(UserTimelineTab tab)
+        {
+            System.Windows.Input.Keyboard.ClearFocus();
+            this.Data.CurrentPage.UserTimelineTab = tab;
+            switch (this.Data.CurrentPage.TimelineType)
+            {
+                case TimelineType.User:
+                    while (this.TimelineItems.Count > 2)
+                    {
+                        this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+                    }
+                    this.Data.SinceId = null;
+                    this.Initialize(Data.CurrentPage);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// タイムラインデータをシリアライズする
+        /// </summary>
+        /// <returns>タイムラインデータ</returns>
+        public string Serialize()
+        {
+            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(TimelineData));
+            using (var stringWriter = new StringWriter(CultureInfo.CurrentCulture))
+            {
+                serializer.Serialize(stringWriter, Data);
+                return stringWriter.ToString();
+            }
+        }
+
+        /// <summary>
+        /// 1つ前のページへ戻る
+        /// </summary>
+        public void Back()
+        {
+            if (this.Data.PageSuffix == 0)
+                return;
+
+            this.TimelineItems.Clear();
+            this.Data.Pages.RemoveAt(this.Data.PageSuffix);
+            this.Data.PageSuffix--;
+            var verticalOffset = this.Data.CurrentPage.VerticalOffset;
+            this.Initialize(Data.CurrentPage);
+            Task.Run(() =>
+            {
+                for (int i = 0; i < 200; i++)
+                    System.Threading.Thread.Sleep(10);
+                this.Data.CurrentPage.VerticalOffset = verticalOffset;
+            });
+        }
+
+        /// <summary>
+        /// 最上部へスクロール
+        /// </summary>
+        public void Up()
+        {
+            this.VerticalOffset = 0;
+
+            var collectionView = CollectionViewSource.GetDefaultView(this.TimelineItems) as CollectionView;
+            if (collectionView == null)
+                return;
+
+            while(collectionView.Count > 100)
+            {
+                this.TimelineItems.RemoveAt(this.TimelineItems.Count - 2);
+            }
+
+            if (this.TimelineItems.Count != 0)
+            {
+                if (this.TimelineItems.Last().LoadingProperties != null)
+                {
+                    for (int i = this.TimelineItems.Count - 1; i > this.TimelineItems.Count - 10 && i >= 0; i--)
+                    {
+                        if (this.TimelineItems[i].StatusProperties != null)
+                        {
+                            this.TimelineItems.Last().LoadingProperties.Parameter = this.TimelineItems[i].StatusProperties.Id - 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 設定画面の開閉
+        /// </summary>
+        public void ToggleOpenSettings()
+        {
+            this.IsVisibleSettings = !this.IsVisibleSettings;
+        }
+        
+        /// <summary>
+        /// タイムラインをクリアする
+        /// </summary>
+        public void Clear()
+        {
+            this.TimelineItems.Clear();
+        }
+
+        /// <summary>
+        /// 通知を表示する
+        /// </summary>
+        /// <param name="message">通知内容</param>
+        /// <param name="type">通知タイプ</param>
+        public void Notify(string message, NoticeType type)
+        {
+            try
+            {
+                Task.Run(async () =>
+                {
+                    this.TimelineNotice.Add(new TimelineNotice(message, type));
+                    await Task.Delay(5000);
+                    this.RemoveNotice();
+                });
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+            }
+        }
+
+        /// <summary>
+        /// リソースの破棄
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// リソースの破棄
+        /// </summary>
+        /// <param name="disposing">マネージリソースを破棄するか否か</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+
+            }
+
+            //ストリームを切断
+            if (this.Disposables != null)
+            {
+                foreach (var disposable in this.Disposables)
+                {
+                    disposable.Dispose();
+                }
+            }
+
+            //タイマーを削除
+            if (this.Timers != null)
+            {
+                foreach (var timer in this.Timers)
+                {
+                    timer.Stop();
+                }
+            }
+
+            //ウィンドウから自分を削除
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+                (mainWindow.DataContext as MainWindowViewModel).Timelines.RemoveTimeline(this.ColumnIndex);
+        }
+
+        /// <summary>
+        /// タイトルを(再)設定する
+        /// </summary>
+        private void SetTitle()
+        {
+            switch (this.Data.CurrentPage.TimelineType)
+            {
+                case TimelineType.Home:
+                    this.Title = "HomeTimeline";
+                    break;
+                case TimelineType.List:
+                    this.Title = this.Data.CurrentPage.ListName;
+                    break;
+                case TimelineType.DirectMessage:
+                    this.Title = "DirectMessage";
+                    break;
+                case TimelineType.Favorite:
+                    this.Title = "Favorite";
+                    break;
+                case TimelineType.Notice:
+                    this.Title = "Notice";
+                    break;
+                case TimelineType.Mention:
+                    this.Title = "Mention";
+                    break;
+                case TimelineType.User:
+                    this.Title = this.Data.CurrentPage.TargetUserName;
+                    break;
+                case TimelineType.Search:
+                    this.Title = this.Data.CurrentPage.SearchText;
+                    break;
+                case TimelineType.Trend:
+                    this.Title = "Trend";
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// ストリーミング・タイマーの開始
+        /// </summary>
+        private void StartStreaming()
+        {
+            if (!(this.Data.CurrentPage.TimelineType == TimelineType.Notice || this.Data.CurrentPage.TimelineType == TimelineType.Trend))
+            {
+                //ツイート時間の更新タイマー
+                var reculcTimeTimer = new Timer();
+                reculcTimeTimer.Elapsed += new ElapsedEventHandler(this.RecalculateTime);
+                reculcTimeTimer.Interval = 1000;
+                reculcTimeTimer.AutoReset = true;
+                reculcTimeTimer.Enabled = true;
+                this.Timers.Add(reculcTimeTimer);
+            }
+
+            switch (this.Data.CurrentPage.TimelineType)
+            {
+                case TimelineType.Home:
+                    {
+                        var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
+                        if (stream != null)
+                        {
+                            //ツイートが流れてきたとき
+                            stream.OfType<StatusMessage>().Subscribe(x => {
+                                //通知
+                                NotifyStatus(x.Status);
+
+                                //流れてきたツイートを挿入
+                                InsertStatus(new List<Status>() { x.Status });
+                            });
+                            //ツイートが削除されたとき
+                            stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
+                            stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
+                            this.Disposables.Add(stream.Connect());
+                        }
+                        break;
+                    }
+                case TimelineType.List:
+                    {
+                        //3.1秒間隔でリストを更新するタイマー
+                        var timer = new Timer();
+                        timer.Elapsed += new ElapsedEventHandler(this.LoadListTimelineAsync);
+                        timer.Interval = 3100;
+                        timer.AutoReset = true;
+                        timer.Enabled = true;
+                        this.Timers.Add(timer);
+                        break;
+                    }
+                case TimelineType.User:
+                    {
+                        //30秒間隔でユーザータイムラインを更新するタイマー
+                        var timer = new Timer();
+                        timer.Elapsed += new ElapsedEventHandler(this.LoadUserTimelineAsync);
+                        timer.Interval = 30000;
+                        timer.AutoReset = true;
+                        timer.Enabled = true;
+                        this.Timers.Add(timer);
+                        break;
+                    }
+                case TimelineType.Notice:
+                    {
+                        var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
+                        if (stream != null)
+                        {
+                            stream.OfType<EventMessage>().Subscribe(x => ProcessEventMessage(x));
+                            stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
+                            this.Disposables.Add(stream.Connect());
+                        }
+                        break;
+                    }
+                case TimelineType.Mention:
+                    {
+                        var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
+                        if (stream != null)
+                        {
+                            //ツイートが流れてきたとき
+                            stream.OfType<StatusMessage>().Subscribe(x => {
+                                //リプライでない場合リターン
+                                if (x.Status.Entities == null || x.Status.Entities.UserMentions == null)
+                                    return;
+
+                                foreach (var entity in x.Status.Entities.UserMentions)
+                                {
+                                    //自分へのリプライの場合処理する
+                                    if (entity.Id == this.Data.UserId)
+                                    {
+                                        //通知
+                                        this.NotifyStatus(x.Status);
+
+                                        //流れてきたツイートを挿入
+                                        this.InsertStatus(new List<Status>() { x.Status });
+                                        break;
+                                    }
+                                }
+                            });
+                            //リプライが削除されたとき
+                            stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
+                            stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
+                            this.Disposables.Add(stream.Connect());
+                        }
+                        break;
+                    }
+                case TimelineType.Trend:
+                    {
+                        var timer = new Timer();
+                        timer.Elapsed += new ElapsedEventHandler(this.LoadTrendsAsync);
+                        timer.Interval = 15000;
+                        timer.AutoReset = true;
+                        timer.Enabled = true;
+                        this.Timers.Add(timer);
+                        break;
+                    }
+                case TimelineType.Search:
+                    {
+                        var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.Filter, this.Data.CurrentPage.SearchText);
+                        if (stream != null)
+                        {
+                            //検索ワードに引っかかる新規ツイートが流れてきたとき
+                            stream.OfType<StatusMessage>().Subscribe(x =>
+                            {
+                                //RTなら処理しない
+                                if (x.Status.RetweetedStatus != null)
+                                    return;
+
+                                //通知
+                                this.NotifyStatus(x.Status);
+
+                                //流れてきたツイートを挿入
+                                this.InsertStatus(new List<Status>() { x.Status });
+                            });
+                            stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
+                            stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
+                            this.Disposables.Add(stream.Connect());
+                        }
+                        break;
+                    }
+                case TimelineType.DirectMessage:
+                    {
+                        //var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
+                        //if (stream != null)
+                        //{
+                        //    //DMを受信した際
+                        //    stream.OfType<DirectMessageMessage>().Subscribe(x =>
+                        //    {
+                        //        if (this.Data.IsNotificationSoundPlay)
+                        //            CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
+
+                        //        //流れてきたツイートを挿入
+                        //        this.InsertDirectMessage(new List<DirectMessage>() { x.DirectMessage });
+                        //    });
+                        //    stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
+                        //}
+                        break;
+                    }
+            }
+        }
+
+        /// <summary>
+        /// イベントが流れてきたとき
+        /// </summary>
+        /// <param name="eventMessage">イベント</param>
+        private void ProcessEventMessage(EventMessage eventMessage)
+        {
+            return;
+        }
+
+        /// <summary>
+        /// 切断情報が流れてきたとき
+        /// </summary>
+        /// <param name="disconnectMessage">切断情報</param>
+        private void ProcessDisconnectMessage(DisconnectMessage disconnectMessage)
+        {
+            CommonMethods.PlaySoundEffect(SoundEffect.Notification2);
+        }
+
+        /// <summary>
+        /// ツイートの追加・挿入
+        /// </summary>
+        /// <param name="statuses">ツイート</param>
+        /// <param name="loadMore">もっと読むによる挿入かどうか</param>
+        /// <returns></returns>
+        private bool InsertStatus(IEnumerable<Status> statuses, bool loadMore = false)
+        {
+            if (!statuses.Any())
+                return false;
+
+            //もっと読むの場合最後のID-1をMaxIdとして控える
+            if (loadMore)
+                this.TimelineItems.Last().LoadingProperties.Parameter = statuses.Last().Id - 1;
+            //そうでない場合最初のID+1をSinceIdとして控える
+            else
+                this.Data.SinceId = statuses.First().Id + 1;
+
+            int i = 0;
+            int insertPosition = 0;
+            if (this.Data.CurrentPage.TimelineType == TimelineType.User)
+                insertPosition = 2;
+
+            foreach (var status in statuses)
+            {
+                var properties = new TimelineItemProperties(this, status);
+
+                if (loadMore)
+                    this.TimelineItems.Insert(this.TimelineItems.Count - 1, properties);
+                else
+                {
+                    this.TimelineItems.Insert(i + insertPosition, properties);
+                }
+                this.RaisePropertyChanged(nameof(this.TimelineItems));
+                i++;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 削除されたツイートを取り除く
+        /// </summary>
+        /// <param name="id">当該ツイートID</param>
+        private void DeleteStatus(long id)
+        {
+            for (int i = 0; i < this.TimelineItems.Count; i++)
+            {
+                if (this.TimelineItems[i].StatusProperties != null)
+                {
+                    if (this.TimelineItems[i].StatusProperties.Id == id)
+                    {
+                        this.TimelineItems.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// トレンドの設定・更新
+        /// </summary>
+        /// <param name="trends">トレンド</param>
+        /// <returns></returns>
+        private bool InsertTrends(IEnumerable<TrendsResult> trends)
+        {
+            if (!trends.Any())
+                return false;
+
+            int i = 1;
+            foreach (var trend in trends)
+            {
+                foreach (var trendEntity in trend.Trends)
+                {
+                    var properties = new TimelineItemProperties(this, trendEntity, i);
+
+                    if (this.TimelineItems.Count > i - 1)
+                        this.TimelineItems[i - 1] = properties;
+                    else
+                        this.TimelineItems.Add(properties);
+
+                    i++;
+
+                    if (i > 30)
+                        break;
+                }
+                break;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// リストタイムラインを読み込む
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void LoadListTimelineAsync(object sender, EventArgs e)
+        {
+            if (this.IsLoading)
+                return;
+
+            try
+            {
+                var loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, null, this.Data.SinceId);
+                if (loadedTimeline != null && loadedTimeline.Count != 0)
+                {
+                    if (this.Data.IsNotificationSoundPlay)
+                        CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
+
+                    foreach (var status in loadedTimeline)
+                        this.NotifyStatus(status);
+
+                    this.InsertStatus(loadedTimeline);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
+        }
+
+        /// <summary>
+        /// ユーザータイムラインを読み込む
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void LoadUserTimelineAsync(object sender, EventArgs e)
+        {
+            if (this.IsLoading)
+                return;
+
+            try
+            {
+                IEnumerable<Status> loadedTimeline = null;
+                var excludeReplies = false;
+                //リプライを省く時
+                if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Tweets)
+                    excludeReplies = true;
+
+                //いいねタブの時
+                if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Favorites)
+                    loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, null, this.Data.SinceId);
+                //メディアタブの時
+                else if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Media)
+                {
+                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.SinceId, false);
+                    if (loadedTimeline != null)
+                        loadedTimeline = loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null);
+                }
+                else
+                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.SinceId);
+
+                if (loadedTimeline != null && loadedTimeline.Count() != 0)
+                {
+                    if (this.Data.IsNotificationSoundPlay)
+                        CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
+
+                    foreach (var status in loadedTimeline)
+                        this.NotifyStatus(status);
+
+                    this.InsertStatus(loadedTimeline);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
+        }
+
+        /// <summary>
+        /// トレンドを読み込む
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void LoadTrendsAsync(object sender, EventArgs e)
+        {
+            if (this.IsLoading)
+                return;
+
+            try
+            {
+                var loadedTrend = await AccountTokens.LoadTrendsAsync(this.Data.TokenSuffix);
+                if (loadedTrend != null && loadedTrend.Count != 0)
+                {
+                    this.InsertTrends(loadedTrend);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
+        }
+
+        /// <summary>
+        /// ツイート時間表示の1秒毎更新
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RecalculateTime(object sender, EventArgs e)
+        {
+            var currentTime = DateTimeOffset.Now;
+            try
+            {
+                for (int i = 0; i < this.TimelineItems.Count; i++)
+                {
+                    if (this.TimelineItems[i].StatusProperties != null)
+                    {
+                        if (this.TimelineItems[i].StatusProperties.RecalculateTime(currentTime))
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// ツイート受信通知を行う
+        /// </summary>
+        /// <param name="status"></param>
+        private void NotifyStatus(Status status)
+        {
+            //サウンド通知
+            if (this.Data.IsNotificationSoundPlay)
+                CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
+
+            //トレイ通知
+            if (this.Data.IsNotification)
+            {
+                var text = "ツイート受信\n@" + status.User.ScreenName + ":";
+                if (status.FullText != null)
+                    text += status.FullText;
+                else if (status.Text != null)
+                    text += status.Text;
+
+                this.Notify(text, NoticeType.Normal);
+            }
+        }
+
+        /// <summary>
+        /// 通知を削除する
+        /// </summary>
+        /// <param name="noticeNumber">削除する通知番号</param>
+        private void RemoveNotice(int noticeNumber = 0)
+        {
+            if (noticeNumber < this.TimelineNotice.Count)
+                this.TimelineNotice.RemoveAt(noticeNumber);
+        }
+
+        /// <summary>
+        /// タイムラインのフィルタリング
+        /// </summary>
+        private void Filtering()
+        {
+            var collectionView = CollectionViewSource.GetDefaultView(this.TimelineItems);
+            if (collectionView == null)
+                return;
+
+            collectionView.Filter = x =>
+            {
+                var item = (TimelineItemProperties)x;
+                var status = item.StatusProperties != null;
+                var media = status && item.StatusProperties.Media.Count > 0;
+                var excludeRetweet = !this.IsVisibleRetweet && (status && item.StatusProperties.IsRetweetedByUser);
+                var excludeReply = !this.IsVisibleReply && (status && item.StatusProperties.ReplyToStatusProperties.Visibility != Visibility.Collapsed);
+                var excludeImage = !this.IsVisibleIncludeImagesStatus && (media && item.StatusProperties.Media.First().Type == Behaviors.StatusMediaType.Image);
+                var excludeGif = !this.IsVisibleIncludeGifStatus && (media && item.StatusProperties.Media.First().Type == Behaviors.StatusMediaType.AnimationGif);
+                var excludeVideo = !this.IsVisibleIncludeVideoStatus && (media && item.StatusProperties.Media.First().Type == Behaviors.StatusMediaType.Video);
+                var excludeLink = !this.IsVisibleIncludeLinkStatus && (status && item.StatusProperties.HyperlinkText.Urls.Count > 0);
+                var excludeOther = !this.IsVisibleOtherStatus &&
+                    (status &&
+                    !media &&
+                    !item.StatusProperties.IsRetweetedByUser &&
+                    item.StatusProperties.ReplyToStatusProperties.Visibility == Visibility.Collapsed &&
+                    item.StatusProperties.HyperlinkText.Urls.Count <= 0);
+                return !excludeRetweet && !excludeReply && !excludeImage && !excludeGif && !excludeVideo && !excludeLink && !excludeOther;
+            };
+        }
+
+        #region ProgressRingVisibility 変更通知プロパティ
+        public Visibility ProgressRingVisibility
+        {
+            get
+            {
+                return this._ProgressRingVisibility;
+            }
+            set
+            {
+                this._ProgressRingVisibility = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private Visibility _ProgressRingVisibility;
+        #endregion
+
+        #region Title 変更通知プロパティ
+        public string Title
+        {
+            get
+            {
+                return this.Data.CurrentPage.Title;
+            }
+            set
+            {
+                this.Data.CurrentPage.Title = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region VerticalOffset 変更通知プロパティ
+        public double VerticalOffset
+        {
+            get
+            {
+                return this.Data.CurrentPage.VerticalOffset;
+            }
+            set
+            {
+                this.Data.CurrentPage.VerticalOffset = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region IsVisibleSettings 変更通知プロパティ
+        public bool IsVisibleSettings
+        {
+            get
+            {
+                return this._IsVisibleSettings;
+            }
+            set
+            {
+                this._IsVisibleSettings = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private bool _IsVisibleSettings;
+        #endregion
+
+        #region IsVisibleRetweet 変更通知プロパティ
+        public bool IsVisibleRetweet
+        {
+            get
+            {
+                return this._IsVisibleRetweet;
+            }
+            set
+            {
+                this._IsVisibleRetweet = value;
+                this.RaisePropertyChanged();
+                this.Filtering();
+            }
+        }
+        private bool _IsVisibleRetweet;
+        #endregion
+
+        #region IsVisibleReply 変更通知プロパティ
+        public bool IsVisibleReply
+        {
+            get
+            {
+                return this._IsVisibleReply;
+            }
+            set
+            {
+                this._IsVisibleReply = value;
+                this.RaisePropertyChanged();
+                this.Filtering();
+            }
+        }
+        private bool _IsVisibleReply;
+        #endregion
+
+        #region IsVisibleIncludeImagesStatus 変更通知プロパティ
+        public bool IsVisibleIncludeImagesStatus
+        {
+            get
+            {
+                return this._IsVisibleIncludeImagesStatus;
+            }
+            set
+            {
+                this._IsVisibleIncludeImagesStatus = value;
+                this.RaisePropertyChanged();
+                this.Filtering();
+            }
+        }
+        private bool _IsVisibleIncludeImagesStatus;
+        #endregion
+
+        #region IsVisibleIncludeGifStatus 変更通知プロパティ
+        public bool IsVisibleIncludeGifStatus
+        {
+            get
+            {
+                return this._IsVisibleIncludeGifStatus;
+            }
+            set
+            {
+                this._IsVisibleIncludeGifStatus = value;
+                this.RaisePropertyChanged();
+                this.Filtering();
+            }
+        }
+        private bool _IsVisibleIncludeGifStatus;
+        #endregion
+
+        #region IsVisibleIncludeVideoStatus 変更通知プロパティ
+        public bool IsVisibleIncludeVideoStatus
+        {
+            get
+            {
+                return this._IsVisibleIncludeVideoStatus;
+            }
+            set
+            {
+                this._IsVisibleIncludeVideoStatus = value;
+                this.RaisePropertyChanged();
+                this.Filtering();
+            }
+        }
+        private bool _IsVisibleIncludeVideoStatus;
+        #endregion
+
+        #region IsVisibleIncludeLinkStatus 変更通知プロパティ
+        public bool IsVisibleIncludeLinkStatus
+        {
+            get
+            {
+                return this._IsVisibleIncludeLinkStatus;
+            }
+            set
+            {
+                this._IsVisibleIncludeLinkStatus = value;
+                this.RaisePropertyChanged();
+                this.Filtering();
+            }
+        }
+        private bool _IsVisibleIncludeLinkStatus;
+        #endregion
+
+        #region IsVisibleOtherStatus 変更通知プロパティ
+        public bool IsVisibleOtherStatus
+        {
+            get
+            {
+                return this._IsVisibleOtherStatus;
+            }
+            set
+            {
+                this._IsVisibleOtherStatus = value;
+                this.RaisePropertyChanged();
+                this.Filtering();
+            }
+        }
+        private bool _IsVisibleOtherStatus;
+        #endregion
+
+        public ObservableCollection<TimelineItemProperties> TimelineItems { get; }
+        public ObservableCollection<TimelineNotice> TimelineNotice { get; }
+
+        public TimelineData Data { get; }
+
+        public string ScreenName
+        {
+            get
+            {
+                return this.Data.ScreenName;
+            }
+            set
+            {
+                this.Data.ScreenName = value;
+            }
+        }
+        public int TokenSuffix
+        {
+            get
+            {
+                return this.Data.TokenSuffix;
+            }
+        }
+        public int ColumnIndex
+        {
+            get
+            {
+                return this.Data.ColumnIndex;
+            }
+            set
+            {
+                this.Data.ColumnIndex = value;
+            }
+        }
+
+        private List<IDisposable> Disposables;
+        private List<Timer> Timers;
+        private bool IsLoading;
+    }
+}

@@ -1,0 +1,17 @@
+﻿<Page x:Class="TweetGazer.Views.Pages.Instructions.Instruction1"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" >
+
+    <Grid>
+        <TextBlock Foreground="Black" TextWrapping="Wrap">
+            <Run FontSize="26" Text="TweetGazer by とろゝをダウンロードいただきありがとうございます。" />
+            <LineBreak />
+            <Run Text="本ソフトウェアはWindows用のTwitterクライアントアプリケーションです。" />
+            <LineBreak />
+            <Run Text="ここでは簡単に使用方法などについて説明させていただきます。" />
+        </TextBlock>
+    </Grid>
+</Page>

@@ -1,0 +1,64 @@
+﻿<UserControl
+    x:Class="TweetGazer.Views.ShowDialogs.ShowImage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Behaviors="clr-namespace:TweetGazer.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Button
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Click="CloseButton_Click"
+        Style="{StaticResource FlatButtonStyle}">
+        <Grid Background="#50000000">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button
+                    Margin="50,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="BlockButton_Click"
+                    Style="{StaticResource FlatButtonStyle}">
+                    <Image
+                        x:Name="image"
+                        Behaviors:ImageBehavior.Source="{Binding Path=Image}"
+                        MouseWheel="ImageMouseWheel" />
+                </Button>
+                <Button
+                    Width="50"
+                    Height="50"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Click="MoveButton_Click"
+                    Command="{Binding Path=PreviousCommand, Mode=OneTime}"
+                    Style="{StaticResource UwpLikeButtonStyle2}"
+                    Visibility="{Binding Path=IsLeftButtonVisible, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                    <ContentControl ContentTemplate="{StaticResource AccentColorLeftIcon}" />
+                </Button>
+                <Button
+                    Width="50"
+                    Height="50"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Click="MoveButton_Click"
+                    Command="{Binding Path=NextCommand, Mode=OneTime}"
+                    Style="{StaticResource UwpLikeButtonStyle2}"
+                    Visibility="{Binding Path=IsRightButtonVisible, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                    <ContentControl ContentTemplate="{StaticResource AccentColorRightIcon}" />
+                </Button>
+                <Button
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Click="CloseButton_Click"
+                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    <ContentControl ContentTemplate="{StaticResource AccentColorCloseIcon}" />
+                </Button>
+            </Grid>
+        </Grid>
+    </Button>
+</UserControl>

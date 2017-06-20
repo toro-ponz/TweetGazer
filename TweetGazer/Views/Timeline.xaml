@@ -1,0 +1,378 @@
+﻿<UserControl
+    x:Class="TweetGazer.Views.Timeline"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Behaviors="clr-namespace:TweetGazer.Behaviors"
+    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:Selectors="clr-namespace:TweetGazer.Selectors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Foreground="{DynamicResource TextBrush}"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/TimelineResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource ControlBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid>
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Width="20"
+                    Height="20"
+                    Margin="2"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource UwpLikeButtonStyle2}"
+                    Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Back" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ContentControl ContentTemplate="{StaticResource FrontColorBackArrowIcon}" />
+                </Button>
+            </StackPanel>
+            <Grid
+                Height="Auto"
+                Margin="30,0"
+                VerticalAlignment="Center">
+                <TextBlock TextAlignment="Center" TextTrimming="CharacterEllipsis">
+                    <Run
+                        FontSize="20"
+                        Foreground="{DynamicResource BlackBrush}"
+                        Text="{Binding Path=Title, Mode=OneWay}" />
+                    <LineBreak />
+                    <Run Foreground="{DynamicResource GrayBrush2}" Text="{Binding Path=ScreenName, Mode=OneTime, StringFormat=@{0}}" />
+                </TextBlock>
+            </Grid>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button
+                    Width="20"
+                    Height="20"
+                    Margin="2"
+                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Close" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ContentControl ContentTemplate="{StaticResource FrontColorCloseIcon}" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid
+            Grid.Row="1"
+            MaxHeight="200"
+            Background="{DynamicResource AccentColorBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="Auto" MaxHeight="180" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Button
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Style="{StaticResource FlatButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="ToggleOpenSettings" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="12"
+                        Foreground="White"
+                        Text="Settings" />
+                </Button>
+            </Grid>
+            <ScrollViewer
+                Grid.Row="1"
+                MaxHeight="180"
+                Behaviors:ScrollViewerBehavior.AnimationScrolling="True"
+                Foreground="White"
+                VerticalScrollBarVisibility="Auto"
+                Visibility="{Binding Path=IsVisibleSettings, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Foreground="White"
+                            Text="表示するツイート"
+                            TextTrimming="CharacterEllipsis" />
+                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleRetweet, Mode=TwoWay}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="リツイート"
+                                    TextTrimming="CharacterEllipsis" />
+                            </CheckBox>
+                        </StackPanel>
+                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleReply, Mode=TwoWay}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="会話"
+                                    TextTrimming="CharacterEllipsis" />
+                            </CheckBox>
+                        </StackPanel>
+                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeImagesStatus, Mode=TwoWay}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="画像付きツイート"
+                                    TextTrimming="CharacterEllipsis" />
+                            </CheckBox>
+                        </StackPanel>
+                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeGifStatus, Mode=TwoWay}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="アニメーションGIF付きツイート"
+                                    TextTrimming="CharacterEllipsis" />
+                            </CheckBox>
+                        </StackPanel>
+                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeVideoStatus, Mode=TwoWay}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="動画付きツイート"
+                                    TextTrimming="CharacterEllipsis" />
+                            </CheckBox>
+                        </StackPanel>
+                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeLinkStatus, Mode=TwoWay}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="リンク付きツイート"
+                                    TextTrimming="CharacterEllipsis" />
+                            </CheckBox>
+                        </StackPanel>
+                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleOtherStatus, Mode=TwoWay}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="その他すべてのツイート"
+                                    TextTrimming="CharacterEllipsis" />
+                            </CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Foreground="White"
+                            Text="通知"
+                            TextTrimming="CharacterEllipsis" />
+                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsNotification, Mode=TwoWay}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="新着ツイートのトレイ通知"
+                                    TextTrimming="CharacterEllipsis" />
+                            </CheckBox>
+                        </StackPanel>
+                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsNotificationSoundPlay, Mode=TwoWay}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="新着ツイートのサウンド通知"
+                                    TextTrimming="CharacterEllipsis" />
+                            </CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <ItemsControl
+            x:Name="ItemsControl"
+            Grid.Row="2"
+            Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
+            ItemsSource="{Binding Path=TimelineItems, Mode=OneWay}"
+            ScrollViewer.CanContentScroll="True"
+            VirtualizingPanel.CacheLength="0"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingStackPanel.IsVirtualizing="True">
+            <ItemsControl.ItemTemplateSelector>
+                <Selectors:TimelineItemTemplateSelector />
+            </ItemsControl.ItemTemplateSelector>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="{x:Type ItemsControl}">
+                    <ScrollViewer
+                        x:Name="ScrollViewer"
+                        Behaviors:ScrollViewerBehavior.AnimationScrolling="True"
+                        Behaviors:ScrollViewerBehavior.VerticalOffset="{Binding Path=VerticalOffset, Mode=TwoWay}"
+                        VerticalScrollBarVisibility="Visible">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+        </ItemsControl>
+
+        <Grid
+            Grid.Row="2"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid
+                Margin="15,0,0,10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Opacity="0.6">
+                <Button Command="{Binding Path=UpdateCommand, Mode=OneTime}" Style="{StaticResource UwpLikeButtonStyle1}">
+                    <Grid>
+                        <Rectangle
+                            Width="40"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Fill="{DynamicResource AccentColorBrush}"
+                            RadiusX="20"
+                            RadiusY="20" />
+                        <Rectangle
+                            Width="32"
+                            Height="32"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Fill="{DynamicResource WhiteBrush}"
+                            RadiusX="16"
+                            RadiusY="16" />
+                        <ContentControl
+                            Width="26"
+                            Height="26"
+                            HorizontalAlignment="Center"
+                            ContentTemplate="{StaticResource AccentColorReloadIcon}" />
+                    </Grid>
+                </Button>
+            </Grid>
+
+            <Grid
+                Margin="0,0,15,10"
+                HorizontalAlignment="Right"
+                Opacity="0.6"
+                Visibility="{Binding Path=UpButtonVisibility, Mode=OneWay}">
+                <Button Style="{StaticResource UwpLikeButtonStyle1}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Up" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <Grid>
+                        <Rectangle
+                            Width="40"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Fill="{DynamicResource AccentColorBrush}"
+                            RadiusX="20"
+                            RadiusY="20" />
+                        <Rectangle
+                            Width="32"
+                            Height="32"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Fill="{DynamicResource WhiteBrush}"
+                            RadiusX="16"
+                            RadiusY="16" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="{DynamicResource AccentColorBrush}"
+                            Text="▲" />
+                    </Grid>
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="1" Background="{DynamicResource AccentColorBrush}">
+                <ItemsControl MaxHeight="100" ItemsSource="{Binding Path=TimelineNotice, Mode=OneTime}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid VerticalAlignment="Bottom" Background="{Binding Path=BackgroundColor, Mode=OneTime}">
+                                <TextBlock
+                                    Margin="10"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="{Binding Path=Message, Mode=OneTime}"
+                                    TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel>
+                                <i:Interaction.Behaviors>
+                                    <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5">
+                                        <ei:FluidMoveBehavior.EaseY>
+                                            <QuadraticEase EasingMode="EaseOut" />
+                                        </ei:FluidMoveBehavior.EaseY>
+                                    </ei:FluidMoveBehavior>
+                                </i:Interaction.Behaviors>
+                            </VirtualizingStackPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="{x:Type ItemsControl}">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                </ItemsControl>
+            </Grid>
+        </Grid>
+
+        <Grid
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Visibility="{Binding Path=ProgressRingVisibility, Mode=OneWay}">
+            <Grid.Background>
+                <SolidColorBrush Opacity="0.2" Color="Black" />
+            </Grid.Background>
+            <Controls:ProgressRing IsActive="True" />
+        </Grid>
+    </Grid>
+</UserControl> 

@@ -1,0 +1,172 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DataTemplate x:Key="Lists">
+        <Grid Margin="0,0,0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="73" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Image
+                Width="48"
+                Height="48"
+                Margin="0,5,5,5"
+                Source="{Binding Icon}" />
+            <Grid Grid.Column="1" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Margin="0,5,0,0"
+                    FontSize="16"
+                    Text="{Binding ListName}" />
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Bottom"
+                    Foreground="#FF818181">
+                    <Run Text="{Binding CreateUser}" />
+                    <Run Text="さんが作成" />
+                </TextBlock>
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Foreground="#FF787878">
+                    <Run Text="{Binding MemberCount}" />
+                    <Run Text="人が追加されています" />
+                </TextBlock>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Users">
+        <Grid Margin="0,0,0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="73" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Image
+                Width="48"
+                Height="48"
+                Margin="0,5,5,5"
+                Source="{Binding Path=ProfileImageUrlHttps}" />
+            <Grid
+                Grid.Column="1"
+                Height="58"
+                VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Margin="0,5,0,0"
+                    FontSize="16"
+                    Text="{Binding Path=Name}"
+                    TextTrimming="CharacterEllipsis" />
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Bottom"
+                    Foreground="#FF818181"
+                    Text="{Binding Path=ScreenName}"
+                    TextTrimming="CharacterEllipsis" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    VerticalAlignment="Bottom"
+                    Foreground="#FF818181"
+                    Text="{Binding Path=Description}"
+                    TextTrimming="CharacterEllipsis" />
+            </Grid>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Trends">
+        <Grid Margin="0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.RowSpan="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Foreground="White"
+                Text="{Binding Rank}" />
+            <TextBlock
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                FontSize="16"
+                Foreground="White"
+                Text="{Binding Name}"
+                TextWrapping="Wrap" />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Foreground="Aqua"
+                Visibility="{Binding CountVisibility}">
+                <Run Text="{Binding Count}" />
+                <Run Text="件のツイート" />
+            </TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="dm">
+        <Grid Margin="0,0,0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="73" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Image
+                Width="48"
+                Height="48"
+                Margin="0,5,5,5"
+                Source="{Binding Icon}" />
+            <Grid
+                Grid.Column="1"
+                Height="58"
+                VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Margin="0,5,0,0"
+                    FontSize="16"
+                    Text="{Binding UserName}" />
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Bottom"
+                    Foreground="#FF818181"
+                    Text="{Binding UserScreenName}" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    VerticalAlignment="Bottom"
+                    Foreground="#FF818181"
+                    Text="{Binding LatestMessage}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="Wrap" />
+            </Grid>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>
