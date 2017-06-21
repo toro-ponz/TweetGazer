@@ -33,7 +33,9 @@ namespace TweetGazer.ViewModels
             this.AddAccount = new AddAccountViewModel();
             this.Mentions = new MentionsViewModel();
             this.Notice = new NoticeViewModel();
+            this.DirectMessages = new DirectMessagesViewModel();
             this.AccountSettings = new AccountSettingsViewModel();
+            this.Search = new SearchViewModel();
             this.ApplicationSettings = new ApplicationSettingsViewModel();
             this.AddAccount = new AddAccountViewModel();
             this.Instructions = new InstructionsViewModel();
@@ -106,6 +108,28 @@ namespace TweetGazer.ViewModels
                 })
             );
             this.CompositeDisposable.Add(
+                new PropertyChangedEventListener(this.DirectMessages, (_, __) =>
+                {
+                    switch (__.PropertyName)
+                    {
+                        case nameof(this.DirectMessages.IsOpen):
+                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            break;
+                    }
+                })
+            );
+            this.CompositeDisposable.Add(
+                new PropertyChangedEventListener(this.Search, (_, __) =>
+                {
+                    switch (__.PropertyName)
+                    {
+                        case nameof(this.Search.IsOpen):
+                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            break;
+                    }
+                })
+            );
+            this.CompositeDisposable.Add(
                 new PropertyChangedEventListener(MentionsStack.Mentions, (_, __) => this.RaisePropertyChanged(() => this.MentionsNotificationVisibility))
             );
             this.CompositeDisposable.Add(
@@ -130,11 +154,13 @@ namespace TweetGazer.ViewModels
             this.CompositeDisposable.Add(this.AddTimeline);
             this.CompositeDisposable.Add(this.Mentions);
             this.CompositeDisposable.Add(this.Notice);
+            this.CompositeDisposable.Add(this.DirectMessages);
             this.CompositeDisposable.Add(this.AccountSettings);
             this.CompositeDisposable.Add(this.ApplicationSettings);
             this.CompositeDisposable.Add(this.Timelines);
             this.CompositeDisposable.Add(this.AddAccount);
             this.CompositeDisposable.Add(this.Instructions);
+            this.CompositeDisposable.Add(this.Search);
 
             this.CompositeDisposable.Add(this.MainWindowModel);
         }
@@ -164,10 +190,14 @@ namespace TweetGazer.ViewModels
                 this.Mentions.ToggleOpen();
             if (this.Notice.IsOpen)
                 this.Notice.ToggleOpen();
+            if (this.DirectMessages.IsOpen)
+                this.DirectMessages.ToggleOpen();
             if (this.AccountSettings.IsOpen)
                 this.AccountSettings.ToggleOpen();
             if (this.ApplicationSettings.IsOpen)
                 this.ApplicationSettings.ToggleOpen();
+            if (this.Search.IsOpen)
+                this.Search.ToggleOpen();
         }
 
         /// <summary>
@@ -367,8 +397,10 @@ namespace TweetGazer.ViewModels
                     !this.AddTimeline.IsOpen &&
                     !this.Mentions.IsOpen &&
                     !this.Notice.IsOpen &&
+                    !this.DirectMessages.IsOpen &&
                     !this.AccountSettings.IsOpen &&
-                    !this.ApplicationSettings.IsOpen)
+                    !this.ApplicationSettings.IsOpen &&
+                    !this.Search.IsOpen)
                 {
                     return Visibility.Collapsed;
                 }
@@ -397,8 +429,10 @@ namespace TweetGazer.ViewModels
         public MovableCreateStatusViewModel MovableCreateStatus { get; }
         public AddTimelineViewModel AddTimeline { get; }
         public MentionsViewModel Mentions { get; }
-        public NoticeViewModel Notice { get; set; }
+        public NoticeViewModel Notice { get; }
+        public DirectMessagesViewModel DirectMessages { get; }
         public AccountSettingsViewModel AccountSettings { get; }
+        public SearchViewModel Search { get; }
         public ApplicationSettingsViewModel ApplicationSettings { get; }
         public TimelinesGridViewModel Timelines { get; }
         public AddAccountViewModel AddAccount { get; }

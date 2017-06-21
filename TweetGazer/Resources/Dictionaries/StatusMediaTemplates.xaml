@@ -4,7 +4,7 @@
     xmlns:Behaviors="clr-namespace:TweetGazer.Behaviors"
     xmlns:Properties="clr-namespace:TweetGazer.Properties">
 
-    <DataTemplate x:Key="ImageTemplate">
+    <DataTemplate x:Key="StatusImageTemplate">
         <StackPanel
             HorizontalAlignment="Center"
             ClipToBounds="True"
@@ -15,16 +15,16 @@
                     Command="{Binding Path=DataContext.SelectMediaCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorLevel=2, AncestorType={x:Type Grid}}}"
                     CommandParameter="{Binding Path=MediaNumber, Mode=OneTime}"
                     Style="{StaticResource UwpLikeButtonStyle2}">
-                    <Image Behaviors:ImageBehavior.Source="{Binding Path=Image}" />
+                    <Image Behaviors:ImageBehavior.Source="{Binding Path=Image, Mode=OneTime}" />
                 </Button>
             </Grid>
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate x:Key="GifTemplate">
+    <DataTemplate x:Key="StatusGifTemplate">
         <Grid MaxHeight="300">
-            <Image Behaviors:ImageBehavior.Source="{Binding Path=Image, Mode=OneWay}" />
-            <MediaElement x:Name="MediaElement" Behaviors:GifMediaElementBehavior.Source="{Binding Path=Url, Mode=OneWay}" />
+            <Image Behaviors:ImageBehavior.Source="{Binding Path=Image, Mode=OneTime}" />
+            <MediaElement x:Name="MediaElement" Behaviors:GifMediaElementBehavior.Source="{Binding Path=Url, Mode=OneTime}" />
             <Grid
                 Width="40"
                 Height="20"
@@ -51,14 +51,14 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate x:Key="VideoTemplate">
+    <DataTemplate x:Key="StatusVideoTemplate">
         <Grid MaxHeight="300" Margin="1">
             <Button
-                Command="{Binding Path=DataContext.SelectMediaCommand, RelativeSource={RelativeSource FindAncestor, AncestorLevel=2, AncestorType={x:Type Grid}}}"
-                CommandParameter="{Binding Path=MediaNumber}"
+                Command="{Binding Path=DataContext.SelectMediaCommand, RelativeSource={RelativeSource FindAncestor, AncestorLevel=2, AncestorType={x:Type Grid}}, Mode=OneTime}"
+                CommandParameter="{Binding Path=MediaNumber, Mode=OneTime}"
                 Style="{StaticResource UwpLikeButtonStyle2}">
                 <Grid>
-                    <Image Behaviors:ImageBehavior.Source="{Binding Path=Image, Mode=OneWay}" />
+                    <Image Behaviors:ImageBehavior.Source="{Binding Path=Image, Mode=OneTime}" />
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Rectangle
                             Width="60"
@@ -108,84 +108,4 @@
             </Button>
         </Grid>
     </DataTemplate>
-
-    <!--<DataTemplate x:Key="VideoTemplate">
-        <Grid MaxHeight="300" Margin="1">
-            <Button
-                Command="{Binding Path=DataContext.MediaCommand, RelativeSource={RelativeSource FindAncestor, AncestorLevel=2, AncestorType={x:Type Grid}}}"
-                CommandParameter="{Binding Path=MediaNumber}"
-                Style="{StaticResource UwpLikeButtonStyle2}">
-                <Grid>
-                    <Image Behaviors:ImageBehavior.Source="{Binding Path=Image, Mode=OneWay}" />
-                    <Grid>
-                        <Rectangle
-                            Width="60"
-                            Height="60"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            RadiusX="30"
-                            RadiusY="30">
-                            <Rectangle.Fill>
-                                <SolidColorBrush Color="White" />
-                            </Rectangle.Fill>
-                        </Rectangle>
-                        <Rectangle
-                            Width="50"
-                            Height="50"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            RadiusX="25"
-                            RadiusY="25">
-                            <Rectangle.Fill>
-                                <SolidColorBrush Color="DodgerBlue" />
-                            </Rectangle.Fill>
-                        </Rectangle>
-                        <TextBlock
-                            Padding="5,0,0,1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="24"
-                            Foreground="White"
-                            Text="▶" />
-                    </Grid>
-                    <MediaElement x:Name="MediaElement" Behaviors:VideoMediaElementBehavior.Source="{Binding Path=Url}" />
-                    <Grid
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Bottom"
-                        Background="#88000000">
-                        <Grid>
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                FontSize="14"
-                                Foreground="White"
-                                Text="{Binding Path=Time, StringFormat=m\\:ss, Mode=OneTime}" />
-                        </Grid>
-                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                            <Button
-                                VerticalAlignment="Center"
-                                Command="{x:Static Behaviors:VideoMediaElementBehavior.PlayCommand}"
-                                CommandParameter="{Binding ElementName=MediaElement}"
-                                Style="{StaticResource FlatButtonStyle}">
-                                <TextBlock
-                                    FontSize="20"
-                                    Foreground="White"
-                                    Text="▶" />
-                            </Button>
-                            <Button
-                                VerticalAlignment="Center"
-                                Command="{x:Static Behaviors:VideoMediaElementBehavior.PauseCommand}"
-                                CommandParameter="{Binding ElementName=MediaElement}"
-                                Style="{StaticResource FlatButtonStyle}">
-                                <TextBlock
-                                    FontSize="20"
-                                    Foreground="White"
-                                    Text="◫" />
-                            </Button>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-            </Button>
-        </Grid>
-    </DataTemplate>-->
 </ResourceDictionary>

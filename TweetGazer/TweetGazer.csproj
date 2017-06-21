@@ -171,6 +171,8 @@
     <Compile Include="Behaviors\ReadMoreBehavior.cs" />
     <Compile Include="Behaviors\StatusMediaItemsControlBehavior.cs" />
     <Compile Include="Behaviors\TextBlockBehavior.cs" />
+    <Compile Include="Common\DirectMessage.cs" />
+    <Compile Include="Common\DirectMessagesStack.cs" />
     <Compile Include="Common\Mention.cs" />
     <Compile Include="Common\NativeMethods.cs" />
     <Compile Include="Common\Notification.cs" />
@@ -182,9 +184,11 @@
     <Compile Include="Models\MainWindow\AccountSettingsParameters.cs" />
     <Compile Include="Models\MainWindow\AddAccount.cs" />
     <Compile Include="Models\MainWindow\CreateStatusUserProperties.cs" />
+    <Compile Include="Models\MainWindow\DirectMessages.cs" />
     <Compile Include="Models\MainWindow\Instructions.cs" />
     <Compile Include="Models\MainWindow\MovableCreateStatus.cs" />
     <Compile Include="Models\MainWindow\Notice.cs" />
+    <Compile Include="Models\MainWindow\Search.cs" />
     <Compile Include="Models\MainWindow\StatusMedia.cs" />
     <Compile Include="Models\MainWindow\TimelinesGrid.cs" />
     <Compile Include="Models\MainWindow\ToastNotice.cs" />
@@ -222,11 +226,13 @@
     <Compile Include="ViewModels\MainWindow\AddTimelineViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ApplicationSettingsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CreateStatusViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\DirectMessagesViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\IFlyoutViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\InstructionsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MentionsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MovableCreateStatusViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\NoticeViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SearchViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TimelinesGridViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowImageViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowStatusViewModel.cs" />

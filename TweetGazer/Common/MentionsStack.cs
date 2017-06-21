@@ -22,7 +22,7 @@ namespace TweetGazer.Common
         /// <summary>
         /// メンションをスタックに積む
         /// </summary>
-        /// <param name="user">受け取ったユーザー</param>
+        /// <param name="user">送ってきたユーザー</param>
         /// <param name="status">送られてきたツイート</param>
         public static void StackMention(User user, Status status)
         {

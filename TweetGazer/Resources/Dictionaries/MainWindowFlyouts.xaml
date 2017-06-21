@@ -4,770 +4,14 @@
     xmlns:Behaviors="clr-namespace:TweetGazer.Behaviors"
     xmlns:Common="clr-namespace:TweetGazer.Common"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-    xmlns:Livet="http://schemas.livet-mvvm.net/2011/wpf"
     xmlns:Properties="clr-namespace:TweetGazer.Properties"
+    xmlns:Selectors="clr-namespace:TweetGazer.Selectors"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
-    <Controls:Flyout
-        x:Key="CreateStatusFlyout"
-        Width="335"
-        Margin="0,30,0,0"
-        Background="#BF000000"
-        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
-        DataContext="{Binding Path=CreateStatus}"
-        Foreground="White"
-        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
-        Position="Left">
-        <Grid Width="280" HorizontalAlignment="Right">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <ItemsControl
-                Grid.Row="0"
-                Margin="0,0,0,10"
-                ItemsSource="{Binding Path=Users, Mode=OneWay}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid
-                            Margin="5,5,5,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top">
-                            <Button
-                                Width="73"
-                                Height="73"
-                                Style="{StaticResource UwpLikeButtonStyle2}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Click">
-                                        <ei:CallMethodAction MethodName="ToggleIsCreate" TargetObject="{Binding}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <Grid>
-                                    <Rectangle RadiusX="5" RadiusY="5">
-                                        <Rectangle.Fill>
-                                            <ImageBrush Behaviors:ImageBehavior.ImageSource="{Binding Path=User.ProfileImageBigger, Mode=OneWay}" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    <Rectangle
-                                        RadiusX="5"
-                                        RadiusY="5"
-                                        Visibility="{Binding Path=IsCreate, Converter={StaticResource BooleanInvertAndToVisibilityConverter}, Mode=OneWay}">
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Opacity="0.5" Color="Black" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                </Grid>
-                            </Button>
-                            <Grid
-                                Margin="2"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top">
-                                <Rectangle
-                                    Width="20"
-                                    Height="20"
-                                    RadiusX="10"
-                                    RadiusY="10">
-                                    <Rectangle.Fill>
-                                        <SolidColorBrush Color="White" />
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <Rectangle
-                                    Width="16"
-                                    Height="16"
-                                    RadiusX="8"
-                                    RadiusY="8">
-                                    <Rectangle.Fill>
-                                        <SolidColorBrush Color="LightGray" />
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <Rectangle
-                                    Width="16"
-                                    Height="16"
-                                    RadiusX="8"
-                                    RadiusY="8"
-                                    Visibility="{Binding Path=IsCreate, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
-                                    <Rectangle.Fill>
-                                        <SolidColorBrush Color="#22ff66" />
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontSize="12"
-                                    Foreground="White"
-                                    Text="✔"
-                                    TextAlignment="Center" />
-                            </Grid>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Margin="0" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Border
-                    Grid.Row="0"
-                    VerticalAlignment="Top"
-                    BorderBrush="{DynamicResource AccentColorBrush}"
-                    BorderThickness="0,1,0,0" />
-                <TextBlock
-                    Grid.Row="0"
-                    Margin="3"
-                    FontSize="16"
-                    Foreground="LightGray"
-                    Text="{Binding Path=ReplyText, Mode=OneWay}"
-                    TextWrapping="Wrap" />
-                <Border
-                    Grid.Row="1"
-                    VerticalAlignment="Top"
-                    BorderBrush="{DynamicResource AccentColorBrush}"
-                    BorderThickness="0,1,0,0" />
-                <TextBox
-                    Grid.Row="1"
-                    MinHeight="200"
-                    Margin="0,1"
-                    Padding="0"
-                    Controls:TextBoxHelper.Watermark="今どうしてる？"
-                    AcceptsReturn="True"
-                    AllowDrop="True"
-                    Background="{x:Null}"
-                    BorderBrush="{x:Null}"
-                    BorderThickness="0"
-                    FontSize="22"
-                    TabIndex="1"
-                    Text="{Binding Path=StatusText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    TextWrapping="Wrap"
-                    VerticalScrollBarVisibility="Visible">
-                    <TextBox.InputBindings>
-                        <KeyBinding
-                            Key="Enter"
-                            Command="{Binding Path=PressCtrlEnterCommand}"
-                            Modifiers="Ctrl" />
-                    </TextBox.InputBindings>
-                </TextBox>
-                <ItemsControl
-                    Grid.Row="2"
-                    MaxHeight="400"
-                    VerticalAlignment="Bottom"
-                    ItemsSource="{Binding Path=FileNames}"
-                    ScrollViewer.CanContentScroll="True"
-                    VirtualizingPanel.ScrollUnit="Pixel"
-                    VirtualizingStackPanel.IsVirtualizing="True">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Image Source="{Binding}" />
-                                <MediaElement Source="{Binding}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.Template>
-                        <ControlTemplate TargetType="{x:Type ItemsControl}">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <ItemsPresenter />
-                            </ScrollViewer>
-                        </ControlTemplate>
-                    </ItemsControl.Template>
-                </ItemsControl>
-                <Controls:ProgressRing Grid.RowSpan="3" Visibility="{Binding Path=IsProgressRingVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <Border
-                    Grid.Row="2"
-                    VerticalAlignment="Bottom"
-                    BorderBrush="{DynamicResource AccentColorBrush}"
-                    BorderThickness="0,0,0,1" />
-                <Grid
-                    Grid.Row="3"
-                    Height="35"
-                    Margin="5,5,5,5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Button
-                        Grid.Column="0"
-                        Width="80"
-                        HorizontalAlignment="Left"
-                        HorizontalContentAlignment="Center"
-                        Background="{x:Null}"
-                        Content="メディア"
-                        FontSize="14"
-                        IsEnabled="{Binding Path=IsSelectButtonEnabled}"
-                        Style="{StaticResource AccentedSquareButtonStyle}"
-                        TabIndex="2">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="SelectMedia" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Button>
-                    <Button
-                        Grid.Column="1"
-                        Width="80"
-                        HorizontalAlignment="Left"
-                        HorizontalContentAlignment="Center"
-                        Background="Red"
-                        Content="削除"
-                        FontSize="14"
-                        Style="{StaticResource AccentedSquareButtonStyle}"
-                        TabIndex="2"
-                        Visibility="{Binding Path=IsDeleteButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="DeleteMedia" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Button>
-                    <Button
-                        Grid.Column="2"
-                        Width="80"
-                        HorizontalAlignment="Right"
-                        HorizontalContentAlignment="Center"
-                        Content="ツイート"
-                        FontSize="14"
-                        Style="{StaticResource AccentedSquareButtonStyle}"
-                        TabIndex="2">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="Create" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Button>
-                </Grid>
-            </Grid>
-        </Grid>
-    </Controls:Flyout>
-
-    <Controls:Flyout
-        x:Key="AddTimelineFlyout"
-        Width="335"
-        Margin="0,30,0,0"
-        Background="#BF000000"
-        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
-        DataContext="{Binding Path=AddTimeline}"
-        Foreground="White"
-        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
-        Position="Left">
-        <Grid Width="280" HorizontalAlignment="Right">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <StackPanel
-                    Grid.Row="0"
-                    Margin="10,0"
-                    Orientation="Horizontal">
-                    <Button
-                        Width="73"
-                        Height="73"
-                        Margin="0"
-                        HorizontalAlignment="Left"
-                        Style="{StaticResource UwpLikeButtonStyle2}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddOwnTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <Image Source="{Binding Path=ProfileImageUrl}" />
-                    </Button>
-                    <ComboBox
-                        Width="170"
-                        Margin="10,0,0,0"
-                        VerticalAlignment="Center"
-                        ItemsSource="{Binding Path=ScreenNames}"
-                        SelectedIndex="{Binding Path=TokenSuffix, Mode=TwoWay}" />
-                </StackPanel>
-                <Grid
-                    Grid.Row="1"
-                    Width="270"
-                    Height="270"
-                    Margin="5,15,5,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>
-                    <Controls:Tile
-                        Title="Timeline"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Width="80"
-                        Height="80"
-                        HorizontalAlignment="Center"
-                        CommandParameter="Home"
-                        HorizontalTitleAlignment="Center">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddHomeTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Controls:Tile>
-                    <Controls:Tile
-                        Title="User"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Width="80"
-                        Height="80"
-                        Margin="5,5,5,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        CommandParameter="User"
-                        HorizontalTitleAlignment="Center">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddUserTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Controls:Tile>
-                    <Controls:Tile
-                        Title="List"
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        Width="80"
-                        Height="80"
-                        HorizontalAlignment="Center"
-                        CommandParameter="List"
-                        HorizontalTitleAlignment="Center">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddListTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Controls:Tile>
-                    <Controls:Tile
-                        Title="Mention"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Width="80"
-                        Height="80"
-                        HorizontalAlignment="Center"
-                        CommandParameter="Mention"
-                        HorizontalTitleAlignment="Center">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddMentionTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Controls:Tile>
-                    <Controls:Tile
-                        Title="Notice"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Width="80"
-                        Height="80"
-                        HorizontalAlignment="Center"
-                        CommandParameter="Notice"
-                        HorizontalTitleAlignment="Center"
-                        IsEnabled="False">
-                        <!--<i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddHomeTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>-->
-                    </Controls:Tile>
-                    <Controls:Tile
-                        Title="Serach"
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        Width="80"
-                        Height="80"
-                        HorizontalAlignment="Center"
-                        CommandParameter="Search"
-                        HorizontalTitleAlignment="Center">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddSearchTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Controls:Tile>
-                    <Controls:Tile
-                        Title="Trend"
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Width="80"
-                        Height="80"
-                        HorizontalAlignment="Center"
-                        CommandParameter="Trend"
-                        HorizontalTitleAlignment="Center">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddTrendTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Controls:Tile>
-                    <Controls:Tile
-                        Title="Favorite"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        Width="80"
-                        Height="80"
-                        HorizontalAlignment="Center"
-                        CommandParameter="Favorite"
-                        HorizontalTitleAlignment="Center">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddFavoriteTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Controls:Tile>
-                    <Controls:Tile
-                        Title="DM"
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        Width="80"
-                        Height="80"
-                        HorizontalAlignment="Center"
-                        CommandParameter="DM"
-                        HorizontalTitleAlignment="Center"
-                        IsEnabled="False">
-                        <!--<i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="AddHomeTimeline" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>-->
-                    </Controls:Tile>
-                </Grid>
-            </Grid>
-            <Grid Grid.Row="1" Margin="0,10,0,0">
-                <ItemsControl Grid.Row="2" ItemsSource="{Binding Path=ExtraGrid}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Grid />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </Grid>
-        </Grid>
-    </Controls:Flyout>
-
-    <Controls:Flyout
-        x:Key="AccountSettingsFlyout"
-        Width="335"
-        Margin="0,30,0,0"
-        Background="#BF000000"
-        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
-        DataContext="{Binding Path=AccountSettings}"
-        Foreground="White"
-        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
-        Position="Left">
-        <Grid Width="280" HorizontalAlignment="Right">
-            <Grid.Background>
-                <SolidColorBrush Opacity="0.5" Color="Black" />
-            </Grid.Background>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid Margin="0,0,0,10">
-                <Button Style="{StaticResource UwpLikeButtonStyle2}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction MethodName="SelectProfileBanner" TargetObject="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <Image Source="{Binding Path=ProfileBanner, Mode=OneWay, Converter={StaticResource NullImageConverter}}" />
-                </Button>
-                <Button
-                    Width="25"
-                    Height="25"
-                    Margin="5"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Style="{StaticResource UwpLikeButtonStyle2}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction MethodName="RemoveProfileBanner" TargetObject="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <ContentControl ContentTemplate="{StaticResource AccentColorCloseIcon}" />
-                </Button>
-                <StackPanel Margin="10,0" Orientation="Horizontal">
-                    <Button
-                        Width="73"
-                        Height="73"
-                        HorizontalAlignment="Left"
-                        Style="{StaticResource UwpLikeButtonStyle2}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="SelectProfileImage" TargetObject="{Binding}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <Image Source="{Binding Path=ProfileImage, Mode=OneWay, Converter={StaticResource NullImageConverter}}" />
-                    </Button>
-                    <ComboBox
-                        Width="170"
-                        Margin="10,0,0,0"
-                        VerticalAlignment="Center"
-                        ItemsSource="{Binding Path=ScreenNames, StringFormat=@{0}}"
-                        SelectedIndex="{Binding Path=TokenSuffix, Mode=TwoWay}" />
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Border
-                    VerticalAlignment="Top"
-                    BorderBrush="{DynamicResource AccentColorBrush}"
-                    BorderThickness="0,1,0,0" />
-                <ScrollViewer Margin="0,1">
-                    <StackPanel Margin="0,5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <StackPanel Grid.ColumnSpan="2">
-                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
-                                <TextBlock
-                                    Margin="10"
-                                    FontSize="20"
-                                    Foreground="White"
-                                    Text="プロフィール" />
-                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,1,0,0" />
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Grid.Column="1">
-                                <Image />
-                                <Image />
-                                <TextBox
-                                    Margin="5"
-                                    Controls:TextBoxHelper.Watermark="Name"
-                                    FontSize="16"
-                                    Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBox
-                                    Margin="5"
-                                    Controls:TextBoxHelper.Watermark="ScreenName"
-                                    FontSize="16"
-                                    IsEnabled="False"
-                                    Text="{Binding Path=ScreenName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBox
-                                    MinHeight="64"
-                                    Margin="5"
-                                    Controls:TextBoxHelper.Watermark="Description"
-                                    AcceptsReturn="True"
-                                    FontSize="16"
-                                    Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBox
-                                    Margin="5"
-                                    Controls:TextBoxHelper.Watermark="Location"
-                                    FontSize="16"
-                                    Text="{Binding Path=Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBox
-                                    Margin="5"
-                                    Controls:TextBoxHelper.Watermark="Url"
-                                    FontSize="16"
-                                    Text="{Binding Path=Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                        </Grid>
-                        <Grid IsEnabled="False">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <StackPanel Grid.ColumnSpan="2">
-                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
-                                <TextBlock
-                                    Margin="10"
-                                    FontSize="20"
-                                    Foreground="White"
-                                    Text="プライバシーとセキュリティ" />
-                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,1,0,0" />
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Grid.Column="1">
-                                <TextBlock
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="自分を画像にタグ付けすることを許可" />
-                                <RadioButton
-                                    Content="全てのアカウント"
-                                    FontSize="16"
-                                    Foreground="White" />
-                                <RadioButton
-                                    Content="フォローのみ"
-                                    FontSize="16"
-                                    Foreground="White" />
-                                <RadioButton
-                                    Content="許可しない"
-                                    FontSize="16"
-                                    Foreground="White" />
-                                <TextBlock
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="ツイートの公開設定" />
-                                <CheckBox
-                                    Content="ツイートを非公開にする"
-                                    FontSize="16"
-                                    Foreground="White" />
-                                <TextBlock
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="位置情報をツイート" />
-                                <CheckBox
-                                    Content="ツイートに位置情報を追加"
-                                    FontSize="16"
-                                    Foreground="White" />
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
-                </ScrollViewer>
-                <Border
-                    VerticalAlignment="Bottom"
-                    BorderBrush="{DynamicResource AccentColorBrush}"
-                    BorderThickness="0,0,0,1" />
-                <Button
-                    Grid.Row="1"
-                    Width="120"
-                    Height="35"
-                    Margin="0,5,5,5"
-                    HorizontalAlignment="Left"
-                    HorizontalContentAlignment="Center"
-                    Content="アカウント追加"
-                    Style="{StaticResource AccentedSquareButtonStyle}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction MethodName="ToggleOpen" TargetObject="{Binding}" />
-                            <ei:CallMethodAction MethodName="Open" TargetObject="{Binding Path=DataContext.AddAccount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-                <Button
-                    Grid.Row="1"
-                    Width="83"
-                    Height="35"
-                    Margin="0,5,5,5"
-                    HorizontalAlignment="Right"
-                    HorizontalContentAlignment="Center"
-                    Content="保存"
-                    FontSize="14"
-                    Style="{StaticResource AccentedSquareButtonStyle}"
-                    TabIndex="2">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction MethodName="Save" TargetObject="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-            </Grid>
-        </Grid>
-    </Controls:Flyout>
-
-    <Controls:Flyout
-        x:Key="MentionsFlyout"
-        Width="335"
-        Margin="0,30,0,0"
-        Background="#BF000000"
-        CloseCommand="{Binding Path=Mentions.CloseCommand, Mode=OneTime}"
-        Foreground="White"
-        IsOpen="{Binding Path=Mentions.IsOpen, Mode=TwoWay}"
-        Position="Left">
-        <Grid Width="280" HorizontalAlignment="Right">
-            <ItemsControl
-                Grid.Row="1"
-                ItemsSource="{Binding Source={x:Static Common:MentionsStack.Mentions}, Mode=OneWay}"
-                ScrollViewer.CanContentScroll="True"
-                VirtualizingPanel.ScrollUnit="Pixel"
-                VirtualizingStackPanel.IsVirtualizing="True">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock
-                                FontSize="20"
-                                Foreground="Pink"
-                                Text="{Binding Path=Status}" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
-                    <ControlTemplate TargetType="{x:Type ItemsControl}">
-                        <ScrollViewer Behaviors:ScrollViewerBehavior.AnimationScrolling="True" VerticalScrollBarVisibility="Visible">
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </ScrollViewer>
-                    </ControlTemplate>
-                </ItemsControl.Template>
-            </ItemsControl>
-        </Grid>
-    </Controls:Flyout>
-
-    <Controls:Flyout
-        x:Key="NoticeFlyout"
-        Width="335"
-        Margin="0,30,0,0"
-        Background="#BF000000"
-        CloseCommand="{Binding Path=Notice.CloseCommand, Mode=OneTime}"
-        Foreground="White"
-        IsOpen="{Binding Path=Notice.IsOpen, Mode=TwoWay}"
-        Position="Left">
-        <Grid Width="280" HorizontalAlignment="Right">
-            <ItemsControl
-                Grid.Row="1"
-                ItemsSource="{Binding Source={x:Static Common:NotificationsStack.Notifications}, Mode=OneWay}"
-                ScrollViewer.CanContentScroll="True"
-                VirtualizingPanel.ScrollUnit="Pixel"
-                VirtualizingStackPanel.IsVirtualizing="True">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock
-                                FontSize="20"
-                                Foreground="Pink"
-                                Text="{Binding Path=Text}" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
-                    <ControlTemplate TargetType="{x:Type ItemsControl}">
-                        <ScrollViewer Behaviors:ScrollViewerBehavior.AnimationScrolling="True" VerticalScrollBarVisibility="Visible">
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </ScrollViewer>
-                    </ControlTemplate>
-                </ItemsControl.Template>
-            </ItemsControl>
-        </Grid>
-    </Controls:Flyout>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/TimelineResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <Controls:Flyout
         x:Key="ApplicationSettingsFlyout"
@@ -1085,6 +329,880 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>
+        </Grid>
+    </Controls:Flyout>
+
+    <Controls:Flyout
+        x:Key="MentionsFlyout"
+        Width="335"
+        Margin="0,30,0,0"
+        Background="#BF000000"
+        CloseCommand="{Binding Path=Mentions.CloseCommand, Mode=OneTime}"
+        Foreground="White"
+        IsOpen="{Binding Path=Mentions.IsOpen, Mode=TwoWay}"
+        Position="Left">
+        <Grid Width="280" HorizontalAlignment="Right">
+            <ItemsControl
+                Grid.Row="1"
+                ItemsSource="{Binding Source={x:Static Common:MentionsStack.Mentions}, Mode=OneWay}"
+                ScrollViewer.CanContentScroll="True"
+                VirtualizingPanel.ScrollUnit="Pixel"
+                VirtualizingStackPanel.IsVirtualizing="True">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock
+                                FontSize="20"
+                                Foreground="Pink"
+                                Text="{Binding Path=Status}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <ScrollViewer Behaviors:ScrollViewerBehavior.AnimationScrolling="True" VerticalScrollBarVisibility="Visible">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+            </ItemsControl>
+        </Grid>
+    </Controls:Flyout>
+
+    <Controls:Flyout
+        x:Key="NoticeFlyout"
+        Width="335"
+        Margin="0,30,0,0"
+        Background="#BF000000"
+        CloseCommand="{Binding Path=Notice.CloseCommand, Mode=OneTime}"
+        Foreground="White"
+        IsOpen="{Binding Path=Notice.IsOpen, Mode=TwoWay}"
+        Position="Left">
+        <Grid Width="280" HorizontalAlignment="Right">
+            <ItemsControl
+                Grid.Row="1"
+                ItemsSource="{Binding Source={x:Static Common:NotificationsStack.Notifications}, Mode=OneWay}"
+                ScrollViewer.CanContentScroll="True"
+                VirtualizingPanel.ScrollUnit="Pixel"
+                VirtualizingStackPanel.IsVirtualizing="True">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock
+                                FontSize="20"
+                                Foreground="Pink"
+                                Text="{Binding Path=Text}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <ScrollViewer Behaviors:ScrollViewerBehavior.AnimationScrolling="True" VerticalScrollBarVisibility="Visible">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+            </ItemsControl>
+        </Grid>
+    </Controls:Flyout>
+
+    <Controls:Flyout
+        x:Key="DirectMessagesFlyout"
+        Width="335"
+        Margin="0,30,0,0"
+        Background="#BF000000"
+        CloseCommand="{Binding Path=DirectMessages.CloseCommand, Mode=OneTime}"
+        Foreground="White"
+        IsOpen="{Binding Path=DirectMessages.IsOpen, Mode=TwoWay}"
+        Position="Left">
+        <Grid Width="280" HorizontalAlignment="Right" />
+    </Controls:Flyout>
+
+    <Controls:Flyout
+        x:Key="AccountSettingsFlyout"
+        Width="335"
+        Margin="0,30,0,0"
+        Background="#BF000000"
+        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
+        DataContext="{Binding Path=AccountSettings}"
+        Foreground="White"
+        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
+        Position="Left">
+        <Grid Width="280" HorizontalAlignment="Right">
+            <Grid.Background>
+                <SolidColorBrush Opacity="0.5" Color="Black" />
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Margin="0,0,0,10">
+                <Button Style="{StaticResource UwpLikeButtonStyle2}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="SelectProfileBanner" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <Image Source="{Binding Path=ProfileBanner, Mode=OneWay, Converter={StaticResource NullImageConverter}}" />
+                </Button>
+                <Button
+                    Width="25"
+                    Height="25"
+                    Margin="5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="RemoveProfileBanner" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ContentControl ContentTemplate="{StaticResource AccentColorCloseIcon}" />
+                </Button>
+                <StackPanel Margin="10,0" Orientation="Horizontal">
+                    <Button
+                        Width="73"
+                        Height="73"
+                        HorizontalAlignment="Left"
+                        Style="{StaticResource UwpLikeButtonStyle2}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="SelectProfileImage" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Image Source="{Binding Path=ProfileImage, Mode=OneWay, Converter={StaticResource NullImageConverter}}" />
+                    </Button>
+                    <ComboBox
+                        Width="170"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        ItemsSource="{Binding Path=ScreenNames, StringFormat=@{0}}"
+                        SelectedIndex="{Binding Path=TokenSuffix, Mode=TwoWay}" />
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border
+                    VerticalAlignment="Top"
+                    BorderBrush="{DynamicResource AccentColorBrush}"
+                    BorderThickness="0,1,0,0" />
+                <ScrollViewer Margin="0,1">
+                    <StackPanel Margin="0,5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.ColumnSpan="2">
+                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
+                                <TextBlock
+                                    Margin="10"
+                                    FontSize="20"
+                                    Foreground="White"
+                                    Text="プロフィール" />
+                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,1,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1">
+                                <Image />
+                                <Image />
+                                <TextBox
+                                    Margin="5"
+                                    Controls:TextBoxHelper.Watermark="Name"
+                                    FontSize="16"
+                                    Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox
+                                    Margin="5"
+                                    Controls:TextBoxHelper.Watermark="ScreenName"
+                                    FontSize="16"
+                                    IsEnabled="False"
+                                    Text="{Binding Path=ScreenName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox
+                                    MinHeight="64"
+                                    Margin="5"
+                                    Controls:TextBoxHelper.Watermark="Description"
+                                    AcceptsReturn="True"
+                                    FontSize="16"
+                                    Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox
+                                    Margin="5"
+                                    Controls:TextBoxHelper.Watermark="Location"
+                                    FontSize="16"
+                                    Text="{Binding Path=Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox
+                                    Margin="5"
+                                    Controls:TextBoxHelper.Watermark="Url"
+                                    FontSize="16"
+                                    Text="{Binding Path=Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid IsEnabled="False">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.ColumnSpan="2">
+                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
+                                <TextBlock
+                                    Margin="10"
+                                    FontSize="20"
+                                    Foreground="White"
+                                    Text="プライバシーとセキュリティ" />
+                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,1,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1">
+                                <TextBlock
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="自分を画像にタグ付けすることを許可" />
+                                <RadioButton
+                                    Content="全てのアカウント"
+                                    FontSize="16"
+                                    Foreground="White" />
+                                <RadioButton
+                                    Content="フォローのみ"
+                                    FontSize="16"
+                                    Foreground="White" />
+                                <RadioButton
+                                    Content="許可しない"
+                                    FontSize="16"
+                                    Foreground="White" />
+                                <TextBlock
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="ツイートの公開設定" />
+                                <CheckBox
+                                    Content="ツイートを非公開にする"
+                                    FontSize="16"
+                                    Foreground="White" />
+                                <TextBlock
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Text="位置情報をツイート" />
+                                <CheckBox
+                                    Content="ツイートに位置情報を追加"
+                                    FontSize="16"
+                                    Foreground="White" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+                <Border
+                    VerticalAlignment="Bottom"
+                    BorderBrush="{DynamicResource AccentColorBrush}"
+                    BorderThickness="0,0,0,1" />
+                <Button
+                    Grid.Row="1"
+                    Width="120"
+                    Height="35"
+                    Margin="0,5,5,5"
+                    HorizontalAlignment="Left"
+                    HorizontalContentAlignment="Center"
+                    Content="アカウント追加"
+                    Style="{StaticResource AccentedSquareButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="ToggleOpen" TargetObject="{Binding}" />
+                            <ei:CallMethodAction MethodName="Open" TargetObject="{Binding Path=DataContext.AddAccount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button
+                    Grid.Row="1"
+                    Width="83"
+                    Height="35"
+                    Margin="0,5,5,5"
+                    HorizontalAlignment="Right"
+                    HorizontalContentAlignment="Center"
+                    Content="保存"
+                    FontSize="14"
+                    Style="{StaticResource AccentedSquareButtonStyle}"
+                    TabIndex="2">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Save" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </Grid>
+        </Grid>
+    </Controls:Flyout>
+
+    <Controls:Flyout
+        x:Key="AddTimelineFlyout"
+        Width="335"
+        Margin="0,30,0,0"
+        Background="#BF000000"
+        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
+        DataContext="{Binding Path=AddTimeline}"
+        Foreground="White"
+        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
+        Position="Left">
+        <Grid Width="280" HorizontalAlignment="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Margin="10,0"
+                    Orientation="Horizontal">
+                    <Button
+                        Width="73"
+                        Height="73"
+                        Margin="0"
+                        HorizontalAlignment="Left"
+                        Style="{StaticResource UwpLikeButtonStyle2}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddOwnTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Image Source="{Binding Path=ProfileImageUrl}" />
+                    </Button>
+                    <ComboBox
+                        Width="170"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        ItemsSource="{Binding Path=ScreenNames}"
+                        SelectedIndex="{Binding Path=TokenSuffix, Mode=TwoWay}" />
+                </StackPanel>
+                <Grid
+                    Grid.Row="1"
+                    Width="270"
+                    Height="270"
+                    Margin="5,15,5,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Controls:Tile
+                        Title="Timeline"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Home"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddHomeTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="User"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Width="80"
+                        Height="80"
+                        Margin="5,5,5,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        CommandParameter="User"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddUserTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="List"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="List"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddListTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Mention"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Mention"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddMentionTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Notice"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Notice"
+                        HorizontalTitleAlignment="Center"
+                        IsEnabled="False">
+                        <!--<i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddHomeTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>-->
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Serach"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Search"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddSearchTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Trend"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Trend"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddTrendTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Favorite"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Favorite"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddFavoriteTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="DM"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="DM"
+                        HorizontalTitleAlignment="Center"
+                        IsEnabled="False">
+                        <!--<i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddHomeTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>-->
+                    </Controls:Tile>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <ItemsControl Grid.Row="2" ItemsSource="{Binding Path=ExtraGrid}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
+        </Grid>
+    </Controls:Flyout>
+
+    <Controls:Flyout
+        x:Key="SearchFlyout"
+        Width="335"
+        Margin="0,30,0,0"
+        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
+        DataContext="{Binding Path=Search}"
+        Foreground="White"
+        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
+        Position="Left">
+        <Controls:Flyout.Background>
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+        </Controls:Flyout.Background>
+        <Grid Width="280" HorizontalAlignment="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel
+                Grid.Row="0"
+                Margin="10,0"
+                Orientation="Horizontal">
+                <Button
+                    Width="73"
+                    Height="73"
+                    Margin="0"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    <Image Source="{Binding Path=ProfileImageUrl, Mode=OneWay}" />
+                </Button>
+                <ComboBox
+                    Width="170"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    ItemsSource="{Binding Path=ScreenNames}"
+                    SelectedIndex="{Binding Path=TokenSuffix, Mode=TwoWay}" />
+            </StackPanel>
+            <Grid Grid.Row="1" Margin="10,5">
+                <Button
+                    Width="20"
+                    Height="20"
+                    Margin="2"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource UwpLikeButtonStyle2}"
+                    Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Back" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ContentControl ContentTemplate="{StaticResource FrontColorBackArrowIcon}" />
+                </Button>
+                <TextBox
+                    Margin="30,0"
+                    Foreground="{DynamicResource TextBrush}"
+                    Text="{Binding Path=SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding Path=SearchingCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+                <Button
+                    Width="20"
+                    Height="20"
+                    Margin="2"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Searching" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ContentControl ContentTemplate="{StaticResource FrontColorSearchIcon}" />
+                </Button>
+            </Grid>
+            <ItemsControl
+                Grid.Row="2"
+                Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
+                ItemsSource="{Binding Path=TimelineItems, Mode=OneWay}"
+                ScrollViewer.CanContentScroll="True"
+                VirtualizingPanel.CacheLength="0"
+                VirtualizingPanel.ScrollUnit="Pixel"
+                VirtualizingStackPanel.IsVirtualizing="True">
+                <ItemsControl.ItemTemplateSelector>
+                    <Selectors:TimelineItemTemplateSelector />
+                </ItemsControl.ItemTemplateSelector>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <ScrollViewer Behaviors:ScrollViewerBehavior.AnimationScrolling="True" VerticalScrollBarVisibility="Visible">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+            </ItemsControl>
+        </Grid>
+    </Controls:Flyout>
+
+    <Controls:Flyout
+        x:Key="CreateStatusFlyout"
+        Width="335"
+        Margin="0,30,0,0"
+        Background="#BF000000"
+        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
+        DataContext="{Binding Path=CreateStatus}"
+        Foreground="White"
+        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
+        Position="Left">
+        <Grid Width="280" HorizontalAlignment="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ItemsControl
+                Grid.Row="0"
+                Margin="0,0,0,10"
+                ItemsSource="{Binding Path=Users, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Margin="5,5,5,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top">
+                            <Button
+                                Width="73"
+                                Height="73"
+                                Style="{StaticResource UwpLikeButtonStyle2}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <ei:CallMethodAction MethodName="ToggleIsCreate" TargetObject="{Binding}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <Grid>
+                                    <Rectangle RadiusX="5" RadiusY="5">
+                                        <Rectangle.Fill>
+                                            <ImageBrush Behaviors:ImageBehavior.ImageSource="{Binding Path=User.ProfileImageBigger, Mode=OneWay}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Rectangle
+                                        RadiusX="5"
+                                        RadiusY="5"
+                                        Visibility="{Binding Path=IsCreate, Converter={StaticResource BooleanInvertAndToVisibilityConverter}, Mode=OneWay}">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Opacity="0.5" Color="Black" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Grid>
+                            </Button>
+                            <Grid
+                                Margin="2"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top">
+                                <Rectangle
+                                    Width="20"
+                                    Height="20"
+                                    RadiusX="10"
+                                    RadiusY="10">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="White" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Rectangle
+                                    Width="16"
+                                    Height="16"
+                                    RadiusX="8"
+                                    RadiusY="8">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="LightGray" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Rectangle
+                                    Width="16"
+                                    Height="16"
+                                    RadiusX="8"
+                                    RadiusY="8"
+                                    Visibility="{Binding Path=IsCreate, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="#22ff66" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="12"
+                                    Foreground="White"
+                                    Text="✔"
+                                    TextAlignment="Center" />
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Margin="0" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border
+                    Grid.Row="0"
+                    VerticalAlignment="Top"
+                    BorderBrush="{DynamicResource AccentColorBrush}"
+                    BorderThickness="0,1,0,0" />
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="3"
+                    FontSize="16"
+                    Foreground="LightGray"
+                    Text="{Binding Path=ReplyText, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+                <Border
+                    Grid.Row="1"
+                    VerticalAlignment="Top"
+                    BorderBrush="{DynamicResource AccentColorBrush}"
+                    BorderThickness="0,1,0,0" />
+                <TextBox
+                    Grid.Row="1"
+                    MinHeight="200"
+                    Margin="0,1"
+                    Padding="0"
+                    Controls:TextBoxHelper.Watermark="今どうしてる？"
+                    AcceptsReturn="True"
+                    AllowDrop="True"
+                    Background="{x:Null}"
+                    BorderBrush="{x:Null}"
+                    BorderThickness="0"
+                    FontSize="22"
+                    Foreground="White"
+                    TabIndex="1"
+                    Text="{Binding Path=StatusText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Visible">
+                    <TextBox.InputBindings>
+                        <KeyBinding
+                            Key="Enter"
+                            Command="{Binding Path=PressCtrlEnterCommand}"
+                            Modifiers="Ctrl" />
+                    </TextBox.InputBindings>
+                </TextBox>
+                <ItemsControl
+                    Grid.Row="2"
+                    MaxHeight="400"
+                    VerticalAlignment="Bottom"
+                    ItemsSource="{Binding Path=FileNames}"
+                    ScrollViewer.CanContentScroll="True"
+                    VirtualizingPanel.ScrollUnit="Pixel"
+                    VirtualizingStackPanel.IsVirtualizing="True">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Image Source="{Binding}" />
+                                <MediaElement Source="{Binding}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="{x:Type ItemsControl}">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                </ItemsControl>
+                <Controls:ProgressRing Grid.RowSpan="3" Visibility="{Binding Path=IsProgressRingVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Border
+                    Grid.Row="2"
+                    VerticalAlignment="Bottom"
+                    BorderBrush="{DynamicResource AccentColorBrush}"
+                    BorderThickness="0,0,0,1" />
+                <Grid
+                    Grid.Row="3"
+                    Height="35"
+                    Margin="5,5,5,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        Grid.Column="0"
+                        Width="80"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Center"
+                        Background="{x:Null}"
+                        Content="メディア"
+                        FontSize="14"
+                        IsEnabled="{Binding Path=IsSelectButtonEnabled}"
+                        Style="{StaticResource AccentedSquareButtonStyle}"
+                        TabIndex="2">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="SelectMedia" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                    <Button
+                        Grid.Column="1"
+                        Width="80"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Center"
+                        Background="Red"
+                        Content="削除"
+                        FontSize="14"
+                        Style="{StaticResource AccentedSquareButtonStyle}"
+                        TabIndex="2"
+                        Visibility="{Binding Path=IsDeleteButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="DeleteMedia" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                    <Button
+                        Grid.Column="2"
+                        Width="80"
+                        HorizontalAlignment="Right"
+                        HorizontalContentAlignment="Center"
+                        Content="ツイート"
+                        FontSize="14"
+                        Style="{StaticResource AccentedSquareButtonStyle}"
+                        TabIndex="2">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="Create" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </Grid>
+            </Grid>
         </Grid>
     </Controls:Flyout>
 </ResourceDictionary>

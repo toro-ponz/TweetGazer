@@ -18,13 +18,13 @@ namespace TweetGazer.Selectors
             switch (data.Type)
             {
                 case StatusMediaType.Image:
-                    result = media.FindResource("ImageTemplate") as DataTemplate;
+                    result = media.FindResource("StatusImageTemplate") as DataTemplate;
                     break;
                 case StatusMediaType.AnimationGif:
-                    result = media.FindResource("GifTemplate") as DataTemplate;
+                    result = media.FindResource("StatusGifTemplate") as DataTemplate;
                     break;
                 case StatusMediaType.Video:
-                    result = media.FindResource("VideoTemplate") as DataTemplate;
+                    result = media.FindResource("StatusVideoTemplate") as DataTemplate;
                     break;
             }
 

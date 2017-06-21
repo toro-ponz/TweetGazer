@@ -111,7 +111,7 @@ namespace TweetGazer.Models
                             ReceiveEventMessage(j, x);
                         });
                         //ダイレクトメッセージを受け取ったとき
-                        stream.OfType<DirectMessage>().Subscribe(ReceiveDirectMessage);
+                        stream.OfType<CoreTweet.DirectMessage>().Subscribe(ReceiveDirectMessage);
 
                         this.Disposables.Add(stream.Connect());
                     }
@@ -261,7 +261,7 @@ namespace TweetGazer.Models
         /// DMが流れてきたとき
         /// </summary>
         /// <param name="directMessage">DM</param>
-        private void ReceiveDirectMessage(DirectMessage directMessage)
+        private void ReceiveDirectMessage(CoreTweet.DirectMessage directMessage)
         {
 
         }
