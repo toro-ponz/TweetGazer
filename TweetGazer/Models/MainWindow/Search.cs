@@ -9,7 +9,7 @@ namespace TweetGazer.Models.MainWindow
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public Search()
+        public Search() : base()
         {
 
         }
@@ -39,7 +39,9 @@ namespace TweetGazer.Models.MainWindow
                 );
             }
 
-            base.Open();
+            this.ScreenNames.Clear();
+            foreach (var user in AccountTokens.Users)
+                this.ScreenNames.Add("@" + user.ScreenName);
         }
 
         /// <summary>

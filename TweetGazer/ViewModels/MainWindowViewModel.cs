@@ -160,6 +160,7 @@ namespace TweetGazer.ViewModels
             this.CompositeDisposable.Add(this.Timelines);
             this.CompositeDisposable.Add(this.AddAccount);
             this.CompositeDisposable.Add(this.Instructions);
+            this.CompositeDisposable.Add(this.Search);
 
             this.CompositeDisposable.Add(this.MainWindowModel);
         }

@@ -875,9 +875,29 @@
         <Grid Width="280" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Margin="10,5">
+            <StackPanel
+                Grid.Row="0"
+                Margin="10,0"
+                Orientation="Horizontal">
+                <Button
+                    Width="73"
+                    Height="73"
+                    Margin="0"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    <Image Source="{Binding Path=ProfileImageUrl, Mode=OneWay}" />
+                </Button>
+                <ComboBox
+                    Width="170"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    ItemsSource="{Binding Path=ScreenNames}"
+                    SelectedIndex="{Binding Path=TokenSuffix, Mode=TwoWay}" />
+            </StackPanel>
+            <Grid Grid.Row="1" Margin="10,5">
                 <Button
                     Width="20"
                     Height="20"
@@ -915,7 +935,7 @@
                 </Button>
             </Grid>
             <ItemsControl
-                Grid.Row="1"
+                Grid.Row="2"
                 Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
                 ItemsSource="{Binding Path=TimelineItems, Mode=OneWay}"
                 ScrollViewer.CanContentScroll="True"

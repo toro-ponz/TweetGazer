@@ -465,7 +465,7 @@ namespace TweetGazer.Models
 
             //ウィンドウから自分を削除
             var mainWindow = CommonMethods.MainWindow;
-            if (mainWindow != null)
+            if (mainWindow != null && this.ColumnIndex >= 0)
                 (mainWindow.DataContext as MainWindowViewModel).Timelines.RemoveTimeline(this.ColumnIndex);
         }
 
@@ -1146,6 +1146,21 @@ namespace TweetGazer.Models
         private bool _IsVisibleOtherStatus;
         #endregion
 
+        #region TokenSuffix 変更通知プロパティ
+        public int TokenSuffix
+        {
+            get
+            {
+                return this.Data.TokenSuffix;
+            }
+            set
+            {
+                this.Data.TokenSuffix = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
         public ObservableCollection<TimelineItemProperties> TimelineItems { get; }
         public ObservableCollection<TimelineNotice> TimelineNotice { get; }
 
@@ -1160,13 +1175,6 @@ namespace TweetGazer.Models
             set
             {
                 this.Data.ScreenName = value;
-            }
-        }
-        public int TokenSuffix
-        {
-            get
-            {
-                return this.Data.TokenSuffix;
             }
         }
         public int ColumnIndex

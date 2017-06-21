@@ -1,6 +1,8 @@
 ﻿using Livet;
 using Livet.EventListeners;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TweetGazer.Common;
 using TweetGazer.Models;
@@ -25,8 +27,17 @@ namespace TweetGazer.ViewModels.MainWindow
                 {
                     switch (__.PropertyName)
                     {
+                        case nameof(this.Search.ScreenNames):
+                            this.RaisePropertyChanged(() => this.ScreenNames);
+                            break;
                         case nameof(this.Search.IsOpen):
                             this.RaisePropertyChanged(() => this.IsOpen);
+                            break;
+                        case nameof(this.Search.ProfileImageUrl):
+                            this.RaisePropertyChanged(() => this.ProfileImageUrl);
+                            break;
+                        case nameof(this.Search.TokenSuffix):
+                            this.RaisePropertyChanged(() => this.TokenSuffix);
                             break;
                         case nameof(this.Search.SearchText):
                             this.RaisePropertyChanged(() => this.SearchText);
@@ -151,6 +162,42 @@ namespace TweetGazer.ViewModels.MainWindow
             {
                 this.Search.SearchText = value;
                 this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region ScreenNames 変更通知プロパティ
+        public ObservableCollection<string> ScreenNames
+        {
+            get
+            {
+                return this.Search.ScreenNames;
+            }
+        }
+        #endregion
+
+        #region TokenSuffix 変更通知プロパティ
+        public int TokenSuffix
+        {
+            get
+            {
+                return this.Search.TokenSuffix;
+            }
+            set
+            {
+                this.Search.TokenSuffix = value;
+                this.Timeline.TokenSuffix = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region ProfileImageUrl 変更通知プロパティ
+        public Uri ProfileImageUrl
+        {
+            get
+            {
+                return this.Search.ProfileImageUrl;
             }
         }
         #endregion
