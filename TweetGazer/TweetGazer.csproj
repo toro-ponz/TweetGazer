@@ -369,7 +369,6 @@
   <ItemGroup>
     <Resource Include="Assets\Images\app.ico" />
     <EmbeddedResource Include="Assets\Sounds\notification01.wav" />
-    <EmbeddedResource Include="Assets\Sounds\notification02.wav" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">

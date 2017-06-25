@@ -689,7 +689,7 @@ namespace TweetGazer.Models
         /// <param name="disconnectMessage">切断情報</param>
         private void ProcessDisconnectMessage(DisconnectMessage disconnectMessage)
         {
-            CommonMethods.PlaySoundEffect(SoundEffect.Notification2);
+
         }
 
         /// <summary>

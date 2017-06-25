@@ -124,9 +124,6 @@ namespace TweetGazer.Common
                 case SoundEffect.Notification1:
                     player = new SoundPlayer(assembly.GetManifestResourceStream("TweetGazer.Assets.Sounds.notification01.wav"));
                     break;
-                case SoundEffect.Notification2:
-                    player = new SoundPlayer(assembly.GetManifestResourceStream("TweetGazer.Assets.Sounds.notification02.wav"));
-                    break;
             }
 
             if (player != null)
@@ -409,9 +406,5 @@ namespace TweetGazer.Common
         /// 通知音
         /// </summary>
         Notification1,
-        /// <summary>
-        /// エラー音
-        /// </summary>
-        Notification2
     }
 }
