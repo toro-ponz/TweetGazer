@@ -336,8 +336,8 @@
         x:Key="MentionsFlyout"
         Width="335"
         Margin="0,30,0,0"
-        DataContext="{Binding Path=Mentions}"
         CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
+        DataContext="{Binding Path=Mentions}"
         Foreground="{DynamicResource TextBrush}"
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
@@ -353,7 +353,8 @@
             <StackPanel
                 Grid.Row="0"
                 Margin="10,0"
-                Orientation="Horizontal">
+                Orientation="Horizontal"
+                Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button
                     Width="73"
                     Height="73"
@@ -388,9 +389,9 @@
                     Width="20"
                     Height="20"
                     Margin="10,0"
-                    Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}"
                     HorizontalAlignment="Right"
-                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    Style="{StaticResource UwpLikeButtonStyle2}"
+                    Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <ei:CallMethodAction MethodName="Delete" TargetObject="{Binding}" />
@@ -447,7 +448,8 @@
             <StackPanel
                 Grid.Row="0"
                 Margin="10,0"
-                Orientation="Horizontal">
+                Orientation="Horizontal"
+                Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button
                     Width="73"
                     Height="73"
@@ -482,9 +484,9 @@
                     Width="20"
                     Height="20"
                     Margin="10,0"
-                    Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}"
                     HorizontalAlignment="Right"
-                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    Style="{StaticResource UwpLikeButtonStyle2}"
+                    Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <ei:CallMethodAction MethodName="Delete" TargetObject="{Binding}" />
