@@ -187,7 +187,7 @@
     <Compile Include="Models\MainWindow\DirectMessages.cs" />
     <Compile Include="Models\MainWindow\Instructions.cs" />
     <Compile Include="Models\MainWindow\MovableCreateStatus.cs" />
-    <Compile Include="Models\MainWindow\Notice.cs" />
+    <Compile Include="Models\MainWindow\Notifications.cs" />
     <Compile Include="Models\MainWindow\Search.cs" />
     <Compile Include="Models\MainWindow\StatusMedia.cs" />
     <Compile Include="Models\MainWindow\TimelinesGrid.cs" />
@@ -203,6 +203,7 @@
     <Compile Include="Models\MainWindow\FlyoutBase.cs" />
     <Compile Include="Models\MainWindow\Mentions.cs" />
     <Compile Include="Common\MentionsStack.cs" />
+    <Compile Include="Models\Timeline\NotificationProperties.cs" />
     <Compile Include="Models\Timeline\QuotationStatusProperties.cs" />
     <Compile Include="Models\Timeline\ReplyToStatusProperties.cs" />
     <Compile Include="Models\Timeline\StatusProperties.cs" />
@@ -231,7 +232,7 @@
     <Compile Include="ViewModels\MainWindow\InstructionsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MentionsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MovableCreateStatusViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\NoticeViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\NotificationsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TimelinesGridViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowImageViewModel.cs" />

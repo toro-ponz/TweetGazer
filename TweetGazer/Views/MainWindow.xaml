@@ -136,7 +136,7 @@
                     <Button Height="50" Style="{StaticResource UwpLikeButtonStyle2}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction MethodName="ToggleOpen" TargetObject="{Binding Path=Notice}" />
+                                <ei:CallMethodAction MethodName="ToggleOpen" TargetObject="{Binding Path=Notifications}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <Grid>

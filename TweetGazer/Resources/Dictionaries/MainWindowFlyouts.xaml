@@ -378,28 +378,80 @@
         x:Key="NoticeFlyout"
         Width="335"
         Margin="0,30,0,0"
-        Background="#BF000000"
-        CloseCommand="{Binding Path=Notice.CloseCommand, Mode=OneTime}"
-        Foreground="White"
-        IsOpen="{Binding Path=Notice.IsOpen, Mode=TwoWay}"
+        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
+        DataContext="{Binding Path=Notifications, Mode=OneWay}"
+        Foreground="{DynamicResource TextBrush}"
+        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
+        <Controls:Flyout.Background>
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+        </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel
+                Grid.Row="0"
+                Margin="10,0"
+                Orientation="Horizontal">
+                <Button
+                    Width="73"
+                    Height="73"
+                    Margin="0"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    <Image Source="{Binding Path=ProfileImageUrl, Mode=OneWay}" />
+                </Button>
+                <ComboBox
+                    Width="170"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    ItemsSource="{Binding Path=ScreenNames}"
+                    SelectedIndex="{Binding Path=TokenSuffix, Mode=TwoWay}" />
+            </StackPanel>
+            <Grid Grid.Row="1" Margin="10,10,10,0">
+                <Button
+                    Width="20"
+                    Height="20"
+                    Margin="10,0"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource UwpLikeButtonStyle2}"
+                    Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Back" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ContentControl ContentTemplate="{StaticResource FrontColorBackArrowIcon}" />
+                </Button>
+                <Button
+                    Width="20"
+                    Height="20"
+                    Margin="10,0"
+                    Visibility="{Binding Path=IsVisibleBackButton, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Delete" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ContentControl ContentTemplate="{StaticResource AccentColorCloseIcon}" />
+                </Button>
+            </Grid>
             <ItemsControl
-                Grid.Row="1"
-                ItemsSource="{Binding Source={x:Static Common:NotificationsStack.Notifications}, Mode=OneWay}"
+                Grid.Row="2"
+                Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
+                ItemsSource="{Binding Path=TimelineItems, Mode=OneWay}"
                 ScrollViewer.CanContentScroll="True"
+                VirtualizingPanel.CacheLength="0"
                 VirtualizingPanel.ScrollUnit="Pixel"
                 VirtualizingStackPanel.IsVirtualizing="True">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock
-                                FontSize="20"
-                                Foreground="Pink"
-                                Text="{Binding Path=Text}" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemTemplateSelector>
+                    <Selectors:TimelineItemTemplateSelector />
+                </ItemsControl.ItemTemplateSelector>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />

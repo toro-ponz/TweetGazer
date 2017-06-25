@@ -208,7 +208,11 @@ namespace TweetGazer.Models
                     case TimelineType.Search:
                         loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId);
                         break;
-                    case TimelineType.Notice:
+                    case TimelineType.Notifications:
+                        break;
+                    case TimelineType.NotificationsStack:
+                        foreach (var no in NotificationsStack.Notifications)
+                            this.TimelineItems.Add(new TimelineItemProperties(this, no.SentUser, no.ReceiveUser, no.NotificationPropertiesType, no.Text, no.Id));
                         break;
                 }
             }
@@ -227,7 +231,7 @@ namespace TweetGazer.Models
                 {
                     this.InsertStatus(loadedTimeline);
                     //もっと読むボタン
-                    if (this.Data.CurrentPage.TimelineType != TimelineType.DirectMessage && this.Data.CurrentPage.TimelineType != TimelineType.Trend && this.Data.CurrentPage.TimelineType != TimelineType.Search && this.Data.CurrentPage.TimelineType != TimelineType.Notice)
+                    if (this.Data.CurrentPage.TimelineType != TimelineType.DirectMessage && this.Data.CurrentPage.TimelineType != TimelineType.Trend && this.Data.CurrentPage.TimelineType != TimelineType.Search && this.Data.CurrentPage.TimelineType != TimelineType.Notifications && this.Data.CurrentPage.TimelineType != TimelineType.NotificationsStack)
                     {
                         this.TimelineItems.Add(new TimelineItemProperties(this, LoadingType.ReadMore, loadedTimeline.Last().Id - 1));
                     }
@@ -394,7 +398,7 @@ namespace TweetGazer.Models
         {
             this.IsVisibleSettings = !this.IsVisibleSettings;
         }
-        
+
         /// <summary>
         /// タイムラインをクリアする
         /// </summary>
@@ -488,7 +492,7 @@ namespace TweetGazer.Models
                 case TimelineType.Favorite:
                     this.Title = "Favorite";
                     break;
-                case TimelineType.Notice:
+                case TimelineType.Notifications:
                     this.Title = "Notice";
                     break;
                 case TimelineType.Mention:
@@ -511,7 +515,7 @@ namespace TweetGazer.Models
         /// </summary>
         private void StartStreaming()
         {
-            if (!(this.Data.CurrentPage.TimelineType == TimelineType.Notice || this.Data.CurrentPage.TimelineType == TimelineType.Trend))
+            if (!(this.Data.CurrentPage.TimelineType == TimelineType.Notifications || this.Data.CurrentPage.TimelineType == TimelineType.NotificationsStack || this.Data.CurrentPage.TimelineType == TimelineType.Trend))
             {
                 //ツイート時間の更新タイマー
                 var reculcTimeTimer = new Timer();
@@ -566,7 +570,7 @@ namespace TweetGazer.Models
                         this.Timers.Add(timer);
                         break;
                     }
-                case TimelineType.Notice:
+                case TimelineType.Notifications:
                     {
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
                         if (stream != null)

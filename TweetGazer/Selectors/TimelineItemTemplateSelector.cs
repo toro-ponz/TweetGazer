@@ -32,6 +32,9 @@ namespace TweetGazer.Selectors
                 case TimelineItemType.Button:
                     result = timeline.FindResource("Loading") as DataTemplate;
                     break;
+                case TimelineItemType.Notification:
+                    result = timeline.FindResource("Notification") as DataTemplate;
+                    break;
             }
 
             return result;

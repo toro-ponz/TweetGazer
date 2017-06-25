@@ -158,6 +158,9 @@ namespace TweetGazer.Models
         /// <param name="statusMessage">メンション</param>
         private void ReceiveMention(int tokenSuffix, StatusMessage statusMessage)
         {
+            if (statusMessage.Status.CurrentUserRetweet != null)
+                return;
+
             if (Properties.Settings.Default.IsNotify)
             {
                 var text = "";
@@ -172,7 +175,15 @@ namespace TweetGazer.Models
                 this.Notify(statusMessage.Status.User.Name + "さんからのメンション\n" + text, NoticeType.Normal);
             }
 
-            MentionsStack.StackMention(statusMessage.Status.User, statusMessage.Status);
+            if (statusMessage.Status.RetweetedStatus != null)
+                NotificationsStack.StackNotification(
+                    statusMessage.Status.User,
+                    statusMessage.Status.RetweetedStatus.User,
+                    Timeline.NotificationPropertiesType.Retweeted,
+                    statusMessage.Status.User.Name + "さんにツイートがリツイートされました。\n" + statusMessage.Status.RetweetedStatus.Text,
+                    statusMessage.Status.RetweetedStatus.Id);
+            else
+                MentionsStack.StackMention(statusMessage.Status.User, statusMessage.Status);
         }
 
         /// <summary>
@@ -199,16 +210,19 @@ namespace TweetGazer.Models
                     isNotify = true;
                     isPlaySound = true;
                     text = eventMessage.Source.Name + "さんにいいねされました。\n" + eventMessage.TargetStatus.Text;
+                    NotificationsStack.StackNotification(eventMessage.Source, eventMessage.Target, Timeline.NotificationPropertiesType.Favorited, text, eventMessage.TargetStatus.Id);
                     break;
                 case EventCode.FavoritedRetweet:
                     isNotify = true;
                     isPlaySound = true;
                     text = eventMessage.Source.Name + "さんにリツイートをいいねされました。\n" + eventMessage.TargetStatus.Text;
+                    NotificationsStack.StackNotification(eventMessage.Source, eventMessage.Target, Timeline.NotificationPropertiesType.RetweetFavorited, text, eventMessage.TargetStatus.Id);
                     break;
                 case EventCode.Follow:
                     isNotify = true;
                     isPlaySound = true;
-                    text = eventMessage.Source.Name + "さんにフォローされました。\n";
+                    text = eventMessage.Source.Name + "さんにフォローされました。";
+                    NotificationsStack.StackNotification(eventMessage.Source, eventMessage.Target, Timeline.NotificationPropertiesType.Followed, text);
                     break;
                 case EventCode.ListCreated:
                     break;
@@ -252,7 +266,6 @@ namespace TweetGazer.Models
                 CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
             if (isNotify)
             {
-                NotificationsStack.StackNotification(text);
                 this.Notify(text, NoticeType.Normal);
             }
         }

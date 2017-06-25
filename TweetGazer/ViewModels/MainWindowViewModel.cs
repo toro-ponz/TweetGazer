@@ -32,7 +32,7 @@ namespace TweetGazer.ViewModels
             this.AddTimeline = new AddTimelineViewModel(this);
             this.AddAccount = new AddAccountViewModel();
             this.Mentions = new MentionsViewModel();
-            this.Notice = new NoticeViewModel();
+            this.Notifications = new NotificationsViewModel();
             this.DirectMessages = new DirectMessagesViewModel();
             this.AccountSettings = new AccountSettingsViewModel();
             this.Search = new SearchViewModel();
@@ -97,11 +97,11 @@ namespace TweetGazer.ViewModels
                 })
             );
             this.CompositeDisposable.Add(
-                new PropertyChangedEventListener(this.Notice, (_, __) =>
+                new PropertyChangedEventListener(this.Notifications, (_, __) =>
                 {
                     switch (__.PropertyName)
                     {
-                        case nameof(this.Notice.IsOpen):
+                        case nameof(this.Notifications.IsOpen):
                             this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
                             break;
                     }
@@ -153,7 +153,7 @@ namespace TweetGazer.ViewModels
             this.CompositeDisposable.Add(this.MovableCreateStatus);
             this.CompositeDisposable.Add(this.AddTimeline);
             this.CompositeDisposable.Add(this.Mentions);
-            this.CompositeDisposable.Add(this.Notice);
+            this.CompositeDisposable.Add(this.Notifications);
             this.CompositeDisposable.Add(this.DirectMessages);
             this.CompositeDisposable.Add(this.AccountSettings);
             this.CompositeDisposable.Add(this.ApplicationSettings);
@@ -188,8 +188,8 @@ namespace TweetGazer.ViewModels
                 this.AddTimeline.ToggleOpen();
             if (this.Mentions.IsOpen)
                 this.Mentions.ToggleOpen();
-            if (this.Notice.IsOpen)
-                this.Notice.ToggleOpen();
+            if (this.Notifications.IsOpen)
+                this.Notifications.ToggleOpen();
             if (this.DirectMessages.IsOpen)
                 this.DirectMessages.ToggleOpen();
             if (this.AccountSettings.IsOpen)
@@ -396,7 +396,7 @@ namespace TweetGazer.ViewModels
                 if (!this.CreateStatus.IsOpen &&
                     !this.AddTimeline.IsOpen &&
                     !this.Mentions.IsOpen &&
-                    !this.Notice.IsOpen &&
+                    !this.Notifications.IsOpen &&
                     !this.DirectMessages.IsOpen &&
                     !this.AccountSettings.IsOpen &&
                     !this.ApplicationSettings.IsOpen &&
@@ -429,7 +429,7 @@ namespace TweetGazer.ViewModels
         public MovableCreateStatusViewModel MovableCreateStatus { get; }
         public AddTimelineViewModel AddTimeline { get; }
         public MentionsViewModel Mentions { get; }
-        public NoticeViewModel Notice { get; }
+        public NotificationsViewModel Notifications { get; }
         public DirectMessagesViewModel DirectMessages { get; }
         public AccountSettingsViewModel AccountSettings { get; }
         public SearchViewModel Search { get; }

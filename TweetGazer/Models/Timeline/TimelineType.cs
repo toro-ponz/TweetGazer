@@ -10,6 +10,7 @@
         DirectMessage,
         Trend,
         Search,
-        Notice
+        Notifications,
+        NotificationsStack
     }
 }
