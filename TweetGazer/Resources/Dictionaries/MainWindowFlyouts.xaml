@@ -2,7 +2,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Behaviors="clr-namespace:TweetGazer.Behaviors"
-    xmlns:Common="clr-namespace:TweetGazer.Common"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:Properties="clr-namespace:TweetGazer.Properties"
     xmlns:Selectors="clr-namespace:TweetGazer.Selectors"
@@ -23,11 +22,11 @@
         CloseButtonVisibility="Collapsed"
         CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
         DataContext="{Binding Path=ApplicationSettings}"
-        Foreground="White"
+        Foreground="{DynamicResource TextBrush}"
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Top">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.75" Color="Black" />
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
         </Controls:Flyout.Background>
         <Grid Margin="50,50,0,30">
             <Grid.RowDefinitions>
@@ -38,7 +37,6 @@
             <Grid Grid.Row="0">
                 <TextBlock
                     FontSize="30"
-                    Foreground="White"
                     Text="設定"
                     TextWrapping="Wrap" />
                 <Border
@@ -52,7 +50,6 @@
                         <TextBlock
                             Margin="30,10"
                             FontSize="28"
-                            Foreground="White"
                             Text="一般"
                             TextWrapping="Wrap" />
                         <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
@@ -61,7 +58,6 @@
                                 <TextBlock
                                     Width="300"
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="アクセントカラー" />
                                 <ComboBox
                                     Width="300"
@@ -99,7 +95,6 @@
                                 <TextBlock
                                     Width="300"
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="テーマ" />
                                 <ComboBox
                                     Width="300"
@@ -117,7 +112,6 @@
                                 IsEnabled="False">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="起動時に更新を確認する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -127,35 +121,30 @@
                                 IsEnabled="False">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="デバッグ情報を送信する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsCloseAfterCreateStatusCorrect, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="ツイート時に自動でツイート画面を閉じる"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsCreateStatusWhenPressCtrlEnter, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="Ctrl+Enterでツイートを送信する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsCloseWhenClickImage, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="画像ダイアログにて画像をクリックでダイアログを閉じる"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsSmoothScrolling, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="滑らかなスクロールを行う"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -165,7 +154,6 @@
                                 IsEnabled="False">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="ツイートトレイを表示する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -175,7 +163,6 @@
                         <TextBlock
                             Margin="30,10"
                             FontSize="28"
-                            Foreground="White"
                             Text="タイムライン"
                             TextWrapping="Wrap" />
                         <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
@@ -183,49 +170,42 @@
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsGifAutoPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="アニメーションGIFを自動再生する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsGifLoopPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="アニメーションGIFをループ再生させる"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVideoLoopPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="動画をループ再生させる"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsDisplayReplyStatus, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="リプライ先をTL上に表示する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVisibleViaInformation, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="Via情報を表示する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsThumbnailing, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="ツイートの画像をトリミング(Crop)して表示する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsUseFavoriteStar, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="いいねアイコンを星にする"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -238,7 +218,6 @@
                         <TextBlock
                             Margin="30,10"
                             FontSize="28"
-                            Foreground="White"
                             Text="通知"
                             TextWrapping="Wrap" />
                         <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
@@ -246,7 +225,6 @@
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="通知を許可する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -256,7 +234,6 @@
                                 IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="メンション"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -266,7 +243,6 @@
                                 IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="リプライ"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -276,7 +252,6 @@
                                 IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="いいね"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -286,7 +261,6 @@
                                 IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="リツイート"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -296,7 +270,6 @@
                                 IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="引用"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -306,7 +279,6 @@
                                 IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
                                 <TextBlock
                                     FontSize="26"
-                                    Foreground="White"
                                     Text="フォロー"
                                     TextWrapping="Wrap" />
                             </CheckBox>
@@ -526,11 +498,13 @@
         x:Key="DirectMessagesFlyout"
         Width="335"
         Margin="0,30,0,0"
-        Background="#BF000000"
         CloseCommand="{Binding Path=DirectMessages.CloseCommand, Mode=OneTime}"
-        Foreground="White"
+        Foreground="{DynamicResource TextBrush}"
         IsOpen="{Binding Path=DirectMessages.IsOpen, Mode=TwoWay}"
         Position="Left">
+        <Controls:Flyout.Background>
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+        </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right" />
     </Controls:Flyout>
 
@@ -538,16 +512,15 @@
         x:Key="AccountSettingsFlyout"
         Width="335"
         Margin="0,30,0,0"
-        Background="#BF000000"
         CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
         DataContext="{Binding Path=AccountSettings}"
-        Foreground="White"
+        Foreground="{DynamicResource TextBrush}"
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
+        <Controls:Flyout.Background>
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+        </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
-            <Grid.Background>
-                <SolidColorBrush Opacity="0.5" Color="Black" />
-            </Grid.Background>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
@@ -621,7 +594,6 @@
                                 <TextBlock
                                     Margin="10"
                                     FontSize="20"
-                                    Foreground="White"
                                     Text="プロフィール" />
                                 <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,1,0,0" />
                             </StackPanel>
@@ -672,43 +644,18 @@
                                 <TextBlock
                                     Margin="10"
                                     FontSize="20"
-                                    Foreground="White"
                                     Text="プライバシーとセキュリティ" />
                                 <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,1,0,0" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="1">
-                                <TextBlock
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="自分を画像にタグ付けすることを許可" />
-                                <RadioButton
-                                    Content="全てのアカウント"
-                                    FontSize="16"
-                                    Foreground="White" />
-                                <RadioButton
-                                    Content="フォローのみ"
-                                    FontSize="16"
-                                    Foreground="White" />
-                                <RadioButton
-                                    Content="許可しない"
-                                    FontSize="16"
-                                    Foreground="White" />
-                                <TextBlock
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="ツイートの公開設定" />
-                                <CheckBox
-                                    Content="ツイートを非公開にする"
-                                    FontSize="16"
-                                    Foreground="White" />
-                                <TextBlock
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="位置情報をツイート" />
-                                <CheckBox
-                                    Content="ツイートに位置情報を追加"
-                                    FontSize="16"
-                                    Foreground="White" />
+                                <TextBlock FontSize="16" Text="自分を画像にタグ付けすることを許可" />
+                                <RadioButton Content="全てのアカウント" FontSize="16" />
+                                <RadioButton Content="フォローのみ" FontSize="16" />
+                                <RadioButton Content="許可しない" FontSize="16" />
+                                <TextBlock FontSize="16" Text="ツイートの公開設定" />
+                                <CheckBox Content="ツイートを非公開にする" FontSize="16" />
+                                <TextBlock FontSize="16" Text="位置情報をツイート" />
+                                <CheckBox Content="ツイートに位置情報を追加" FontSize="16" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -758,12 +705,14 @@
         x:Key="AddTimelineFlyout"
         Width="335"
         Margin="0,30,0,0"
-        Background="#BF000000"
         CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
         DataContext="{Binding Path=AddTimeline}"
-        Foreground="White"
+        Foreground="{DynamicResource TextBrush}"
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
+        <Controls:Flyout.Background>
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+        </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -972,7 +921,7 @@
         Margin="0,30,0,0"
         CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
         DataContext="{Binding Path=Search}"
-        Foreground="White"
+        Foreground="{DynamicResource TextBrush}"
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
         <Controls:Flyout.Background>
@@ -1071,12 +1020,14 @@
         x:Key="CreateStatusFlyout"
         Width="335"
         Margin="0,30,0,0"
-        Background="#BF000000"
         CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
         DataContext="{Binding Path=CreateStatus}"
-        Foreground="White"
+        Foreground="{DynamicResource TextBrush}"
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
+        <Controls:Flyout.Background>
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+        </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -1182,7 +1133,7 @@
                     Grid.Row="0"
                     Margin="3"
                     FontSize="16"
-                    Foreground="LightGray"
+                    Foreground="{DynamicResource GrayBrush2}"
                     Text="{Binding Path=ReplyText, Mode=OneWay}"
                     TextWrapping="Wrap" />
                 <Border
@@ -1202,7 +1153,6 @@
                     BorderBrush="{x:Null}"
                     BorderThickness="0"
                     FontSize="22"
-                    Foreground="White"
                     TabIndex="1"
                     Text="{Binding Path=StatusText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap"
