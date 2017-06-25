@@ -390,6 +390,7 @@
                                 <Button
                                     Padding="0"
                                     HorizontalContentAlignment="Center"
+                                    Command="{Binding Path=ReplyCommand, Mode=OneTime}"
                                     Style="{StaticResource UwpLikeButtonStyle2}">
                                     <ContentControl ContentTemplate="{StaticResource FrontColorReplyIcon}" />
                                 </Button>
