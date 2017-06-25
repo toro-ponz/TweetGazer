@@ -181,8 +181,12 @@ namespace TweetGazer.Models
                     case TimelineType.List:
                         loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, maxId);
                         break;
-                    case TimelineType.Mention:
+                    case TimelineType.Mentions:
                         loadedTimeline = await AccountTokens.LoadMentionsTimelineAsync(this.Data.TokenSuffix, maxId);
+                        break;
+                    case TimelineType.MentionsStack:
+                        foreach (var me in MentionsStack.Mentions)
+                            this.TimelineItems.Add(new TimelineItemProperties(this, me.Status));
                         break;
                     case TimelineType.Favorite:
                         loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, maxId);
@@ -495,7 +499,7 @@ namespace TweetGazer.Models
                 case TimelineType.Notifications:
                     this.Title = "Notice";
                     break;
-                case TimelineType.Mention:
+                case TimelineType.Mentions:
                     this.Title = "Mention";
                     break;
                 case TimelineType.User:
@@ -515,7 +519,9 @@ namespace TweetGazer.Models
         /// </summary>
         private void StartStreaming()
         {
-            if (!(this.Data.CurrentPage.TimelineType == TimelineType.Notifications || this.Data.CurrentPage.TimelineType == TimelineType.NotificationsStack || this.Data.CurrentPage.TimelineType == TimelineType.Trend))
+            if (!(this.Data.CurrentPage.TimelineType == TimelineType.Notifications ||
+                this.Data.CurrentPage.TimelineType == TimelineType.NotificationsStack ||
+                this.Data.CurrentPage.TimelineType == TimelineType.Trend))
             {
                 //ツイート時間の更新タイマー
                 var reculcTimeTimer = new Timer();
@@ -581,7 +587,7 @@ namespace TweetGazer.Models
                         }
                         break;
                     }
-                case TimelineType.Mention:
+                case TimelineType.Mentions:
                     {
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
                         if (stream != null)

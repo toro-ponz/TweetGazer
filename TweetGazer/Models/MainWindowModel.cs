@@ -183,7 +183,7 @@ namespace TweetGazer.Models
                     statusMessage.Status.User.Name + "さんにツイートがリツイートされました。\n" + statusMessage.Status.RetweetedStatus.Text,
                     statusMessage.Status.RetweetedStatus.Id);
             else
-                MentionsStack.StackMention(statusMessage.Status.User, statusMessage.Status);
+                MentionsStack.StackMention(statusMessage.Status);
         }
 
         /// <summary>

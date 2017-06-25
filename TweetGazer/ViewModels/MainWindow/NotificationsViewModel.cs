@@ -190,7 +190,6 @@ namespace TweetGazer.ViewModels.MainWindow
         #endregion
 
         public ICommand CloseCommand { get; }
-        public ICommand SearchingCommand { get; }
 
         private TimelineModel Timeline;
         private Notifications Notifications;

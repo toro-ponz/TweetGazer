@@ -24,18 +24,14 @@ namespace TweetGazer.Common
         /// </summary>
         /// <param name="user">送ってきたユーザー</param>
         /// <param name="status">送られてきたツイート</param>
-        public static void StackMention(User user, Status status)
+        public static void StackMention(Status status)
         {
             if (Mentions == null)
             {
                 Mentions = new ObservableCollection<Mention>();
                 BindingOperations.EnableCollectionSynchronization(Mentions, new object());
             }
-            Mentions.Add(new Mention()
-            {
-                User = new UserOverviewProperties(user),
-                Status = status
-            });
+            Mentions.Add(new Mention(status));
         }
 
         /// <summary>
