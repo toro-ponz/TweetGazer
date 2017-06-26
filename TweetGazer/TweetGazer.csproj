@@ -183,6 +183,7 @@
     <Compile Include="Converters\NullImageConverter.cs" />
     <Compile Include="Models\MainWindow\AccountSettingsParameters.cs" />
     <Compile Include="Models\MainWindow\AddAccount.cs" />
+    <Compile Include="Models\MainWindow\CreateStatusBase.cs" />
     <Compile Include="Models\MainWindow\CreateStatusUserProperties.cs" />
     <Compile Include="Models\MainWindow\DirectMessages.cs" />
     <Compile Include="Models\MainWindow\Instructions.cs" />
