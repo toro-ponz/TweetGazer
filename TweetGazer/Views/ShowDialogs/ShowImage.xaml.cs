@@ -132,15 +132,15 @@ namespace TweetGazer.Views.ShowDialogs
                 var heightOffset = 0.0d;
 
                 // 拡大部分が画面からはみ出るならマウスポインタの逆側に移動
-                if (e.GetPosition(this.ZoomCanvas1).X + this.ZoomScrollViewer.Width > this.RenderSize.Width - 10)
+                if (e.GetPosition(this.ZoomCanvas).X + this.ZoomScrollViewer.Width > this.RenderSize.Width - 10)
                     widthOffset = this.ZoomScrollViewer.Width;
-                if (e.GetPosition(this.ZoomCanvas1).Y + this.ZoomScrollViewer.Height > this.RenderSize.Height - 10)
+                if (e.GetPosition(this.ZoomCanvas).Y + this.ZoomScrollViewer.Height > this.RenderSize.Height - 10)
                     heightOffset = this.ZoomScrollViewer.Height;
 
                 Canvas.SetLeft(this.ZoomImage, (e.GetPosition(this.Image).X * -1) * widthRatio);
                 Canvas.SetTop(this.ZoomImage, (e.GetPosition(this.Image).Y * -1) * heightRatio);
-                Canvas.SetLeft(this.ZoomScrollViewer, e.GetPosition(this.ZoomCanvas1).X - widthOffset);
-                Canvas.SetTop(this.ZoomScrollViewer, e.GetPosition(this.ZoomCanvas1).Y - heightOffset);
+                Canvas.SetLeft(this.ZoomScrollViewer, e.GetPosition(this.ZoomCanvas).X - widthOffset);
+                Canvas.SetTop(this.ZoomScrollViewer, e.GetPosition(this.ZoomCanvas).Y - heightOffset);
 
                 this.ZoomImage.Visibility = Visibility.Visible;
             }

@@ -73,15 +73,17 @@
                 </Button>
             </Grid>
             <Canvas
-                x:Name="ZoomCanvas1"
+                x:Name="ZoomCanvas"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                MouseMove="Image_MouseMove"
                 Visibility="{Binding Path=IsZoom, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ScrollViewer
                     x:Name="ZoomScrollViewer"
+                    Background="{x:Null}"
                     HorizontalScrollBarVisibility="Disabled"
                     VerticalScrollBarVisibility="Disabled">
-                    <Canvas x:Name="ZoomCanvas2">
+                    <Canvas Background="{x:Null}">
                         <Image
                             x:Name="ZoomImage"
                             HorizontalAlignment="Stretch"
