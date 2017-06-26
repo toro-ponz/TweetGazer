@@ -9,6 +9,7 @@
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    MinWidth="200"
     Foreground="{DynamicResource TextBrush}"
     mc:Ignorable="d">
 

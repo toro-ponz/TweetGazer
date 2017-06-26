@@ -71,8 +71,7 @@ namespace TweetGazer.Models.MainWindow
             //タイムライン用のカラムを生成
             var columnDefinition = new ColumnDefinition()
             {
-                //Width = new GridLength(1, GridUnitType.Star),
-                MinWidth = 280.0d
+                Width = new GridLength(1, GridUnitType.Star)
             };
             //タイムラインの幅をカラムにバインド
             var width = new Binding("Timelines.Timelines[" + this.Timelines.Count + "].TimelineViewModel.GridWidth")
