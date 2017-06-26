@@ -82,7 +82,7 @@
                                 Style="{StaticResource UwpLikeButtonStyle1}">
                                 <TextBlock
                                     FontSize="14"
-                                    Foreground="{StaticResource BlackBrush}"
+                                    Foreground="{DynamicResource TextBrush}"
                                     Text="{Binding Path=OpenButtonText, Mode=OneWay}"
                                     TextAlignment="Center" />
                             </Button>

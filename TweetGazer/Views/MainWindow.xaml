@@ -233,7 +233,7 @@
             VerticalAlignment="Center">
             <TextBlock
                 FontSize="30"
-                Foreground="DodgerBlue"
+                Foreground="{DynamicResource AccentColorBrush}"
                 Text="タイムラインを表示するには、左のリンクボタンから追加してください。"
                 TextAlignment="Center"
                 TextWrapping="Wrap" />
