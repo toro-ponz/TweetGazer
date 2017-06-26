@@ -416,7 +416,7 @@ namespace TweetGazer.Models
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public void Notify(string message, NoticeType type)
+        public void Notify(string message, NotificationType type)
         {
             try
             {
@@ -931,7 +931,7 @@ namespace TweetGazer.Models
                 else if (status.Text != null)
                     text += status.Text;
 
-                this.Notify(text, NoticeType.Normal);
+                this.Notify(text, NotificationType.Normal);
             }
         }
 

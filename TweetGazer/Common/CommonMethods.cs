@@ -152,7 +152,7 @@ namespace TweetGazer.Common
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public static void Notify(string message, NoticeType type = NoticeType.Normal)
+        public static void Notify(string message, NotificationType type = NotificationType.Normal)
         {
             var mainWindow = MainWindow;
             if (mainWindow != null)

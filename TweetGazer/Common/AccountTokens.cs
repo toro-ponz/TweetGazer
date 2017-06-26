@@ -350,19 +350,19 @@ namespace TweetGazer.Common
             }
             catch (HttpRequestException e)
             {
-                CommonMethods.Notify("ネットワークに正常に接続できませんでした．", NoticeType.Error);
+                CommonMethods.Notify("ネットワークに正常に接続できませんでした．", NotificationType.Error);
                 Console.Write(e);
                 return null;
             }
             catch (WebException e)
             {
-                CommonMethods.Notify("ネットワークに正常に接続できませんでした．", NoticeType.Error);
+                CommonMethods.Notify("ネットワークに正常に接続できませんでした．", NotificationType.Error);
                 Console.Write(e);
                 return null;
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("エラー．", NoticeType.Error);
+                CommonMethods.Notify("エラー．", NotificationType.Error);
                 Console.Write(e);
                 return null;
             }
@@ -382,23 +382,23 @@ namespace TweetGazer.Common
             }
             catch (TwitterException e)
             {
-                CommonMethods.Notify("トークン認証失敗．", NoticeType.Error);
+                CommonMethods.Notify("トークン認証失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
             catch (HttpRequestException e)
             {
-                CommonMethods.Notify("ネットワークに正常に接続できませんでした．", NoticeType.Error);
+                CommonMethods.Notify("ネットワークに正常に接続できませんでした．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("エラー．", NoticeType.Error);
+                CommonMethods.Notify("エラー．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
-            CommonMethods.Notify("トークン認証成功．", NoticeType.Success);
+            CommonMethods.Notify("トークン認証成功．", NotificationType.Success);
             return true;
         }
 
@@ -413,11 +413,11 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("ツイート失敗．", NoticeType.Error);
+                CommonMethods.Notify("ツイート失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
-            CommonMethods.Notify("ツイート完了．", NoticeType.Success);
+            CommonMethods.Notify("ツイート完了．", NotificationType.Success);
             return true;
         }
 
@@ -436,7 +436,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("画像のアップロード失敗．", NoticeType.Error);
+                CommonMethods.Notify("画像のアップロード失敗．", NotificationType.Error);
                 Console.Write(e);
                 return null;
             }
@@ -454,7 +454,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("動画のアップロード失敗．", NoticeType.Error);
+                CommonMethods.Notify("動画のアップロード失敗．", NotificationType.Error);
                 Console.Write(e);
                 return null;
             }
@@ -471,7 +471,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("リツイート失敗．", NoticeType.Error);
+                CommonMethods.Notify("リツイート失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
@@ -489,7 +489,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("リツイート解除失敗．", NoticeType.Error);
+                CommonMethods.Notify("リツイート解除失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
@@ -507,7 +507,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("いいね失敗．", NoticeType.Error);
+                CommonMethods.Notify("いいね失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
@@ -525,7 +525,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("いいね解除失敗．", NoticeType.Error);
+                CommonMethods.Notify("いいね解除失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
@@ -543,7 +543,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("フォロー失敗．", NoticeType.Error);
+                CommonMethods.Notify("フォロー失敗．", NotificationType.Error);
                 Console.Write(e);
                 return null;
             }
@@ -560,7 +560,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("フォロー解除失敗．", NoticeType.Error);
+                CommonMethods.Notify("フォロー解除失敗．", NotificationType.Error);
                 Console.Write(e);
                 return null;
             }
@@ -609,11 +609,11 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("ミュート失敗．", NoticeType.Error);
+                CommonMethods.Notify("ミュート失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
-            CommonMethods.Notify("ミュート成功．", NoticeType.Normal);
+            CommonMethods.Notify("ミュート成功．", NotificationType.Normal);
             return true;
         }
 
@@ -628,11 +628,11 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("ミュート解除失敗．", NoticeType.Error);
+                CommonMethods.Notify("ミュート解除失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
-            CommonMethods.Notify("ミュート解除成功．", NoticeType.Normal);
+            CommonMethods.Notify("ミュート解除成功．", NotificationType.Normal);
             return true;
         }
 
@@ -647,11 +647,11 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("ツイートの削除失敗．", NoticeType.Error);
+                CommonMethods.Notify("ツイートの削除失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
-            CommonMethods.Notify("ツイートの削除完了．", NoticeType.Success);
+            CommonMethods.Notify("ツイートの削除完了．", NotificationType.Success);
             return true;
         }
 
@@ -667,16 +667,16 @@ namespace TweetGazer.Common
             catch (Exception e)
             {
                 if (isNotify)
-                    CommonMethods.Notify("指定ユーザーを通知リストに追加することができませんでした．", NoticeType.Error);
+                    CommonMethods.Notify("指定ユーザーを通知リストに追加することができませんでした．", NotificationType.Error);
                 else
-                    CommonMethods.Notify("指定ユーザーを通知リストから削除することができませんでした．", NoticeType.Error);
+                    CommonMethods.Notify("指定ユーザーを通知リストから削除することができませんでした．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
             if (isNotify)
-                CommonMethods.Notify("指定ユーザーを通知リストに追加しました．", NoticeType.Normal);
+                CommonMethods.Notify("指定ユーザーを通知リストに追加しました．", NotificationType.Normal);
             else
-                CommonMethods.Notify("指定ユーザーを通知リストから削除しました．", NoticeType.Normal);
+                CommonMethods.Notify("指定ユーザーを通知リストから削除しました．", NotificationType.Normal);
             return true;
         }
 
@@ -780,7 +780,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("ログイン失敗．", NoticeType.Error);
+                CommonMethods.Notify("ログイン失敗．", NotificationType.Error);
                 Console.Write(e);
                 return false;
             }
@@ -846,12 +846,12 @@ namespace TweetGazer.Common
             if (!await TokenVerifyAsync(Tokens))
             {
                 Tokens.Clear();
-                CommonMethods.Notify("トークンの認証失敗．", NoticeType.Error);
+                CommonMethods.Notify("トークンの認証失敗．", NotificationType.Error);
                 IsVerifying = false;
                 return false;
             }
 
-            CommonMethods.Notify("トークン読み込み完了．", NoticeType.Success);
+            CommonMethods.Notify("トークン読み込み完了．", NotificationType.Success);
 
             IsVerifying = false;
             return true;
@@ -910,7 +910,7 @@ namespace TweetGazer.Common
                     {
                         if (addUser.Id == user.Id)
                         {
-                            CommonMethods.Notify("既に追加されているアカウントです．", NoticeType.Error);
+                            CommonMethods.Notify("既に追加されているアカウントです．", NotificationType.Error);
                             return;
                         }
                     }
@@ -918,7 +918,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("トークン認証失敗．", NoticeType.Error);
+                CommonMethods.Notify("トークン認証失敗．", NotificationType.Error);
                 Console.Write(e);
                 return;
             }
@@ -935,12 +935,12 @@ namespace TweetGazer.Common
             //トークンの保存
             if (!WriteTokens())
             {
-                CommonMethods.Notify("トークン書き込み失敗．", NoticeType.Error);
+                CommonMethods.Notify("トークン書き込み失敗．", NotificationType.Error);
                 return;
             }
             else
             {
-                CommonMethods.Notify("トークン書き込み成功．", NoticeType.Success);
+                CommonMethods.Notify("トークン書き込み成功．", NotificationType.Success);
             }
             return;
         }

@@ -124,7 +124,7 @@ namespace TweetGazer.Models.MainWindow
                     mediaTypes.Add(MediaType.Video);
                 else
                 {
-                    CommonMethods.Notify("ファイルタイプエラー．", NoticeType.Error);
+                    CommonMethods.Notify("ファイルタイプエラー．", NotificationType.Error);
                     return;
                 }
             }
@@ -135,7 +135,7 @@ namespace TweetGazer.Models.MainWindow
             {
                 if (mediaType != mt || (Type != MediaType.Undefined && Type != mt))
                 {
-                    CommonMethods.Notify("異なるメディアを同時にアップロードすることはできません．", NoticeType.Error);
+                    CommonMethods.Notify("異なるメディアを同時にアップロードすることはできません．", NotificationType.Error);
                     return;
                 }
             }
@@ -145,7 +145,7 @@ namespace TweetGazer.Models.MainWindow
 
             if (this.FileNames.Count + ofd.FileNames.Count() > 4)
             {
-                CommonMethods.Notify("画像は4枚までです．", NoticeType.Error);
+                CommonMethods.Notify("画像は4枚までです．", NotificationType.Error);
                 return;
             }
 

@@ -1,5 +1,4 @@
-﻿using CoreTweet;
-using CoreTweet.Streaming;
+﻿using CoreTweet.Streaming;
 using Livet;
 using System;
 using System.Collections.Generic;
@@ -24,8 +23,8 @@ namespace TweetGazer.Models
             //tempフォルダを削除
             CommonMethods.DeleteDirectory(SecretParameters.TemporaryDirectoryPath);
 
-            this.ToastNotice = new ObservableCollection<ToastNotice>();
-            BindingOperations.EnableCollectionSynchronization(this.ToastNotice, new object());
+            this.TrayNotifications = new ObservableCollection<TrayNotification>();
+            BindingOperations.EnableCollectionSynchronization(this.TrayNotifications, new object());
             
             this.Timers = new List<Timer>();
         }
@@ -35,13 +34,13 @@ namespace TweetGazer.Models
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public void Notify(string message, NoticeType type)
+        public void Notify(string message, NotificationType type)
         {
             try
             {
                 Task.Run(async  () =>
                 {
-                    this.ToastNotice.Add(new ToastNotice(message, type));
+                    this.TrayNotifications.Add(new TrayNotification(message, type));
                     await Task.Delay(7000);
                     this.RemoveNotice();
                 });
@@ -51,15 +50,15 @@ namespace TweetGazer.Models
                 Console.Write(e);
             }
         }
-        
+
         /// <summary>
         /// 通知を削除する
         /// </summary>
         /// <param name="noticeNumber">削除する通知番号</param>
         public void RemoveNotice(int noticeNumber = 0)
         {
-            if (noticeNumber < this.ToastNotice.Count)
-                this.ToastNotice.RemoveAt(noticeNumber);
+            if (noticeNumber < this.TrayNotifications.Count)
+                this.TrayNotifications.RemoveAt(noticeNumber);
         }
 
         /// <summary>
@@ -174,7 +173,7 @@ namespace TweetGazer.Models
                     text = statusMessage.Status.Text;
 
                 CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
-                this.Notify(statusMessage.Status.User.Name + "さんからのメンション\n" + text, NoticeType.Normal);
+                this.Notify(statusMessage.Status.User.Name + "さんからのメンション\n" + text, NotificationType.Normal);
             }
 
             if (statusMessage.Status.RetweetedStatus != null)
@@ -268,7 +267,7 @@ namespace TweetGazer.Models
                 CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
             if (isNotify)
             {
-                this.Notify(text, NoticeType.Normal);
+                this.Notify(text, NotificationType.Normal);
             }
         }
 
@@ -281,7 +280,7 @@ namespace TweetGazer.Models
 
         }
 
-        public ObservableCollection<ToastNotice> ToastNotice { get; }
+        public ObservableCollection<TrayNotification> TrayNotifications { get; }
 
         private List<IDisposable> Disposables;
         private List<Timer> Timers;

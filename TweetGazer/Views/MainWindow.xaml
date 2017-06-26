@@ -83,6 +83,8 @@
             <RowDefinition />
             <RowDefinition Height="Auto" MaxHeight="150" />
         </Grid.RowDefinitions>
+        
+        <!-- 左部メニュー -->
         <Grid Grid.RowSpan="2">
             <Grid
                 Width="50"
@@ -228,6 +230,7 @@
                 BorderThickness="0,0,2,0" />
         </Grid>
 
+        <!-- タイムライン背面 -->
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
@@ -240,6 +243,7 @@
                 TextWrapping="Wrap" />
         </StackPanel>
 
+        <!-- タイムライン -->
         <ItemsControl
             Grid.Row="0"
             Grid.Column="1"
@@ -251,6 +255,66 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
+        <!-- トレイ通知領域 -->
+        <ItemsControl
+            Grid.Row="1"
+            Grid.Column="1"
+            MaxHeight="100"
+            ItemsSource="{Binding Path=TrayNotifications, Mode=OneTime}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid VerticalAlignment="Bottom" Background="{Binding Path=BackgroundColor, Mode=OneTime}">
+                        <TextBlock
+                            Margin="10"
+                            HorizontalAlignment="Center"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="{Binding Path=Message, Mode=OneTime}"
+                            TextWrapping="Wrap" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel>
+                        <i:Interaction.Behaviors>
+                            <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5">
+                                <ei:FluidMoveBehavior.EaseY>
+                                    <QuadraticEase EasingMode="EaseOut" />
+                                </ei:FluidMoveBehavior.EaseY>
+                            </ei:FluidMoveBehavior>
+                        </i:Interaction.Behaviors>
+                    </VirtualizingStackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="{x:Type ItemsControl}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+        </ItemsControl>
+
+        <!--  移動可能なコンテンツの親キャンバス  -->
+        <Canvas
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            Margin="0,-30,0,0">
+            <!--  移動可能なツイートトレイ  -->
+            <ContentControl
+                Canvas.Left="{Binding Path=CreateStatusTrayXPosition, Source={x:Static Properties:Settings.Default}, Mode=OneTime}"
+                Canvas.Top="{Binding Path=CreateStatusTrayYPosition, Source={x:Static Properties:Settings.Default}, Mode=OneTime}"
+                ContentTemplate="{StaticResource MovableCreateStatusTray}"
+                DataContext="{Binding}">
+                <i:Interaction.Behaviors>
+                    <ei:MouseDragElementBehavior X="{Binding Path=CreateStatusTrayXPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}" Y="{Binding Path=CreateStatusTrayYPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}" />
+                </i:Interaction.Behaviors>
+            </ContentControl>
+        </Canvas>
+
+        <!-- Flyoutの背面 -->
         <Grid Grid.RowSpan=" 2" Grid.ColumnSpan="2">
             <Button Style="{StaticResource BackButtonStyle}" Visibility="{Binding Path=FlyoutCloseVisibility}">
                 <i:Interaction.Triggers>
@@ -261,195 +325,18 @@
             </Button>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="1">
-            <ItemsControl MaxHeight="100" ItemsSource="{Binding Path=ToastNotice, Mode=OneTime}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid VerticalAlignment="Bottom" Background="{Binding Path=BackgroundColor, Mode=OneTime}">
-                            <TextBlock
-                                Margin="10"
-                                HorizontalAlignment="Center"
-                                FontSize="20"
-                                FontWeight="Bold"
-                                Foreground="White"
-                                Text="{Binding Path=Message, Mode=OneTime}"
-                                TextWrapping="Wrap" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel>
-                            <i:Interaction.Behaviors>
-                                <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5">
-                                    <ei:FluidMoveBehavior.EaseY>
-                                        <QuadraticEase EasingMode="EaseOut" />
-                                    </ei:FluidMoveBehavior.EaseY>
-                                </ei:FluidMoveBehavior>
-                            </i:Interaction.Behaviors>
-                        </VirtualizingStackPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
-                    <ControlTemplate TargetType="{x:Type ItemsControl}">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </ScrollViewer>
-                    </ControlTemplate>
-                </ItemsControl.Template>
-            </ItemsControl>
-        </Grid>
-
-        <!-- 移動可能なコンテンツの親キャンバス -->
-        <Canvas
-            Grid.RowSpan="2"
-            Grid.ColumnSpan="2"
-            Margin="0,-30,0,0">
-            <!--  移動可能なツイート画面  -->
-            <ContentControl
-                DataContext="{Binding}"
-                Canvas.Left="{Binding Path=CreateStatusTrayXPosition, Source={x:Static Properties:Settings.Default}, Mode=OneTime}"
-                Canvas.Top="{Binding Path=CreateStatusTrayYPosition, Source={x:Static Properties:Settings.Default}, Mode=OneTime}"
-                ContentTemplate="{StaticResource MovableCreateStatusTray}">
-                <i:Interaction.Behaviors>
-                    <ei:MouseDragElementBehavior X="{Binding Path=CreateStatusTrayXPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}" Y="{Binding Path=CreateStatusTrayYPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}" />
-                </i:Interaction.Behaviors>
-            </ContentControl>
-        </Canvas>
-
         <!--  ログイン画面  -->
-        <Grid
+        <ContentControl
             Grid.RowSpan="2"
             Grid.ColumnSpan="2"
-            Background="#77FFFFFF"
-            DataContext="{Binding Path=AddAccount}"
-            Visibility="{Binding Path=Visibility, Mode=OneWay}">
-            <Grid Margin="20">
-                <Grid
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Background="White">
-                    <Border
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        BorderBrush="Gray"
-                        BorderThickness="1" />
-                    <StackPanel MinWidth="180" Margin="30">
-                        <TextBlock
-                            FontSize="30"
-                            Foreground="Black"
-                            Text="アカウント追加" />
-                        <Button
-                            HorizontalAlignment="Stretch"
-                            FontSize="20"
-                            Style="{StaticResource AccentedSquareButtonStyle}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <ei:CallMethodAction MethodName="OpenAuthenticationUrl" TargetObject="{Binding}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <TextBlock Text="認証用URLを開く" />
-                        </Button>
-                        <TextBlock
-                            FontSize="20"
-                            Foreground="Black"
-                            Text="PIN" />
-                        <TextBox
-                            HorizontalAlignment="Stretch"
-                            Background="White"
-                            FontSize="20"
-                            Foreground="Black"
-                            IsEnabled="{Binding Path=IsPinTextBoxEnabled, Mode=OneWay}"
-                            Text="{Binding Path=Pin, Mode=TwoWay}" />
-                        <TextBlock
-                            HorizontalAlignment="Stretch"
-                            FontSize="14"
-                            Foreground="Red"
-                            Text="{Binding Path=Message, Mode=OneWay}"
-                            TextWrapping="Wrap" />
-                        <Button
-                            HorizontalAlignment="Stretch"
-                            Content="認証"
-                            FontSize="20"
-                            IsEnabled="{Binding Path=IsPinTextBoxEnabled, Mode=OneWay}"
-                            Style="{StaticResource AccentedSquareButtonStyle}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <ei:CallMethodAction MethodName="Authentication" TargetObject="{Binding}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
-                        <Button
-                            HorizontalAlignment="Stretch"
-                            Content="キャンセル"
-                            FontSize="20"
-                            Style="{StaticResource AccentedSquareButtonStyle}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <ei:CallMethodAction MethodName="Cancel" TargetObject="{Binding}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
-                    </StackPanel>
-                </Grid>
-            </Grid>
-        </Grid>
+            ContentTemplate="{StaticResource Login}"
+            DataContext="{Binding}" />
 
         <!--  チュートリアル画面  -->
-        <Grid
+        <ContentControl
             Grid.RowSpan="2"
             Grid.ColumnSpan="2"
-            Background="#77FFFFFF"
-            DataContext="{Binding Path=Instructions}"
-            Visibility="{Binding Path=Visibility, Mode=OneWay}">
-            <Grid Margin="20" Background="White">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
-                <Grid>
-                    <Frame
-                        Padding="50"
-                        FontSize="20"
-                        NavigationUIVisibility="Hidden"
-                        Source="{Binding Path=Page, Mode=OneWay}" />
-                </Grid>
-                <Button
-                    Grid.Row="1"
-                    Width="210"
-                    HorizontalAlignment="Left"
-                    Content="PREVIOUS"
-                    FontSize="20"
-                    Style="{StaticResource AccentedSquareButtonStyle}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction MethodName="Previous" TargetObject="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-                <TextBlock
-                    Grid.Row="1"
-                    HorizontalAlignment="Center"
-                    FontSize="24"
-                    Foreground="Black">
-                    <Run Text="{Binding Path=PageNumber, Mode=OneWay}" />
-                    <Run Text="/" />
-                    <Run Text="{Binding Path=PagesCount, Mode=OneTime}" />
-                </TextBlock>
-                <Button
-                    Grid.Row="1"
-                    Width="210"
-                    HorizontalAlignment="Right"
-                    Content="NEXT"
-                    FontSize="20"
-                    Style="{StaticResource AccentedSquareButtonStyle}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction MethodName="Next" TargetObject="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-            </Grid>
-        </Grid>
+            ContentTemplate="{StaticResource Instructions}"
+            DataContext="{Binding}" />
     </Grid>
 </Controls:MetroWindow>

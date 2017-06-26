@@ -10,23 +10,23 @@ namespace TweetGazer.Models.Timeline
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type"></param>
-        public TimelineNotice(string message, NoticeType type)
+        public TimelineNotice(string message, NotificationType type)
         {
             this.Message = message.TrimEnd('\n', '\r', ' ');
             this.Type = type;
 
             switch (type)
             {
-                case NoticeType.Normal:
+                case NotificationType.Normal:
                     this.BackgroundColor = new SolidColorBrush(Colors.DodgerBlue);
                     break;
-                case NoticeType.Success:
+                case NotificationType.Success:
                     this.BackgroundColor = new SolidColorBrush(Colors.Green);
                     break;
-                case NoticeType.Alert:
+                case NotificationType.Alert:
                     this.BackgroundColor = new SolidColorBrush(Colors.Orange);
                     break;
-                case NoticeType.Error:
+                case NotificationType.Error:
                     this.BackgroundColor = new SolidColorBrush(Colors.Red);
                     break;
             }
@@ -37,10 +37,10 @@ namespace TweetGazer.Models.Timeline
 
         public string Message { get; }
 
-        public NoticeType Type;
+        public NotificationType Type;
     }
 
-    public enum NoticeType
+    public enum NotificationType
     {
         Normal,
         Success,

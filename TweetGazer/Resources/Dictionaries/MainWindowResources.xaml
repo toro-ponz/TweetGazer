@@ -13,10 +13,10 @@
 
     <DataTemplate x:Key="MovableCreateStatusTray">
         <Grid
-            DataContext="{Binding Path=DataContext.MovableCreateStatus, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}"
             Grid.Row="1"
             Width="280"
             MaxHeight="600"
+            DataContext="{Binding Path=DataContext.MovableCreateStatus, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}"
             Visibility="{Binding Path=IsVisibleCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.Background>
                 <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
@@ -273,6 +273,139 @@
                     Grid.RowSpan="2"
                     BorderBrush="{DynamicResource AccentColorBrush}"
                     BorderThickness="1" />
+            </Grid>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Login">
+        <Grid
+            Background="#77FFFFFF"
+            DataContext="{Binding Path=DataContext.AddAccount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}"
+            Visibility="{Binding Path=Visibility, Mode=OneWay}">
+            <Grid Margin="20">
+                <Grid
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="White">
+                    <Border
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        BorderBrush="Gray"
+                        BorderThickness="1" />
+                    <StackPanel MinWidth="180" Margin="30">
+                        <TextBlock
+                            FontSize="30"
+                            Foreground="Black"
+                            Text="アカウント追加" />
+                        <Button
+                            HorizontalAlignment="Stretch"
+                            FontSize="20"
+                            Style="{StaticResource AccentedSquareButtonStyle}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <ei:CallMethodAction MethodName="OpenAuthenticationUrl" TargetObject="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <TextBlock Text="認証用URLを開く" />
+                        </Button>
+                        <TextBlock
+                            FontSize="20"
+                            Foreground="Black"
+                            Text="PIN" />
+                        <TextBox
+                            HorizontalAlignment="Stretch"
+                            Background="White"
+                            FontSize="20"
+                            Foreground="Black"
+                            IsEnabled="{Binding Path=IsPinTextBoxEnabled, Mode=OneWay}"
+                            Text="{Binding Path=Pin, Mode=TwoWay}" />
+                        <TextBlock
+                            HorizontalAlignment="Stretch"
+                            FontSize="14"
+                            Foreground="Red"
+                            Text="{Binding Path=Message, Mode=OneWay}"
+                            TextWrapping="Wrap" />
+                        <Button
+                            HorizontalAlignment="Stretch"
+                            Content="認証"
+                            FontSize="20"
+                            IsEnabled="{Binding Path=IsPinTextBoxEnabled, Mode=OneWay}"
+                            Style="{StaticResource AccentedSquareButtonStyle}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <ei:CallMethodAction MethodName="Authentication" TargetObject="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                        <Button
+                            HorizontalAlignment="Stretch"
+                            Content="キャンセル"
+                            FontSize="20"
+                            Style="{StaticResource AccentedSquareButtonStyle}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <ei:CallMethodAction MethodName="Cancel" TargetObject="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Instructions">
+        <Grid
+            Background="#77FFFFFF"
+            DataContext="{Binding Path=DataContext.Instructions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}"
+            Visibility="{Binding Path=Visibility, Mode=OneWay}">
+            <Grid Margin="20" Background="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Frame
+                        Padding="50"
+                        FontSize="20"
+                        NavigationUIVisibility="Hidden"
+                        Source="{Binding Path=Page, Mode=OneWay}" />
+                </Grid>
+                <Button
+                    Grid.Row="1"
+                    Width="210"
+                    HorizontalAlignment="Left"
+                    Content="PREVIOUS"
+                    FontSize="20"
+                    Style="{StaticResource AccentedSquareButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Previous" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <TextBlock
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    FontSize="24"
+                    Foreground="Black">
+                    <Run Text="{Binding Path=PageNumber, Mode=OneWay}" />
+                    <Run Text="/" />
+                    <Run Text="{Binding Path=PagesCount, Mode=OneTime}" />
+                </TextBlock>
+                <Button
+                    Grid.Row="1"
+                    Width="210"
+                    HorizontalAlignment="Right"
+                    Content="NEXT"
+                    FontSize="20"
+                    Style="{StaticResource AccentedSquareButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Next" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
             </Grid>
         </Grid>
     </DataTemplate>

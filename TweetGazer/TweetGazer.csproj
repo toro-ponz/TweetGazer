@@ -192,7 +192,7 @@
     <Compile Include="Models\MainWindow\Search.cs" />
     <Compile Include="Models\MainWindow\StatusMedia.cs" />
     <Compile Include="Models\MainWindow\TimelinesGrid.cs" />
-    <Compile Include="Models\MainWindow\ToastNotice.cs" />
+    <Compile Include="Models\MainWindow\TrayNotification.cs" />
     <Compile Include="Models\ShowDialongs\SearchRepliesProperties.cs" />
     <Compile Include="Models\ShowDialongs\ShowImageModel.cs" />
     <Compile Include="Models\ShowDialongs\ShowStatusModel.cs" />

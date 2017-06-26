@@ -54,7 +54,7 @@ namespace TweetGazer.Models.MainWindow
 
             if (filePaths.Count() > 4 - this.Source.Count)
             {
-                CommonMethods.Notify("画像ファイルは4枚までです．", NoticeType.Error);
+                CommonMethods.Notify("画像ファイルは4枚までです．", NotificationType.Error);
                 return false;
             }
 
@@ -69,13 +69,13 @@ namespace TweetGazer.Models.MainWindow
                         Ids += "," + media.MediaId.ToString();
 
                     this.IsEnabled = true;
-                    CommonMethods.Notify("画像アップロード完了．", NoticeType.Success);
+                    CommonMethods.Notify("画像アップロード完了．", NotificationType.Success);
                     this.Source.Add(new Uri(filePath));
                     this.Type = MediaType.Image;
                 }
                 else
                 {
-                    CommonMethods.Notify("画像アップロード失敗．", NoticeType.Error);
+                    CommonMethods.Notify("画像アップロード失敗．", NotificationType.Error);
                     return false;
                 }
             }
@@ -100,7 +100,7 @@ namespace TweetGazer.Models.MainWindow
 
             if (filePaths.Count() > 1 - this.Source.Count)
             {
-                CommonMethods.Notify("アニメーションGIFファイルは1枚までです．", NoticeType.Error);
+                CommonMethods.Notify("アニメーションGIFファイルは1枚までです．", NotificationType.Error);
                 return false;
             }
 
@@ -112,13 +112,13 @@ namespace TweetGazer.Models.MainWindow
                     this.Ids = media.MediaId.ToString();
 
                     this.IsEnabled = true;
-                    CommonMethods.Notify("アニメーションGIFアップロード完了．", NoticeType.Success);
+                    CommonMethods.Notify("アニメーションGIFアップロード完了．", NotificationType.Success);
                     this.Source.Add(new Uri(filePath));
                     this.Type = MediaType.Gif;
                 }
                 else
                 {
-                    CommonMethods.Notify("アニメーションGIFアップロード失敗．", NoticeType.Error);
+                    CommonMethods.Notify("アニメーションGIFアップロード失敗．", NotificationType.Error);
                     return false;
                 }
                 break;
@@ -144,7 +144,7 @@ namespace TweetGazer.Models.MainWindow
 
             if (filePaths.Count > 1 - this.Source.Count)
             {
-                CommonMethods.Notify("動画は1つまでです．", NoticeType.Error);
+                CommonMethods.Notify("動画は1つまでです．", NotificationType.Error);
                 return false;
             }
 
@@ -155,13 +155,13 @@ namespace TweetGazer.Models.MainWindow
                 {
                     this.Ids = media.MediaId.ToString();
                     this.IsEnabled = true;
-                    CommonMethods.Notify("動画アップロード完了．", NoticeType.Success);
+                    CommonMethods.Notify("動画アップロード完了．", NotificationType.Success);
                     this.Source.Add(new Uri(filePath));
                     this.Type = MediaType.Video;
                 }
                 else
                 {
-                    CommonMethods.Notify("動画アップロード失敗．", NoticeType.Error);
+                    CommonMethods.Notify("動画アップロード失敗．", NotificationType.Error);
                     return false;
                 }
                 break;

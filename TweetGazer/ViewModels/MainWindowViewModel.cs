@@ -24,7 +24,7 @@ namespace TweetGazer.ViewModels
         public MainWindowViewModel()
         {
             this.MainWindowModel = new MainWindowModel();
-            this.ToastNotice = this.MainWindowModel.ToastNotice;
+            this.TrayNotifications = this.MainWindowModel.TrayNotifications;
             this.Login();
 
             this.CreateStatus = new CreateStatusViewModel();
@@ -224,7 +224,7 @@ namespace TweetGazer.ViewModels
         {
             if (AccountTokens.TokensCount == 0 || AccountTokens.Users.Count == 0)
             {
-                this.MainWindowModel.Notify("トークン再認証開始．", NoticeType.Normal);
+                this.MainWindowModel.Notify("トークン再認証開始．", NotificationType.Normal);
                 await AccountTokens.LoadTokensAsync();
                 return;
             }
@@ -244,7 +244,7 @@ namespace TweetGazer.ViewModels
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public void Notify(string message, NoticeType type)
+        public void Notify(string message, NotificationType type)
         {
             this.MainWindowModel.Notify(message, type);
         }
@@ -294,7 +294,7 @@ namespace TweetGazer.ViewModels
             this.CreateStatus.StatusText = "\n" + text;
             this.CreateStatus.SelectUser(tokenSuffix);
         }
-        
+
         /// <summary>
         /// 起動時のログイン
         /// </summary>
@@ -317,18 +317,18 @@ namespace TweetGazer.ViewModels
                 //列データの読み込み
                 else if (this.Timelines.LoadColumnData())
                 {
-                    this.MainWindowModel.Notify("カラム読み込み完了.", NoticeType.Normal);
+                    this.MainWindowModel.Notify("カラム読み込み完了.", NotificationType.Normal);
                 }
             }
             catch (TwitterException e)
             {
-                this.MainWindowModel.Notify("トークン認証失敗.", NoticeType.Error);
+                this.MainWindowModel.Notify("トークン認証失敗.", NotificationType.Error);
                 Console.Write(e);
                 return;
             }
             catch (Exception e) when (e is HttpRequestException || e is WebException)
             {
-                this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした．\n左下の更新ボタンを押して再認証してください．", NoticeType.Error);
+                this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした．\n左下の更新ボタンを押して再認証してください．", NotificationType.Error);
                 Console.Write(e);
                 return;
             }
@@ -358,7 +358,7 @@ namespace TweetGazer.ViewModels
                 }
                 catch (Exception e)
                 {
-                    this.Notify("エラーが発生しました．", NoticeType.Error);
+                    this.Notify("エラーが発生しました．", NotificationType.Error);
                     Console.Write(e);
                 }
             }
@@ -421,7 +421,7 @@ namespace TweetGazer.ViewModels
         public TimelinesGridViewModel Timelines { get; }
         public AddAccountViewModel AddAccount { get; }
         public InstructionsViewModel Instructions { get; }
-        public ObservableCollection<ToastNotice> ToastNotice { get; }
+        public ObservableCollection<TrayNotification> TrayNotifications { get; }
 
         private MainWindowModel MainWindowModel;
     }

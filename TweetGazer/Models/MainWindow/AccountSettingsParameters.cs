@@ -87,36 +87,36 @@ namespace TweetGazer.Models.MainWindow
             {
                 if (await AccountTokens.UpdateProfileImage(this.TokenSuffix, this.ProfileImage.OriginalString))
                 {
-                    CommonMethods.Notify("プロフィール画像の更新成功．", NoticeType.Success);
+                    CommonMethods.Notify("プロフィール画像の更新成功．", NotificationType.Success);
                     this.ReloadProfileImage(AccountTokens.Users[TokenSuffix]);
                 }
                 else
                 {
-                    CommonMethods.Notify("プロフィール画像の更新失敗．", NoticeType.Error);
+                    CommonMethods.Notify("プロフィール画像の更新失敗．", NotificationType.Error);
                 }
             }
             if (this.ProfileBannerIsChanged)
             {
                 if (await AccountTokens.UpdateProfileBanner(this.TokenSuffix, this.ProfileBanner.OriginalString))
                 {
-                    CommonMethods.Notify("プロフィールバナーの更新成功．", NoticeType.Success);
+                    CommonMethods.Notify("プロフィールバナーの更新成功．", NotificationType.Success);
                     this.ReloadProfileBanner(AccountTokens.Users[TokenSuffix]);
                 }
                 else
                 {
-                    CommonMethods.Notify("プロフィールバナーの更新失敗．", NoticeType.Error);
+                    CommonMethods.Notify("プロフィールバナーの更新失敗．", NotificationType.Error);
                 }
             }
             if (this.OtherProfileIsChanged)
             {
                 if (await AccountTokens.UpdateProfile(this.TokenSuffix, this.Name, this.Url, this.Location, this.Description))
                 {
-                    CommonMethods.Notify("プロフィールの更新成功．", NoticeType.Success);
+                    CommonMethods.Notify("プロフィールの更新成功．", NotificationType.Success);
                     this.ReloadProfile(AccountTokens.Users[this.TokenSuffix]);
                 }
                 else
                 {
-                    CommonMethods.Notify("プロフィールの更新失敗．", NoticeType.Error);
+                    CommonMethods.Notify("プロフィールの更新失敗．", NotificationType.Error);
                 }
             }
         }
@@ -129,11 +129,11 @@ namespace TweetGazer.Models.MainWindow
         {
             if (await AccountTokens.RemoveProfileBanner(this.TokenSuffix))
             {
-                CommonMethods.Notify("プロフィールバナーの削除成功．", NoticeType.Success);
+                CommonMethods.Notify("プロフィールバナーの削除成功．", NotificationType.Success);
             }
             else
             {
-                CommonMethods.Notify("プロフィールバナーの削除失敗．", NoticeType.Error);
+                CommonMethods.Notify("プロフィールバナーの削除失敗．", NotificationType.Error);
             }
         }
 
