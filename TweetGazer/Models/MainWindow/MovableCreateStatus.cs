@@ -19,8 +19,6 @@ namespace TweetGazer.Models.MainWindow
             this._IsProgressRingVisible = false;
             this._IsSelectButtonEnabled = true;
             this._IsDeleteButtonVisible = false;
-            this._IsMinimized = false;
-            this._IsTrayVisible = true;
 
             this.Users = new ObservableCollection<CreateStatusUserProperties>();
             this.ReloadUsers();
@@ -36,7 +34,8 @@ namespace TweetGazer.Models.MainWindow
         /// </summary>
         public void ToggleOpen()
         {
-            this.IsTrayVisible = !this._IsTrayVisible;
+            Properties.Settings.Default.IsVisibleCreateStatusTray = !Properties.Settings.Default.IsVisibleCreateStatusTray;
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>
@@ -44,7 +43,8 @@ namespace TweetGazer.Models.MainWindow
         /// </summary>
         public void ToggleMinimize()
         {
-            this.IsMinimized = !this._IsMinimized;
+            Properties.Settings.Default.IsMinimizeCreateStatusTray = !Properties.Settings.Default.IsMinimizeCreateStatusTray;
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>
@@ -262,38 +262,6 @@ namespace TweetGazer.Models.MainWindow
             }
         }
         private bool _IsSelectButtonEnabled;
-        #endregion
-
-        #region IsTrayVisible 変更通知プロパティ
-        public bool IsTrayVisible
-        {
-            get
-            {
-                return this._IsTrayVisible;
-            }
-            private set
-            {
-                this._IsTrayVisible = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        private bool _IsTrayVisible;
-        #endregion
-
-        #region IsMinimized 変更通知プロパティ
-        public bool IsMinimized
-        {
-            get
-            {
-                return this._IsMinimized;
-            }
-            private set
-            {
-                this._IsMinimized = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        private bool _IsMinimized;
         #endregion
 
         #region StatusText 変更通知プロパティ

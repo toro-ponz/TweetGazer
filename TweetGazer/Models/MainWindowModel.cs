@@ -149,6 +149,8 @@ namespace TweetGazer.Models
                 foreach (var timer in this.Timers)
                     timer.Dispose();
             }
+
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>

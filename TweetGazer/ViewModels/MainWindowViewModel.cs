@@ -409,22 +409,6 @@ namespace TweetGazer.ViewModels
         }
         #endregion
 
-        #region CreateStatusTrayVisibility 変更通知プロパティ
-        public Visibility CreateStatusTrayVisibility
-        {
-            get
-            {
-                return this._CreateStatusTrayVisibility;
-            }
-            set
-            {
-                this._CreateStatusTrayVisibility = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        private Visibility _CreateStatusTrayVisibility;
-        #endregion
-
         public CreateStatusViewModel CreateStatus { get; }
         public MovableCreateStatusViewModel MovableCreateStatus { get; }
         public AddTimelineViewModel AddTimeline { get; }

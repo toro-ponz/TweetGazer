@@ -2,8 +2,10 @@
     x:Class="TweetGazer.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Behaviors="clr-namespace:TweetGazer.Behaviors"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:Lighty="clr-namespace:SourceChord.Lighty;assembly=Lighty"
+    xmlns:Properties="clr-namespace:TweetGazer.Properties"
     xmlns:ViewModels="clr-namespace:TweetGazer.ViewModels"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -300,7 +302,6 @@
         </Grid>
 
         <!--  移動可能なツイート画面  -->
-        <!--
         <Canvas
             Grid.RowSpan="2"
             Grid.ColumnSpan="2"
@@ -311,9 +312,11 @@
                 Canvas.Top="{Binding Path=CreateStatusTrayYPosition, Source={x:Static Properties:Settings.Default}, Mode=OneTime}"
                 Width="280"
                 MaxHeight="600"
-                Background="#88000000"
                 DataContext="{Binding Path=MovableCreateStatus}"
-                Visibility="{Binding Path=IsTrayVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding Path=IsVisibleCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.Background>
+                    <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+                </Grid.Background>
                 <i:Interaction.Behaviors>
                     <ei:MouseDragElementBehavior X="{Binding Path=CreateStatusTrayXPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}" Y="{Binding Path=CreateStatusTrayYPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}" />
                 </i:Interaction.Behaviors>
@@ -333,7 +336,7 @@
                             Height="20"
                             Margin="5"
                             Style="{StaticResource UwpLikeButtonStyle2}">
-                            <Image Source="pack://application:,,,/Assets/Images/minus-icon.png" />
+                            <ContentControl ContentTemplate="{StaticResource AccentColorMinusIcon}" />
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
                                     <ei:CallMethodAction MethodName="ToggleMinimize" TargetObject="{Binding}" />
@@ -350,13 +353,13 @@
                                     <ei:CallMethodAction MethodName="ToggleOpen" TargetObject="{Binding}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                            <Image Source="pack://application:,,,/Assets/Images/close-icon.png" />
+                            <ContentControl ContentTemplate="{StaticResource AccentColorCloseIcon}" />
                         </Button>
                     </StackPanel>
                     <Grid
                         x:Name="Panel"
                         Grid.Row="1"
-                        Visibility="{Binding Path=IsMinimized, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}">
+                        Visibility="{Binding Path=IsMinimizeCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=TwoWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition />
@@ -566,12 +569,12 @@
                     </Grid>
                     <Border
                         Grid.RowSpan="2"
-                        BorderBrush="White"
+                        BorderBrush="{DynamicResource AccentColorBrush}"
                         BorderThickness="1" />
                 </Grid>
             </Grid>
         </Canvas>
-        -->
+
 
         <!--  ログイン画面  -->
         <Grid

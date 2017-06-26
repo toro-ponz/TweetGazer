@@ -150,8 +150,7 @@
                             </CheckBox>
                             <CheckBox
                                 Margin="0,5"
-                                IsChecked="{Binding Path=CreateStatusTrayVisibility, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
-                                IsEnabled="False">
+                                IsChecked="{Binding Path=IsVisibleCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
                                     Text="ツイートトレイを表示する"

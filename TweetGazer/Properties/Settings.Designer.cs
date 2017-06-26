@@ -194,12 +194,12 @@ namespace TweetGazer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool CreateStatusTrayVisibility {
+        public bool IsVisibleCreateStatusTray {
             get {
-                return ((bool)(this["CreateStatusTrayVisibility"]));
+                return ((bool)(this["IsVisibleCreateStatusTray"]));
             }
             set {
-                this["CreateStatusTrayVisibility"] = value;
+                this["IsVisibleCreateStatusTray"] = value;
             }
         }
         
@@ -356,6 +356,18 @@ namespace TweetGazer.Properties {
             }
             set {
                 this["IsVisibleViaInformation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsMinimizeCreateStatusTray {
+            get {
+                return ((bool)(this["IsMinimizeCreateStatusTray"]));
+            }
+            set {
+                this["IsMinimizeCreateStatusTray"] = value;
             }
         }
     }
