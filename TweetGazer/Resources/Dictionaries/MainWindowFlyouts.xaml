@@ -630,34 +630,6 @@
                                     Text="{Binding Path=Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                         </Grid>
-                        <Grid IsEnabled="False">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <StackPanel Grid.ColumnSpan="2">
-                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
-                                <TextBlock
-                                    Margin="10"
-                                    FontSize="20"
-                                    Text="プライバシーとセキュリティ" />
-                                <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,1,0,0" />
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Grid.Column="1">
-                                <TextBlock FontSize="16" Text="自分を画像にタグ付けすることを許可" />
-                                <RadioButton Content="全てのアカウント" FontSize="16" />
-                                <RadioButton Content="フォローのみ" FontSize="16" />
-                                <RadioButton Content="許可しない" FontSize="16" />
-                                <TextBlock FontSize="16" Text="ツイートの公開設定" />
-                                <CheckBox Content="ツイートを非公開にする" FontSize="16" />
-                                <TextBlock FontSize="16" Text="位置情報をツイート" />
-                                <CheckBox Content="ツイートに位置情報を追加" FontSize="16" />
-                            </StackPanel>
-                        </Grid>
                     </StackPanel>
                 </ScrollViewer>
                 <Border
