@@ -21,9 +21,10 @@
                     Click="BlockButton_Click"
                     Style="{StaticResource FlatButtonStyle}">
                     <Image
-                        x:Name="image"
+                        x:Name="Image"
                         Behaviors:ImageBehavior.Source="{Binding Path=Image}"
-                        MouseWheel="ImageMouseWheel" />
+                        MouseMove="Image_MouseMove"
+                        MouseWheel="Image_MouseWheel" />
                 </Button>
                 <Button
                     Width="50"
@@ -52,6 +53,18 @@
                 <Button
                     Width="30"
                     Height="30"
+                    Margin="10,10,50,10"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Click="MoveButton_Click"
+                    Command="{Binding Path=ToggleZoomCommand, Mode=OneTime}"
+                    Style="{StaticResource UwpLikeButtonStyle2}">
+                    <ContentControl ContentTemplate="{StaticResource AccentColorSearchIcon}" />
+                </Button>
+                <Button
+                    Width="30"
+                    Height="30"
+                    Margin="10"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Click="CloseButton_Click"
@@ -59,6 +72,25 @@
                     <ContentControl ContentTemplate="{StaticResource AccentColorCloseIcon}" />
                 </Button>
             </Grid>
+            <Canvas
+                x:Name="ZoomCanvas1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Visibility="{Binding Path=IsZoom, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ScrollViewer
+                    x:Name="ZoomScrollViewer"
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Disabled">
+                    <Canvas x:Name="ZoomCanvas2">
+                        <Image
+                            x:Name="ZoomImage"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Behaviors:ImageBehavior.Source="{Binding Path=Image}"
+                            MouseMove="Image_MouseMove" />
+                    </Canvas>
+                </ScrollViewer>
+            </Canvas>
         </Grid>
     </Button>
 </UserControl>

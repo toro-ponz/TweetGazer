@@ -394,7 +394,7 @@ namespace TweetGazer.Models
                 }
             }
         }
-        
+
         /// <summary>
         /// 設定画面の開閉
         /// </summary>

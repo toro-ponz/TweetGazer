@@ -1,14 +1,11 @@
 ﻿using CoreTweet;
 using SourceChord.Lighty;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
 using TweetGazer.Behaviors;
 using TweetGazer.Common;
-using TweetGazer.Views;
 
 namespace TweetGazer.Models.Timeline
 {

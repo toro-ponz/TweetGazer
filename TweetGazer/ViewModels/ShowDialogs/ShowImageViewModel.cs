@@ -33,12 +33,16 @@ namespace TweetGazer.ViewModels.ShowDialogs
                         case nameof(this.ShowImage.IsRightButtonVisible):
                             this.RaisePropertyChanged(() => this.IsRightButtonVisible);
                             break;
+                        case nameof(this.ShowImage.IsZoom):
+                            this.RaisePropertyChanged(() => this.IsZoom);
+                            break;
                     }
                 })
             );
 
             this.PreviousCommand = new RelayCommand(this.Previous);
             this.NextCommand = new RelayCommand(this.Next);
+            this.ToggleZoomCommand = new RelayCommand(this.ToggleZoom);
         }
 
         /// <summary>
@@ -55,6 +59,14 @@ namespace TweetGazer.ViewModels.ShowDialogs
         public void Next()
         {
             this.ShowImage.Next();
+        }
+
+        /// <summary>
+        /// ズームの切り替え
+        /// </summary>
+        public void ToggleZoom()
+        {
+            this.ShowImage.ToggleZoom();
         }
 
         #region Image 変更通知プロパティ
@@ -87,8 +99,19 @@ namespace TweetGazer.ViewModels.ShowDialogs
         }
         #endregion
 
+        #region IsZoom 変更通知プロパティ
+        public bool IsZoom
+        {
+            get
+            {
+                return this.ShowImage.IsZoom;
+            }
+        }
+        #endregion
+
         public ICommand PreviousCommand { get; }
         public ICommand NextCommand { get; }
+        public ICommand ToggleZoomCommand { get; }
 
         private ShowImageModel ShowImage;
     }

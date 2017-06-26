@@ -88,12 +88,66 @@ namespace TweetGazer.Views.ShowDialogs
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ImageMouseWheel(object sender, MouseWheelEventArgs e)
+        private void Image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta > 0)
                 this.ShowImageViewModel.Previous();
             else
                 this.ShowImageViewModel.Next();
+        }
+
+        /// <summary>
+        /// 画像の拡大
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Image_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.ShowImageViewModel.IsZoom)
+            {
+                if (Double.IsNaN(this.ZoomImage.Width))
+                    this.ZoomImage.Width = this.Image.ActualWidth * 3;
+                if (Double.IsNaN(this.ZoomImage.Height))
+                    this.ZoomImage.Height = this.Image.ActualHeight * 3;
+
+                // 拡大部分のサイズは画像サイズの大きい方の2/5
+                if (Double.IsNaN(this.ZoomScrollViewer.Width) || Double.IsNaN(this.ZoomScrollViewer.Height))
+                {
+                    if (this.Image.ActualHeight < this.Image.ActualWidth)
+                    {
+                        this.ZoomScrollViewer.Width = this.Image.ActualWidth / 2.5;
+                        this.ZoomScrollViewer.Height = this.Image.ActualWidth / 2.5;
+                    }
+                    else
+                    {
+                        this.ZoomScrollViewer.Width = this.Image.ActualHeight / 2.5;
+                        this.ZoomScrollViewer.Height = this.Image.ActualHeight / 2.5;
+                    }
+                }
+
+                var widthRatio = this.ZoomImage.ActualWidth / this.Image.ActualWidth;
+                var heightRatio = this.ZoomImage.ActualHeight / this.Image.ActualHeight;
+
+                var widthOffset = 0.0d;
+                var heightOffset = 0.0d;
+
+                // 拡大部分が画面からはみ出るならマウスポインタの逆側に移動
+                if (e.GetPosition(this.ZoomCanvas1).X + this.ZoomScrollViewer.Width > this.RenderSize.Width - 10)
+                    widthOffset = this.ZoomScrollViewer.Width;
+                if (e.GetPosition(this.ZoomCanvas1).Y + this.ZoomScrollViewer.Height > this.RenderSize.Height - 10)
+                    heightOffset = this.ZoomScrollViewer.Height;
+
+                Canvas.SetLeft(this.ZoomImage, (e.GetPosition(this.Image).X * -1) * widthRatio);
+                Canvas.SetTop(this.ZoomImage, (e.GetPosition(this.Image).Y * -1) * heightRatio);
+                Canvas.SetLeft(this.ZoomScrollViewer, e.GetPosition(this.ZoomCanvas1).X - widthOffset);
+                Canvas.SetTop(this.ZoomScrollViewer, e.GetPosition(this.ZoomCanvas1).Y - heightOffset);
+
+                this.ZoomImage.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                this.ZoomImage.Visibility = Visibility.Hidden;
+            }
         }
 
         private ShowImageViewModel ShowImageViewModel { get; }
