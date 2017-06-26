@@ -459,6 +459,7 @@
                             AcceptsReturn="True"
                             AllowDrop="True"
                             Background="{x:Null}"
+                            VerticalScrollBarVisibility="Auto"
                             BorderBrush="{x:Null}"
                             BorderThickness="0"
                             FontSize="22"
@@ -508,7 +509,7 @@
                             BorderBrush="{DynamicResource AccentColorBrush}"
                             BorderThickness="0,0,0,1" />
                         <Grid
-                            Grid.Row="2"
+                            Grid.Row="3"
                             Height="35"
                             Margin="5,5,5,5">
                             <Grid.ColumnDefinitions>
