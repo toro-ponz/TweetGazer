@@ -83,8 +83,8 @@
             <RowDefinition />
             <RowDefinition Height="Auto" MaxHeight="150" />
         </Grid.RowDefinitions>
-        
-        <!-- 左部メニュー -->
+
+        <!--  左部メニュー  -->
         <Grid Grid.RowSpan="2">
             <Grid
                 Width="50"
@@ -230,7 +230,7 @@
                 BorderThickness="0,0,2,0" />
         </Grid>
 
-        <!-- タイムライン背面 -->
+        <!--  タイムライン背面  -->
         <StackPanel
             Grid.Row="0"
             Grid.Column="1"
@@ -243,7 +243,7 @@
                 TextWrapping="Wrap" />
         </StackPanel>
 
-        <!-- タイムライン -->
+        <!--  タイムライン  -->
         <ItemsControl
             Grid.Row="0"
             Grid.Column="1"
@@ -255,7 +255,7 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
-        <!-- トレイ通知領域 -->
+        <!--  トレイ通知領域  -->
         <ItemsControl
             Grid.Row="1"
             Grid.Column="1"
@@ -314,7 +314,7 @@
             </ContentControl>
         </Canvas>
 
-        <!-- Flyoutの背面 -->
+        <!--  Flyoutの背面  -->
         <Grid Grid.RowSpan=" 2" Grid.ColumnSpan="2">
             <Button Style="{StaticResource BackButtonStyle}" Visibility="{Binding Path=FlyoutCloseVisibility}">
                 <i:Interaction.Triggers>

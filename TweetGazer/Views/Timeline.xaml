@@ -73,7 +73,7 @@
             </StackPanel>
         </Grid>
 
-        <!-- 設定 -->
+        <!--  設定  -->
         <Grid
             Grid.Row="1"
             MaxHeight="200"
@@ -82,8 +82,8 @@
                 <RowDefinition Height="20" />
                 <RowDefinition Height="Auto" MaxHeight="180" />
             </Grid.RowDefinitions>
-            
-           <!-- 設定の開閉ボタン -->
+
+            <!--  設定の開閉ボタン  -->
             <Grid Grid.Row="0">
                 <Button
                     HorizontalAlignment="Stretch"
@@ -103,8 +103,8 @@
                         Text="Settings" />
                 </Button>
             </Grid>
-            
-            <!-- 設定 -->
+
+            <!--  設定  -->
             <ScrollViewer
                 Grid.Row="1"
                 MaxHeight="180"
@@ -225,7 +225,7 @@
             </ScrollViewer>
         </Grid>
 
-        <!-- タイムライン -->
+        <!--  タイムライン  -->
         <ItemsControl
             x:Name="ItemsControl"
             Grid.Row="2"
@@ -256,7 +256,7 @@
             </ItemsControl.Template>
         </ItemsControl>
 
-        <!-- 各種ボタン等 -->
+        <!--  各種ボタン等  -->
         <Grid
             Grid.Row="2"
             HorizontalAlignment="Stretch"
@@ -265,8 +265,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
-            <!-- 更新ボタン -->
+
+            <!--  更新ボタン  -->
             <Grid
                 Margin="15,0,0,10"
                 HorizontalAlignment="Left"
@@ -299,7 +299,7 @@
                 </Button>
             </Grid>
 
-            <!-- トップに戻るボタン -->
+            <!--  トップに戻るボタン  -->
             <Grid
                 Margin="0,0,15,10"
                 HorizontalAlignment="Right"
@@ -338,7 +338,7 @@
                 </Button>
             </Grid>
 
-            <!-- トレイ通知領域 -->
+            <!--  トレイ通知領域  -->
             <Grid Grid.Row="1" Background="{DynamicResource AccentColorBrush}">
                 <ItemsControl MaxHeight="100" ItemsSource="{Binding Path=TimelineNotice, Mode=OneTime}">
                     <ItemsControl.ItemTemplate>
@@ -377,7 +377,7 @@
             </Grid>
         </Grid>
 
-        <!-- プログレスリング -->
+        <!--  プログレスリング  -->
         <Grid
             Grid.Row="1"
             Grid.RowSpan="2"
