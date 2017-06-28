@@ -353,13 +353,13 @@ namespace TweetGazer.Models
             this.TimelineItems.Clear();
             this.Data.Pages.RemoveAt(this.Data.PageSuffix);
             this.Data.PageSuffix--;
-            var verticalOffset = this.Data.CurrentPage.VerticalOffset;
+            var verticalOffset = this.VerticalOffset;
             this.Initialize(Data.CurrentPage);
             Task.Run(() =>
             {
                 for (int i = 0; i < 200; i++)
                     System.Threading.Thread.Sleep(10);
-                this.Data.CurrentPage.VerticalOffset = verticalOffset;
+                this.VerticalOffset = verticalOffset;
             });
         }
 

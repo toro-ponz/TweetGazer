@@ -264,11 +264,11 @@ namespace TweetGazer.ViewModels
         {
             get
             {
-                return this.Timeline.Data.CurrentPage.VerticalOffset;
+                return this.Timeline.VerticalOffset;
             }
             set
             {
-                this.Timeline.Data.CurrentPage.VerticalOffset = value;
+                this.Timeline.VerticalOffset = value;
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(nameof(this.UpButtonVisibility));
             }
