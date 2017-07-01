@@ -188,19 +188,10 @@
 
             <!--  トレイ通知領域  -->
             <Grid Grid.Row="1" Background="{DynamicResource AccentColorBrush}">
-                <ItemsControl MaxHeight="100" ItemsSource="{Binding Path=TimelineNotice, Mode=OneTime}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid VerticalAlignment="Bottom" Background="{Binding Path=BackgroundColor, Mode=OneTime}">
-                                <TextBlock
-                                    Margin="10"
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="{Binding Path=Message, Mode=OneTime}"
-                                    TextWrapping="Wrap" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                <ItemsControl MaxHeight="100" ItemsSource="{Binding Path=TimelineNotice ,Mode=OneTime}">
+                    <ItemsControl.ItemTemplateSelector>
+                        <Selectors:TimelineNotificationTrayTemplateSelector />
+                    </ItemsControl.ItemTemplateSelector>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel>

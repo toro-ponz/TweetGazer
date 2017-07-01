@@ -5,6 +5,7 @@
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:Lighty="clr-namespace:SourceChord.Lighty;assembly=Lighty"
     xmlns:Properties="clr-namespace:TweetGazer.Properties"
+    xmlns:Selectors="clr-namespace:TweetGazer.Selectors"
     xmlns:ViewModels="clr-namespace:TweetGazer.ViewModels"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -262,20 +263,9 @@
             Grid.Column="1"
             MaxHeight="100"
             ItemsSource="{Binding Path=TrayNotifications, Mode=OneTime}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid VerticalAlignment="Bottom" Background="{Binding Path=BackgroundColor, Mode=OneTime}">
-                        <TextBlock
-                            Margin="10"
-                            HorizontalAlignment="Center"
-                            FontSize="20"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="{Binding Path=Message, Mode=OneTime}"
-                            TextWrapping="Wrap" />
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemTemplateSelector>
+                <Selectors:MainWindowNotificationTrayTemplateSelector />
+            </ItemsControl.ItemTemplateSelector>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel>

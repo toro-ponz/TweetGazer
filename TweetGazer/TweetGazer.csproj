@@ -218,6 +218,8 @@
     <Compile Include="Models\Timeline\UserOverviewProperties.cs" />
     <Compile Include="Models\Timeline\UserProperties.cs" />
     <Compile Include="Models\Timeline\UserTimelineTab.cs" />
+    <Compile Include="Selectors\MainWindowNotificationTrayTemplateSelector.cs" />
+    <Compile Include="Selectors\TimelineNotificationTrayTemplateSelector.cs" />
     <Compile Include="Selectors\StatusMediaTemplateSelector.cs" />
     <Compile Include="Selectors\ShowStatusItemTemplateSelector.cs" />
     <Compile Include="Selectors\TimelineItemTemplateSelector.cs" />

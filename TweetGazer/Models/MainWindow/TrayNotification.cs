@@ -14,28 +14,9 @@ namespace TweetGazer.Models.MainWindow
         {
             this.Message = message.TrimEnd('\n', '\r', ' ');
             this.Type = type;
-
-            switch (type)
-            {
-                case NotificationType.Normal:
-                    this.BackgroundColor = new SolidColorBrush(Colors.DodgerBlue);
-                    break;
-                case NotificationType.Success:
-                    this.BackgroundColor = new SolidColorBrush(Colors.Lime);
-                    break;
-                case NotificationType.Alert:
-                    this.BackgroundColor = new SolidColorBrush(Colors.Orange);
-                    break;
-                case NotificationType.Error:
-                    this.BackgroundColor = new SolidColorBrush(Colors.Red);
-                    break;
-            }
-            this.BackgroundColor.Freeze();
         }
 
         public NotificationType Type;
-
-        public Brush BackgroundColor { get; }
 
         public string Message { get; }
     }

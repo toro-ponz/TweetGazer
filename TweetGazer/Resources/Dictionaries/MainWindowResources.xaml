@@ -458,4 +458,56 @@
         </Grid>
     </DataTemplate>
 
+    <DataTemplate x:Key="NotificationAlertTray">
+        <Grid VerticalAlignment="Bottom" Background="Orange">
+            <TextBlock
+                Margin="10"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="{Binding Path=Message, Mode=OneTime}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="NotificationErrorTray">
+        <Grid VerticalAlignment="Bottom" Background="Red">
+            <TextBlock
+                Margin="10"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="{Binding Path=Message, Mode=OneTime}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="NotificationNormalTray">
+        <Grid VerticalAlignment="Bottom" Background="DodgerBlue">
+            <TextBlock
+                Margin="10"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="{Binding Path=Message, Mode=OneTime}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="NotificationSuccessTray">
+        <Grid VerticalAlignment="Bottom" Background="Lime">
+            <TextBlock
+                Margin="10"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="{Binding Path=Message, Mode=OneTime}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+        </Grid>
+    </DataTemplate>
+
 </ResourceDictionary>
