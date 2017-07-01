@@ -164,8 +164,10 @@ namespace TweetGazer.Models.Timeline
             //リプライの場合
             if (Properties.Settings.Default.IsDisplayReplyStatus && status.InReplyToStatusId != null)
                 this.ReplyToStatusProperties = new ReplyToStatusProperties(this.TimelineModel, (long)status.InReplyToStatusId);
+            else if (status.InReplyToStatusId != null)
+                this.ReplyToStatusProperties = new ReplyToStatusProperties(true);
             else
-                this.ReplyToStatusProperties = new ReplyToStatusProperties();
+                this.ReplyToStatusProperties = new ReplyToStatusProperties(false);
         }
 
         /// <summary>

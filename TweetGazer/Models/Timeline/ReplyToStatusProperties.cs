@@ -11,8 +11,9 @@ namespace TweetGazer.Models.Timeline
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ReplyToStatusProperties()
+        public ReplyToStatusProperties(bool isExist)
         {
+            this.IsExist = isExist;
             this._Visibility = Visibility.Collapsed;
         }
 
@@ -23,6 +24,7 @@ namespace TweetGazer.Models.Timeline
         /// <param name="id">ツイートID</param>
         public ReplyToStatusProperties(TimelineModel timelineModel, long id)
         {
+            this.IsExist = true;
             this._Visibility = Visibility.Visible;
             this._TextVisibility = Visibility.Collapsed;
             this.ToggleOpenCommand = new RelayCommand(this.ToggleOpen);
@@ -154,6 +156,8 @@ namespace TweetGazer.Models.Timeline
         }
 
         public long? Id { get; set; }
+
+        public bool IsExist { get; }
 
         private TimelineModel TimelineModel;
     }

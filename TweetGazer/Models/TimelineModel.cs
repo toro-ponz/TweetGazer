@@ -960,7 +960,7 @@ namespace TweetGazer.Models
                 var status = item.StatusProperties != null;
                 var media = status && item.StatusProperties.Media.Count > 0;
                 var excludeRetweet = !this.IsVisibleRetweet && (status && item.StatusProperties.IsRetweetedByUser);
-                var excludeReply = !this.IsVisibleReply && (status && item.StatusProperties.ReplyToStatusProperties.Visibility != Visibility.Collapsed);
+                var excludeReply = !this.IsVisibleReply && (status && item.StatusProperties.ReplyToStatusProperties.IsExist);
                 var excludeImage = !this.IsVisibleIncludeImagesStatus && (media && item.StatusProperties.Media.First().Type == Behaviors.StatusMediaType.Image);
                 var excludeGif = !this.IsVisibleIncludeGifStatus && (media && item.StatusProperties.Media.First().Type == Behaviors.StatusMediaType.AnimationGif);
                 var excludeVideo = !this.IsVisibleIncludeVideoStatus && (media && item.StatusProperties.Media.First().Type == Behaviors.StatusMediaType.Video);
@@ -969,7 +969,7 @@ namespace TweetGazer.Models
                     (status &&
                     !media &&
                     !item.StatusProperties.IsRetweetedByUser &&
-                    item.StatusProperties.ReplyToStatusProperties.Visibility == Visibility.Collapsed &&
+                    !item.StatusProperties.ReplyToStatusProperties.IsExist &&
                     item.StatusProperties.HyperlinkText.Urls.Count <= 0);
                 return !excludeRetweet && !excludeReply && !excludeImage && !excludeGif && !excludeVideo && !excludeLink && !excludeOther;
             };
