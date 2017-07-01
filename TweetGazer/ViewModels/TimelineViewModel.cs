@@ -55,11 +55,17 @@ namespace TweetGazer.ViewModels
                         case nameof(this.Timeline.IsVisibleIncludeImagesStatus):
                             this.RaisePropertyChanged(() => this.IsVisibleIncludeImagesStatus);
                             break;
+                        case nameof(this.Timeline.IsVisibleIncludeGifStatus):
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeGifStatus);
+                            break;
                         case nameof(this.Timeline.IsVisibleIncludeVideoStatus):
                             this.RaisePropertyChanged(() => this.IsVisibleIncludeVideoStatus);
                             break;
                         case nameof(this.Timeline.IsVisibleIncludeLinkStatus):
                             this.RaisePropertyChanged(() => this.IsVisibleIncludeLinkStatus);
+                            break;
+                        case nameof(this.Timeline.IsVisibleOtherStatus):
+                            this.RaisePropertyChanged(() => this.IsVisibleOtherStatus);
                             break;
                     }
                 })
@@ -82,6 +88,13 @@ namespace TweetGazer.ViewModels
                             this.RaisePropertyChanged(() => this.IsVisibleBackButton);
                             this.RaisePropertyChanged(() => this.VerticalOffset);
                             this.RaisePropertyChanged(() => this.UpButtonVisibility);
+                            this.RaisePropertyChanged(() => this.IsVisibleRetweet);
+                            this.RaisePropertyChanged(() => this.IsVisibleReply);
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeImagesStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeGifStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeVideoStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeLinkStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleOtherStatus);
                             break;
                         case nameof(this.Timeline.Data.GridWidth):
                             this.RaisePropertyChanged(() => this.GridWidth);

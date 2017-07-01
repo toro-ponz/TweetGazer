@@ -32,15 +32,7 @@ namespace TweetGazer.Models
             this.Timers = new List<Timer>();
             this._ProgressRingVisibility = Visibility.Collapsed;
             this._IsVisibleSettings = false;
-
-            this._IsVisibleRetweet = true;
-            this._IsVisibleReply = true;
-            this._IsVisibleIncludeImagesStatus = true;
-            this._IsVisibleIncludeGifStatus = true;
-            this._IsVisibleIncludeVideoStatus = true;
-            this._IsVisibleIncludeLinkStatus = true;
-            this._IsVisibleOtherStatus = true;
-
+            
             this.TimelineItems = new ObservableCollection<TimelineItemProperties>();
             BindingOperations.EnableCollectionSynchronization(this.TimelineItems, new object());
             this.TimelineNotice = new ObservableCollection<TimelineNotice>();
@@ -1042,16 +1034,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleRetweet;
+                return this.Data.CurrentPage.IsVisibleRetweet;
             }
             set
             {
-                this._IsVisibleRetweet = value;
+                this.Data.CurrentPage.IsVisibleRetweet = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleRetweet;
         #endregion
 
         #region IsVisibleReply 変更通知プロパティ
@@ -1059,11 +1050,11 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleReply;
+                return this.Data.CurrentPage.IsVisibleReply;
             }
             set
             {
-                this._IsVisibleReply = value;
+                this.Data.CurrentPage.IsVisibleReply = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
@@ -1076,16 +1067,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleIncludeImagesStatus;
+                return this.Data.CurrentPage.IsVisibleIncludeImagesStatus;
             }
             set
             {
-                this._IsVisibleIncludeImagesStatus = value;
+                this.Data.CurrentPage.IsVisibleIncludeImagesStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleIncludeImagesStatus;
         #endregion
 
         #region IsVisibleIncludeGifStatus 変更通知プロパティ
@@ -1093,16 +1083,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleIncludeGifStatus;
+                return this.Data.CurrentPage.IsVisibleIncludeGifStatus;
             }
             set
             {
-                this._IsVisibleIncludeGifStatus = value;
+                this.Data.CurrentPage.IsVisibleIncludeGifStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleIncludeGifStatus;
         #endregion
 
         #region IsVisibleIncludeVideoStatus 変更通知プロパティ
@@ -1110,16 +1099,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleIncludeVideoStatus;
+                return this.Data.CurrentPage.IsVisibleIncludeVideoStatus;
             }
             set
             {
-                this._IsVisibleIncludeVideoStatus = value;
+                this.Data.CurrentPage.IsVisibleIncludeVideoStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleIncludeVideoStatus;
         #endregion
 
         #region IsVisibleIncludeLinkStatus 変更通知プロパティ
@@ -1127,16 +1115,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleIncludeLinkStatus;
+                return this.Data.CurrentPage.IsVisibleIncludeLinkStatus;
             }
             set
             {
-                this._IsVisibleIncludeLinkStatus = value;
+                this.Data.CurrentPage.IsVisibleIncludeLinkStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleIncludeLinkStatus;
         #endregion
 
         #region IsVisibleOtherStatus 変更通知プロパティ
@@ -1144,16 +1131,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleOtherStatus;
+                return this.Data.CurrentPage.IsVisibleOtherStatus;
             }
             set
             {
-                this._IsVisibleOtherStatus = value;
+                this.Data.CurrentPage.IsVisibleOtherStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleOtherStatus;
         #endregion
 
         #region TokenSuffix 変更通知プロパティ
