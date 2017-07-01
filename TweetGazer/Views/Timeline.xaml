@@ -228,10 +228,11 @@
         <!--  設定  -->
         <Grid
             Grid.Row="1"
+            VerticalAlignment="Top"
             Background="{DynamicResource AccentColorBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20" />
-                <RowDefinition Height="Auto" MaxHeight="180" />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <!--  設定の開閉ボタン  -->
@@ -258,7 +259,6 @@
             <!--  設定  -->
             <ScrollViewer
                 Grid.Row="1"
-                MaxHeight="180"
                 Behaviors:ScrollViewerBehavior.AnimationScrolling="True"
                 Foreground="White"
                 VerticalScrollBarVisibility="Auto"
