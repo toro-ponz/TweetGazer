@@ -14,21 +14,24 @@
 
     <DataTemplate x:Key="Status">
         <StackPanel DataContext="{Binding Path=StatusProperties}">
-            <Grid Background="{DynamicResource GrayBrush8}" Visibility="{Binding Path=ReplyToStatusProperties.Visibility, Mode=OneWay}">
+            <Grid
+                Background="{DynamicResource GrayBrush8}"
+                DataContext="{Binding Path=ReplyToStatusProperties}"
+                Visibility="{Binding Path=Visibility, Mode=OneWay}">
                 <Button
                     Margin="10,10,10,5"
                     HorizontalContentAlignment="Stretch"
                     VerticalContentAlignment="Stretch"
-                    Command="{Binding Path=ReplyToStatusSelectCommand, Mode=OneTime}"
+                    Command="{Binding Path=SelectCommand, Mode=OneTime}"
                     FontSize="14"
                     Foreground="{DynamicResource TextBrush}"
                     Style="{StaticResource UwpLikeButtonStyle1}">
-                    <Grid DataContext="{Binding Path=ReplyToStatusProperties}">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" DataContext="{Binding Path=User}">
+                        <Grid Grid.Row="0">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
@@ -42,12 +45,14 @@
                                 Width="20"
                                 Height="20"
                                 Margin="2"
+                                Command="{Binding Path=SelectIconCommand, Mode=OneTime}"
                                 Style="{StaticResource UwpLikeButtonStyle2}">
-                                <Image Behaviors:ImageBehavior.Source="{Binding Path=ProfileImageNormal, Mode=OneWay}" />
+                                <Image Behaviors:ImageBehavior.Source="{Binding Path=User.ProfileImageNormal, Mode=OneWay}" />
                             </Button>
                             <TextBlock
                                 Grid.Column="1"
                                 HorizontalAlignment="Left"
+                                DataContext="{Binding Path=User}"
                                 TextTrimming="CharacterEllipsis">
                                 <Run
                                     FontSize="14"
@@ -78,7 +83,6 @@
                                 HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center"
                                 Command="{Binding Path=ToggleOpenCommand, Mode=OneTime}"
-                                DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType=Grid, AncestorLevel=2}}"
                                 Style="{StaticResource UwpLikeButtonStyle1}">
                                 <TextBlock
                                     FontSize="14"
@@ -911,5 +915,5 @@
                 TextWrapping="Wrap" />
         </Grid>
     </DataTemplate>
-    
+
 </ResourceDictionary>

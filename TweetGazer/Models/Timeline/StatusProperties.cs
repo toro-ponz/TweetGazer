@@ -43,7 +43,6 @@ namespace TweetGazer.Models.Timeline
             };
 
             this.SelectItemCommand = new RelayCommand(this.SelectItem);
-            this.ReplyToStatusSelectCommand = new RelayCommand(this.ReplyToStatusSelect);
             this.SelectIconCommand = new RelayCommand(this.SelectIcon);
             this.ReplyCommand = new RelayCommand(this.Reply);
             this.RetweetCommand = new RelayCommand(this.Retweet);
@@ -198,21 +197,6 @@ namespace TweetGazer.Models.Timeline
             if (mainWindow != null)
             {
                 using (var status = new Views.ShowDialogs.ShowStatus(this.TimelineModel, this.Id))
-                {
-                    LightBox.ShowDialog(mainWindow, status);
-                }
-            }
-        }
-
-        /// <summary>
-        /// リプライ先ツイートをクリックしたとき
-        /// </summary>
-        public void ReplyToStatusSelect()
-        {
-            var mainWindow = CommonMethods.MainWindow;
-            if (mainWindow != null && this.ReplyToStatusProperties.Id != null)
-            {
-                using (var status = new Views.ShowDialogs.ShowStatus(this.TimelineModel, (long)this.ReplyToStatusProperties.Id))
                 {
                     LightBox.ShowDialog(mainWindow, status);
                 }
@@ -739,7 +723,6 @@ namespace TweetGazer.Models.Timeline
         public StatusType Type { get; }
 
         public ICommand SelectItemCommand { get; }
-        public ICommand ReplyToStatusSelectCommand { get; }
         public ICommand SelectIconCommand { get; }
         public ICommand ReplyCommand { get; }
         public ICommand RetweetCommand { get; }
