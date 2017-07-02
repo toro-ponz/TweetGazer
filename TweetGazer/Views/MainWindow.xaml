@@ -95,7 +95,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="250" />
                     <RowDefinition />
-                    <RowDefinition Height="200" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
                     <Button Height="50" Style="{StaticResource UwpLikeButtonStyle2}">
@@ -187,7 +187,7 @@
                         <ContentControl Margin="10" ContentTemplate="{StaticResource FrontColorYouIcon}" />
                     </Button>
                 </StackPanel>
-                <StackPanel Grid.Row="2">
+                <StackPanel Grid.Row="2" Margin="0,0,0,5">
                     <Button Height="50" Style="{StaticResource UwpLikeButtonStyle2}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
@@ -219,6 +219,76 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ContentControl Margin="10" ContentTemplate="{StaticResource FrontColorReloadIcon}" />
+                    </Button>
+                    <Button
+                        Width="50"
+                        Height="50"
+                        MaxWidth="50"
+                        MaxHeight="50"
+                        DataContext="{Binding Path=NetworkState, Mode=OneTime}"
+                        Style="{StaticResource FlatButtonStyle}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseEnter">
+                                <ei:ChangePropertyAction
+                                    PropertyName="Visibility"
+                                    TargetObject="{Binding ElementName=NetworkGrid}"
+                                    Value="Visible" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="MouseLeave">
+                                <ei:ChangePropertyAction
+                                    PropertyName="Visibility"
+                                    TargetObject="{Binding ElementName=NetworkGrid}"
+                                    Value="Collapsed" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Grid>
+                            <Rectangle
+                                Width="44"
+                                Height="44"
+                                Margin="3"
+                                RadiusX="22"
+                                RadiusY="22">
+                                <Rectangle.Fill>
+                                    <ImageBrush ImageSource="{Binding Path=MainProfileImage, Mode=OneWay}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Grid
+                                Width="14"
+                                Height="14"
+                                Margin="4"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom">
+                                <Rectangle
+                                    Width="10"
+                                    Height="10"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RadiusX="5"
+                                    RadiusY="5">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="Red" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Rectangle
+                                    Width="10"
+                                    Height="10"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RadiusX="5"
+                                    RadiusY="5"
+                                    Visibility="{Binding Path=IsOnline, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="Lime" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <ContentControl
+                                    Width="12"
+                                    Height="12"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    ContentTemplate="{StaticResource WhiteCheckIcon}" />
+                            </Grid>
+                        </Grid>
                     </Button>
                 </StackPanel>
             </Grid>
@@ -287,6 +357,112 @@
                 </ControlTemplate>
             </ItemsControl.Template>
         </ItemsControl>
+
+        <!--  通信状態の表示領域  -->
+        <Grid
+            x:Name="NetworkGrid"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            MaxWidth="500"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Background="{DynamicResource WindowBackgroundBrush}"
+            DataContext="{Binding Path=NetworkState, Mode=OneTime}"
+            Visibility="Collapsed">
+            <StackPanel Margin="10" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Grid>
+                        <Rectangle
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RadiusX="10"
+                            RadiusY="10">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="Red" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RadiusX="10"
+                            RadiusY="10"
+                            Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="Lime" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <ContentControl
+                            Width="16"
+                            Height="16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            ContentTemplate="{StaticResource WhiteCheckIcon}" />
+                    </Grid>
+                    <TextBlock
+                        FontSize="16"
+                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Foreground="{DynamicResource TextBrush}"
+                        Text="インターネット接続済み" />
+                    <TextBlock
+                        FontSize="16"
+                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}"
+                        Foreground="{DynamicResource TextBrush}"
+                        Text="インターネット未接続" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Grid>
+                        <Rectangle
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RadiusX="10"
+                            RadiusY="10">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="Red" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RadiusX="10"
+                            RadiusY="10"
+                            Visibility="{Binding Path=IsTwitterOnline, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="Lime" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <ContentControl
+                            Width="16"
+                            Height="16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            ContentTemplate="{StaticResource WhiteCheckIcon}" />
+                    </Grid>
+                    <TextBlock
+                        FontSize="16"
+                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Foreground="{DynamicResource TextBrush}"
+                        Text="Twitter接続可能" />
+                    <TextBlock
+                        FontSize="16"
+                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}"
+                        Foreground="{DynamicResource TextBrush}"
+                        Text="Twitter接続不能" />
+                </StackPanel>
+            </StackPanel>
+            <Border
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                BorderBrush="{DynamicResource AccentColorBrush}"
+                BorderThickness="1" />
+        </Grid>
 
         <!--  移動可能なコンテンツの親キャンバス  -->
         <Canvas

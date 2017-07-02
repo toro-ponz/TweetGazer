@@ -381,6 +381,43 @@ namespace TweetGazer.Common
         }
 
         /// <summary>
+        /// インターネット接続が有効か否か
+        /// </summary>
+        /// <returns>インターネット接続が有効か否か</returns>
+        public static bool CheckInternetConnectEnabled()
+        {
+            return NativeMethods.InternetGetConnectedState(out int flag, 0);
+        }
+
+        /// <summary>
+        /// Twitterに接続可能か否か
+        /// </summary>
+        /// <returns>Twitterに接続可能か否か</returns>
+        public static bool CheckTwitterConnectEnabled()
+        {
+            HttpWebRequest webreq = null;
+            HttpWebResponse webres = null;
+            try
+            {
+                webreq = (HttpWebRequest)WebRequest.Create("http://www.twitter.com");
+                webreq.Method = "HEAD";
+                webres = (HttpWebResponse)webreq.GetResponse();
+                Console.WriteLine(webres.StatusCode);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e);
+                return false;
+            }
+            finally
+            {
+                if (webres != null)
+                    webres.Close();
+            }
+        }
+
+        /// <summary>
         /// メインウィンドウインスタンスを返す
         /// </summary>
         public static Views.MainWindow MainWindow

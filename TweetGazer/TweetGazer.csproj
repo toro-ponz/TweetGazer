@@ -188,6 +188,7 @@
     <Compile Include="Models\MainWindow\DirectMessages.cs" />
     <Compile Include="Models\MainWindow\Instructions.cs" />
     <Compile Include="Models\MainWindow\MovableCreateStatus.cs" />
+    <Compile Include="Models\MainWindow\NetworkState.cs" />
     <Compile Include="Models\MainWindow\Notifications.cs" />
     <Compile Include="Models\MainWindow\Search.cs" />
     <Compile Include="Models\MainWindow\StatusMedia.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="ViewModels\MainWindow\InstructionsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MentionsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MovableCreateStatusViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\NetworkStateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\NotificationsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TimelinesGridViewModel.cs" />
