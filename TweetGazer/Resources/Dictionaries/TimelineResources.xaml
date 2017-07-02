@@ -692,7 +692,7 @@
             Width="50"
             Height="50"
             Margin="10"
-            Behaviors:ReadMoreBehavior.Command="{Binding Path=Command, Mode=OneTime}"
+            Behaviors:ReadMoreBehavior.Command="{Binding Path=LoadCommand, Mode=OneTime}"
             DataContext="{Binding Path=LoadingProperties}" />
     </DataTemplate>
 

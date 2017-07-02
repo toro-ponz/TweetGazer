@@ -21,6 +21,7 @@ namespace TweetGazer.ViewModels
             this.Timeline = new TimelineModel(data);
 
             this.TimelineNotice = this.Timeline.TimelineNotice;
+            this._Message = this.Timeline.Message;
             this._Title = this.Timeline.Data.CurrentPage.Title;
             this.ScreenName = this.Timeline.ScreenName;
             this._IsVisibleSettings = this.Timeline.IsVisibleSettings;
@@ -30,8 +31,8 @@ namespace TweetGazer.ViewModels
                 {
                     switch (__.PropertyName)
                     {
-                        case nameof(this.Timeline.TimelineItems):
-                            this.RaisePropertyChanged(() => this.TimelineItems);
+                        case nameof(this.Timeline.Message):
+                            this.Message = this.Timeline.Message;
                             break;
                         case nameof(this.Timeline.ProgressRingVisibility):
                             this.RaisePropertyChanged(() => this.ProgressRingVisibility);
@@ -214,6 +215,22 @@ namespace TweetGazer.ViewModels
                 return this.Timeline.ProgressRingVisibility;
             }
         }
+        #endregion
+
+        #region Message 変更通知プロパティ
+        public string Message
+        {
+            get
+            {
+                return this._Message;
+            }
+            set
+            {
+                this._Message = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private string _Message;
         #endregion
 
         #region Title 変更通知プロパティ

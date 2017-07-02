@@ -20,41 +20,34 @@ namespace TweetGazer.Models.Timeline
             if (parameter != null)
                 this.Parameter = parameter;
 
-            this.Command = new RelayCommand<object>(this.CommandEntityAsync);
+            this.LoadCommand = new RelayCommand<object>(this.Load);
         }
 
         /// <summary>
-        /// ローディング
+        /// ロード
         /// </summary>
         /// <param name="parameter">パラメーター</param>
-        private async void CommandEntityAsync(object parameter)
+        private async void Load(object parameter)
         {
-            if (this.Visibility == Visibility.Collapsed)
+            if (this.Parameter == null || this.Visibility == Visibility.Collapsed)
                 return;
 
             switch (this.Type)
             {
                 case LoadingType.ReadMore:
-                    if (this.Parameter != null)
-                        await this.TimelineModel.Update((long)this.Parameter);
+                    await this.TimelineModel.Update((long)this.Parameter);
                     break;
                 case LoadingType.ReadMoreReplies:
                 case LoadingType.ReadMoreRepliesButton:
-                    if (this.Parameter != null)
                     {
                         if (parameter is ICommand command)
-                        {
-                            command.Execute(this.Parameter);
-                        }
+                            command?.Execute(this.Parameter);
                     }
                     break;
                 case LoadingType.ReadMoreRepliesToMainStatus:
-                    if (this.Parameter != null)
                     {
                         if (parameter is ICommand command)
-                        {
-                            command.Execute(this.Parameter);
-                        }
+                            command?.Execute(this.Parameter);
                     }
                     break;
             }
@@ -78,7 +71,7 @@ namespace TweetGazer.Models.Timeline
 
         public LoadingType Type { get; }
 
-        public ICommand Command { get; }
+        public ICommand LoadCommand { get; }
 
         public object Parameter { get; set; }
 

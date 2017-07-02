@@ -26,6 +26,8 @@
             <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
+
+        <!--  タイトル等  -->
         <Grid>
             <StackPanel Orientation="Horizontal">
                 <Button
@@ -72,11 +74,21 @@
             </StackPanel>
         </Grid>
 
+        <!--  メッセージ  -->
+        <TextBlock
+            Grid.Row="1"
+            Margin="10"
+            VerticalAlignment="Center"
+            FontSize="25"
+            Foreground="{DynamicResource TextBrush}"
+            Text="{Binding Path=Message, Mode=OneWay}"
+            TextAlignment="Center"
+            TextWrapping="Wrap" />
+
         <!--  タイムライン  -->
         <ItemsControl
-            x:Name="ItemsControl"
-            Margin="0,20,0,0"
             Grid.Row="1"
+            Margin="0,20,0,0"
             Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
             ItemsSource="{Binding Path=TimelineItems, Mode=OneWay}"
             ScrollViewer.CanContentScroll="True"
@@ -94,7 +106,6 @@
             <ItemsControl.Template>
                 <ControlTemplate TargetType="{x:Type ItemsControl}">
                     <ScrollViewer
-                        x:Name="ScrollViewer"
                         Behaviors:ScrollViewerBehavior.AnimationScrolling="True"
                         Behaviors:ScrollViewerBehavior.VerticalOffset="{Binding Path=VerticalOffset, Mode=TwoWay}"
                         VerticalScrollBarVisibility="Visible">
@@ -188,7 +199,7 @@
 
             <!--  トレイ通知領域  -->
             <Grid Grid.Row="1" Background="{DynamicResource AccentColorBrush}">
-                <ItemsControl MaxHeight="100" ItemsSource="{Binding Path=TimelineNotice ,Mode=OneTime}">
+                <ItemsControl MaxHeight="100" ItemsSource="{Binding Path=TimelineNotice, Mode=OneTime}">
                     <ItemsControl.ItemTemplateSelector>
                         <Selectors:TimelineNotificationTrayTemplateSelector />
                     </ItemsControl.ItemTemplateSelector>
@@ -368,9 +379,7 @@
         </Grid>
 
         <!--  プログレスリング  -->
-        <Grid
-            Grid.Row="1"
-            Visibility="{Binding Path=ProgressRingVisibility, Mode=OneWay}">
+        <Grid Grid.Row="1" Visibility="{Binding Path=ProgressRingVisibility, Mode=OneWay}">
             <Grid.Background>
                 <SolidColorBrush Opacity="0.2" Color="Black" />
             </Grid.Background>
