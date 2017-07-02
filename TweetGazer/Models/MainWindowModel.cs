@@ -89,8 +89,11 @@ namespace TweetGazer.Models
                     if (stream != null)
                     {
                         var j = i;
+                        //再接続
+                        stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
                         //ツイートが流れてきたとき
-                        stream.OfType<StatusMessage>().Subscribe(x => {
+                        stream.OfType<StatusMessage>().Subscribe(x =>
+                        {
                             if (x.Status.Entities != null && x.Status.Entities.UserMentions != null)
                             {
                                 foreach (var mention in x.Status.Entities.UserMentions)
