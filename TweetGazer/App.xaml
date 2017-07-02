@@ -25,6 +25,8 @@
                     <Converters:BooleanInvertAndToVisibilityConverter x:Key="BooleanInvertAndToVisibilityConverter" />
                     <Converters:NullImageConverter x:Key="NullImageConverter" />
                 </ResourceDictionary>
+                <!--  ApplicationMainResources  -->
+                <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/ApplicationResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

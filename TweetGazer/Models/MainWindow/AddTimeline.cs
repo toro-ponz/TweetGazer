@@ -1,5 +1,4 @@
-﻿using CoreTweet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using TweetGazer.Common;
 using TweetGazer.Models.Timeline;
 using TweetGazer.ViewModels;
@@ -179,37 +177,29 @@ namespace TweetGazer.Models.MainWindow
             this.ExtraGrid.Add(new Grid());
 
             var lists = await AccountTokens.LoadListsAsync(this.TokenSuffix);
-            var listBox = new ListBox();
-            var itemsSource = new ObservableCollection<ListProperties>();
+            var itemsSource = new List<ListProperties>();
 
             foreach (var list in lists)
             {
-                itemsSource.Add(new ListProperties()
-                {
-                    Icon = new Uri(list.User.ProfileImageUrlHttps),
-                    ListName = list.Name,
-                    Id = list.Id,
-                    CreateUser = list.User.Name,
-                    MemberCount = list.MemberCount
-                });
+                itemsSource.Add(
+                    new ListProperties(
+                        this,
+                        new Uri(list.User.ProfileImageUrlHttps),
+                        list.Name,
+                        list.User.Name,
+                        list.Id,
+                        list.MemberCount
+                    )
+                );
             }
 
-            listBox.Background = new SolidColorBrush(Colors.Transparent);
-            listBox.ItemTemplate = CommonMethods.LoadEmbededResourceDictionary("pack://application:,,,/Resources/Dictionaries/AddTimelineListItems.xaml")["Lists"] as DataTemplate;
-            listBox.ItemsSource = itemsSource;
-            listBox.SelectionChanged += (sender, e) =>
+            var contentControl = new ContentControl()
             {
-                var page = new TimelinePageData()
-                {
-                    TimelineType = TimelineType.List,
-                    ListName = itemsSource[listBox.SelectedIndex].ListName,
-                    ListNumber = itemsSource[listBox.SelectedIndex].Id
-                };
-                this.CreateTimeline(page);
-                this.ExtraGrid.First().Children.RemoveAt(0);
+                Content = Application.Current.FindResource("AddTimelineExtreGridLists") as Grid,
+                DataContext = itemsSource
             };
-            this.ExtraGrid.First().Children.Add(listBox);
-            this.RaisePropertyChanged(nameof(ExtraGrid));
+
+            this.ExtraGrid.First().Children.Add(contentControl);
         }
 
         /// <summary>
@@ -221,75 +211,30 @@ namespace TweetGazer.Models.MainWindow
             this.ExtraGrid.Add(new Grid());
 
             var users = await AccountTokens.LoadFriendsAsync(this.TokenSuffix);
-            var listBox = new ListBox();
-            var itemsSource = new ObservableCollection<User>();
-            var textBox = new TextBox()
-            {
-                Height = 30.0d,
-                Margin = new Thickness(5, 5, 40, 5),
-                HorizontalAlignment = HorizontalAlignment.Stretch
-            };
-            var button = new Button()
-            {
-                Width = 30.0d,
-                Height = 30.0d,
-                Margin = new Thickness(0, 5, 5, 5),
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Content = new ContentControl()
-                {
-                    ContentTemplate = Application.Current.FindResource("AccentColorSearchIcon") as DataTemplate
-                }
-            };
+            var itemsSource = new ObservableCollection<UserProperties>();
+            BindingOperations.EnableCollectionSynchronization(itemsSource, new object());
 
-            textBox.KeyUp += async (sender, e) =>
-            {
-                if (e.Key == Key.Enter && textBox.Text != "")
-                {
-                    itemsSource.Clear();
-                    foreach (var user in await AccountTokens.LoadSearchedUsersAsync(this.TokenSuffix, textBox.Text))
-                    {
-                        itemsSource.Add(user);
-                    }
-                }
-            };
-            button.Click += (sender, e) =>
-            {
-
-            };
-            this.ExtraGrid.First().RowDefinitions.Add(new RowDefinition()
-            {
-                Height = GridLength.Auto
-            });
-            this.ExtraGrid.First().Children.Add(textBox);
-            this.ExtraGrid.First().Children.Add(button);
-
-            var i = 1;
             foreach (var user in users)
             {
-                itemsSource.Add(user);
-                i++;
+                if (user.Id != null)
+                {
+                    itemsSource.Add(new UserProperties(this)
+                    {
+                        Name = user.Name,
+                        ScreenName = user.ScreenName,
+                        Description = user.Description,
+                        ProfileImageUrlHttps = user.ProfileImageUrlHttps,
+                        Id = (long)user.Id
+                    });
+                }
             }
 
-            listBox.Background = new SolidColorBrush(Colors.Transparent);
-            listBox.ItemTemplate = CommonMethods.LoadEmbededResourceDictionary("pack://application:,,,/Resources/Dictionaries/AddTimelineListItems.xaml")["Users"] as DataTemplate;
-            listBox.ItemsSource = itemsSource;
-            listBox.SelectionChanged += (sender, e) =>
+            var contentControl = new ContentControl()
             {
-                var page = new TimelinePageData()
-                {
-                    TimelineType = TimelineType.User,
-                    TargetUserId = itemsSource[listBox.SelectedIndex].Id,
-                    TargetUserName = itemsSource[listBox.SelectedIndex].Name
-                };
-                this.CreateTimeline(page);
-                this.ExtraGrid.First().Children.RemoveAt(0);
+                Content = Application.Current.FindResource("AddTimelineExtreGridUsers") as Grid,
+                DataContext = new UsersModel(this, itemsSource, this.TokenSuffix)
             };
-            Grid.SetRow(listBox, 1);
-            this.ExtraGrid.First().RowDefinitions.Add(new RowDefinition()
-            {
-                Height = new GridLength(1.0, GridUnitType.Star)
-            });
-            this.ExtraGrid.First().Children.Add(listBox);
+            this.ExtraGrid.First().Children.Add(contentControl);
         }
 
         /// <summary>
@@ -301,60 +246,14 @@ namespace TweetGazer.Models.MainWindow
             this.ExtraGrid.Add(new Grid());
 
             var trendResult = await AccountTokens.LoadTrendsAsync(TokenSuffix);
-            var listBox = new ListBox();
-            var itemsSource = new ObservableCollection<TrendProperties>();
-            var textBox = new TextBox()
-            {
-                Height = 30.0d,
-                Margin = new Thickness(5, 5, 40, 5),
-                HorizontalAlignment = HorizontalAlignment.Stretch
-            };
-            var button = new Button()
-            {
-                Width = 30.0d,
-                Height = 30.0d,
-                Margin = new Thickness(0, 5, 5, 5),
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Content = new ContentControl()
-                {
-                    ContentTemplate = Application.Current.FindResource("AccentColorSearchIcon") as DataTemplate
-                }
-            };
-
-            textBox.KeyUp += (sender, e) =>
-            {
-                if (e.Key == Key.Enter)
-                {
-                    var page = new TimelinePageData()
-                    {
-                        TimelineType = TimelineType.Search,
-                        SearchText = textBox.Text
-                    };
-                    this.CreateTimeline(page);
-                }
-            };
-            button.Click += (sender, e) =>
-            {
-                var page = new TimelinePageData()
-                {
-                    TimelineType = TimelineType.Search,
-                    SearchText = textBox.Text
-                };
-                this.CreateTimeline(page);
-            };
-            this.ExtraGrid.First().RowDefinitions.Add(new RowDefinition()
-            {
-                Height = GridLength.Auto
-            });
-            this.ExtraGrid.First().Children.Add(textBox);
-            this.ExtraGrid.First().Children.Add(button);
+            var itemsSource = new List<TrendProperties>();
 
             var i = 1;
             foreach (var trends in trendResult)
             {
                 foreach (var trend in trends)
                 {
-                    var item = new TrendProperties()
+                    var item = new TrendProperties(this)
                     {
                         Rank = i,
                         Name = trend.Name,
@@ -370,25 +269,12 @@ namespace TweetGazer.Models.MainWindow
                 }
             }
 
-            listBox.Background = new SolidColorBrush(Colors.Transparent);
-            listBox.ItemTemplate = CommonMethods.LoadEmbededResourceDictionary("pack://application:,,,/Resources/Dictionaries/AddTimelineListItems.xaml")["Trends"] as DataTemplate;
-            listBox.ItemsSource = itemsSource;
-            listBox.SelectionChanged += (sender, e) =>
+            var contentControl = new ContentControl()
             {
-                var page = new TimelinePageData()
-                {
-                    TimelineType = TimelineType.Search,
-                    SearchText = itemsSource[listBox.SelectedIndex].Name
-                };
-                this.CreateTimeline(page);
-                this.ExtraGrid.First().Children.RemoveAt(0);
+                Content = Application.Current.FindResource("AddTimelineExtreGridTrends") as Grid,
+                DataContext = new TrendsModel(this, itemsSource)
             };
-            Grid.SetRow(listBox, 1);
-            this.ExtraGrid.First().RowDefinitions.Add(new RowDefinition()
-            {
-                Height = new GridLength(1.0, GridUnitType.Star)
-            });
-            this.ExtraGrid.First().Children.Add(listBox);
+            this.ExtraGrid.First().Children.Add(contentControl);
         }
 
         /// <summary>
@@ -404,19 +290,184 @@ namespace TweetGazer.Models.MainWindow
         
         private class ListProperties
         {
-            public Uri Icon { get; set; }
-            public string ListName { get; set; }
+            public ListProperties(AddTimeline addTimeline, Uri url, string listName, string userName, long id, int count)
+            {
+                this.AddTimeline = addTimeline;
+
+                this.Icon = url;
+                this.ListName = listName;
+                this.UserName = userName;
+                this.Id = id;
+                this.MemberCount = count;
+
+                this.SelectCommand = new RelayCommand(this.Select);
+            }
+
+            private void Select()
+            {
+                var page = new TimelinePageData()
+                {
+                    TimelineType = TimelineType.List,
+                    ListName = this.ListName,
+                    ListNumber = this.Id
+                };
+                this.AddTimeline.CreateTimeline(page);
+                this.AddTimeline.ExtraGrid.First().Children.Clear();
+            }
+
+            public ICommand SelectCommand { get; }
+
+            public Uri Icon { get; }
+
+            public string ListName { get; }
+            public string UserName { get; }
+
+            public long Id { get; }
+
+            public int MemberCount { get; }
+
+            private AddTimeline AddTimeline { get; }
+        }
+
+        private class UserProperties
+        {
+            public UserProperties(AddTimeline addTimeline)
+            {
+                this.AddTimeline = addTimeline;
+
+                this.SelectCommand = new RelayCommand(this.Select);
+            }
+
+            private void Select()
+            {
+                var page = new TimelinePageData()
+                {
+                    TimelineType = TimelineType.User,
+                    TargetUserId = Id,
+                    TargetUserName = Name
+                };
+                this.AddTimeline.CreateTimeline(page);
+                this.AddTimeline.ExtraGrid.First().Children.Clear();
+            }
+
+            public ICommand SelectCommand { get; }
+
+            public string Name { get; set; }
+            public string ScreenName { get; set; }
+            public string Description { get; set; }
+            public string ProfileImageUrlHttps { get; set; }
             public long Id { get; set; }
-            public string CreateUser { get; set; }
-            public int MemberCount { get; set; }
+
+            private AddTimeline AddTimeline;
         }
 
         private class TrendProperties
         {
-            public int Rank { get; set; }
-            public string Name { get; set; }
-            public int Count { get; set; }
+            public TrendProperties(AddTimeline addTimeline)
+            {
+                this.AddTimeline = addTimeline;
+
+                this.SelectCommand = new RelayCommand(this.Select);
+            }
+
+            private void Select()
+            {
+                var page = new TimelinePageData()
+                {
+                    TimelineType = TimelineType.Search,
+                    SearchText = this.Name
+                };
+                this.AddTimeline.CreateTimeline(page);
+                this.AddTimeline.ExtraGrid.First().Children.Clear();
+            }
+
+            public ICommand SelectCommand { get; }
             public Visibility CountVisibility { get; set; }
+
+            public string Name { get; set; }
+            public int Rank { get; set; }
+            public int Count { get; set; }
+
+            private AddTimeline AddTimeline;
+        }
+
+        private class UsersModel
+        {
+            public UsersModel(AddTimeline addTimeline, ObservableCollection<UserProperties> users, int tokenSuffix)
+            {
+                this.AddTimeline = addTimeline;
+
+                this.Users = users;
+                this.TokenSuffix = tokenSuffix;
+
+                this.SearchCommand = new RelayCommand(this.Search);
+            }
+
+            private async void Search()
+            {
+                if (String.IsNullOrEmpty(this.Text))
+                    return;
+
+                this.Users.Clear();
+                foreach (var user in await AccountTokens.LoadSearchedUsersAsync(this.TokenSuffix, this.Text))
+                {
+                    if (user.Id != null)
+                    {
+                        this.Users.Add(new UserProperties(this.AddTimeline)
+                        {
+                            Name = user.Name,
+                            ScreenName = user.ScreenName,
+                            Description = user.Description,
+                            ProfileImageUrlHttps = user.ProfileImageUrlHttps,
+                            Id = (long)user.Id
+                        });
+                    }
+                }
+            }
+
+            public ICommand SearchCommand { get; }
+
+            public ObservableCollection<UserProperties> Users { get; }
+
+            public string Text { get; set; }
+
+            private int TokenSuffix;
+
+            private AddTimeline AddTimeline;
+        }
+
+        private class TrendsModel
+        {
+            public TrendsModel(AddTimeline addTimeline, List<TrendProperties> trends)
+            {
+                this.AddTimeline = addTimeline;
+
+                this.Trends = trends;
+
+                this.SearchCommand = new RelayCommand(this.Search);
+            }
+
+            private void Search()
+            {
+                if (String.IsNullOrEmpty(this.Text))
+                    return;
+
+                var page = new TimelinePageData()
+                {
+                    TimelineType = TimelineType.Search,
+                    SearchText = this.Text
+                };
+                this.AddTimeline.CreateTimeline(page);
+                this.AddTimeline.ExtraGrid.First().Children.Clear();
+            }
+
+            public ICommand SearchCommand { get; }
+
+            public List<TrendProperties> Trends { get; }
+
+            public string Text { get; set; }
+
+            private AddTimeline AddTimeline;
         }
     }
 }

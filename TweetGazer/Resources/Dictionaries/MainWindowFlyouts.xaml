@@ -148,9 +148,7 @@
                                     Text="滑らかなスクロールを行う"
                                     TextWrapping="Wrap" />
                             </CheckBox>
-                            <CheckBox
-                                Margin="0,5"
-                                IsChecked="{Binding Path=IsVisibleCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVisibleCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
                                     Text="ツイートトレイを表示する"
@@ -504,7 +502,14 @@
         <Controls:Flyout.Background>
             <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
         </Controls:Flyout.Background>
-        <Grid Width="280" HorizontalAlignment="Right" />
+        <Grid Width="280" HorizontalAlignment="Right">
+            <TextBlock
+                FontSize="30"
+                TextAlignment="Center"
+                Foreground="{DynamicResource TextBrush}"
+                Text="未実装"
+                TextWrapping="Wrap" />
+        </Grid>
     </Controls:Flyout>
 
     <Controls:Flyout
@@ -1232,4 +1237,5 @@
             </Grid>
         </Grid>
     </Controls:Flyout>
+    
 </ResourceDictionary>

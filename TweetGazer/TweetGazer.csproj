@@ -278,10 +278,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
-    <Resource Include="Resources\Dictionaries\AddTimelineListItems.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Resources\Dictionaries\ApplicationResources.xaml">
       <SubType>Designer</SubType>
-    </Resource>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Dictionaries\MainWindowFlyouts.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
