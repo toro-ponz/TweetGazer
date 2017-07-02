@@ -4,6 +4,7 @@ using Livet.EventListeners;
 using MahApps.Metro;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -323,18 +324,18 @@ namespace TweetGazer.ViewModels
             catch (TwitterException e)
             {
                 this.MainWindowModel.Notify("トークン認証失敗.", NotificationType.Error);
-                Console.Write(e);
+                Debug.Write(e);
                 return;
             }
             catch (Exception e) when (e is HttpRequestException || e is WebException)
             {
                 this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした．\n左下の更新ボタンを押して再認証してください．", NotificationType.Error);
-                Console.Write(e);
+                Debug.Write(e);
                 return;
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return;
             }
 
@@ -359,7 +360,7 @@ namespace TweetGazer.ViewModels
                 catch (Exception e)
                 {
                     this.Notify("エラーが発生しました．", NotificationType.Error);
-                    Console.Write(e);
+                    Debug.Write(e);
                 }
             }
         }

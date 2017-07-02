@@ -206,7 +206,7 @@ namespace TweetGazer.Models.Timeline
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
                 this.TimelineModel.Notify("URLが開けませんでした．", NotificationType.Error);
             }
         }
@@ -229,7 +229,7 @@ namespace TweetGazer.Models.Timeline
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 this.TimelineModel.Notify("URLが開けませんでした．", NotificationType.Error);
             }
         }

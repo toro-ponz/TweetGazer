@@ -1,6 +1,7 @@
 ﻿using CoreTweet;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -70,7 +71,7 @@ namespace TweetGazer.Models.ShowDialongs
                 }
                 catch (Exception e)
                 {
-                    Console.Write(e);
+                    Debug.Write(e);
                     this.Statuses.First().LoadingProperties.Visibility = Visibility.Collapsed;
                     break;
                 }

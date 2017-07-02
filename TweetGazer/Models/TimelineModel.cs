@@ -4,6 +4,7 @@ using Livet;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -209,7 +210,7 @@ namespace TweetGazer.Models
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 this.ProgressRingVisibility = Visibility.Collapsed;
                 this.IsLoading = false;
 
@@ -435,7 +436,7 @@ namespace TweetGazer.Models
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
 
@@ -545,6 +546,8 @@ namespace TweetGazer.Models
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
                         if (stream != null)
                         {
+                            // 再接続
+                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
                             // ツイートが流れてきたとき
                             stream.OfType<StatusMessage>().Subscribe(x => {
                                 // フォローしていない人のツイート(RTされたイベント等)を弾く
@@ -590,6 +593,8 @@ namespace TweetGazer.Models
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
                         if (stream != null)
                         {
+                            // 再接続
+                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
                             stream.OfType<EventMessage>().Subscribe(x => ProcessEventMessage(x));
                             stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
                             this.Disposables.Add(stream.Connect());
@@ -601,6 +606,8 @@ namespace TweetGazer.Models
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
                         if (stream != null)
                         {
+                            // 再接続
+                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
                             // ツイートが流れてきたとき
                             stream.OfType<StatusMessage>().Subscribe(x => {
                                 // リプライでない場合リターン
@@ -643,6 +650,8 @@ namespace TweetGazer.Models
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.Filter, this.Data.CurrentPage.SearchText);
                         if (stream != null)
                         {
+                            // 再接続
+                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
                             // 検索ワードに引っかかる新規ツイートが流れてきたとき
                             stream.OfType<StatusMessage>().Subscribe(x =>
                             {
@@ -817,7 +826,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
             }
         }
 
@@ -865,7 +874,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
             }
         }
 
@@ -889,7 +898,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
             }
         }
 
@@ -914,7 +923,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
                 return;
             }
         }

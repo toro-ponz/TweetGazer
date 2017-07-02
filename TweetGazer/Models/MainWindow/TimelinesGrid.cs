@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -174,7 +175,7 @@ namespace TweetGazer.Models.MainWindow
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return false;
             }
             finally
@@ -241,7 +242,7 @@ namespace TweetGazer.Models.MainWindow
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return false;
             }
             finally

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
@@ -78,7 +79,7 @@ namespace TweetGazer.Behaviors
                 }
                 catch (Exception ex)
                 {
-                    Console.Write(ex);
+                    Debug.Write(ex);
                 }
                 finally
                 {
@@ -415,7 +416,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
 
@@ -433,7 +434,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
 
@@ -446,7 +447,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
 

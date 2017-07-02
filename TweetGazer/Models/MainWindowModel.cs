@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using TweetGazer.Models.MainWindow;
 using System.Windows.Data;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace TweetGazer.Models
 {
@@ -47,7 +48,7 @@ namespace TweetGazer.Models
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
 
@@ -118,7 +119,7 @@ namespace TweetGazer.Models
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return;
             }
         }

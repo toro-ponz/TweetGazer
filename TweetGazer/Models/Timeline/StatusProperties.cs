@@ -490,7 +490,7 @@ namespace TweetGazer.Models.Timeline
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
             }
         }
 

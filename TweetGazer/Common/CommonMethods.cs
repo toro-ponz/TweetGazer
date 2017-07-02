@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -242,7 +243,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return null;
             }
         }
@@ -267,7 +268,7 @@ namespace TweetGazer.Common
                 }
                 catch (Exception e)
                 {
-                    Console.Write(e);
+                    Debug.Write(e);
                     return null;
                 }
                 finally
@@ -322,7 +323,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
         
@@ -352,7 +353,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return true;
             }
         }
@@ -374,7 +375,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return true;
             }
         }
@@ -393,7 +394,7 @@ namespace TweetGazer.Common
                 }
                 catch (Exception e)
                 {
-                    Console.Write(e);
+                    Debug.Write(e);
                     return null;
                 }
             }
