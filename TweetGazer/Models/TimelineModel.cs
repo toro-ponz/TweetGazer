@@ -230,6 +230,7 @@ namespace TweetGazer.Models
                     this.InsertStatus(loadedTimeline);
                     // 末尾にローディングプログレスリングを追加
                     if (this.Data.CurrentPage.TimelineType != TimelineType.DirectMessage &&
+                        this.Data.CurrentPage.TimelineType != TimelineType.MentionsStack &&
                         this.Data.CurrentPage.TimelineType != TimelineType.Trend &&
                         this.Data.CurrentPage.TimelineType != TimelineType.Notifications &&
                         this.Data.CurrentPage.TimelineType != TimelineType.NotificationsStack)
@@ -256,7 +257,13 @@ namespace TweetGazer.Models
                 this.ProgressRingVisibility = Visibility.Collapsed;
                 this.IsLoading = false;
 
-                if (maxId == null)
+                if (this.Data.CurrentPage.TimelineType == TimelineType.DirectMessage ||
+                    this.Data.CurrentPage.TimelineType == TimelineType.MentionsStack ||
+                    this.Data.CurrentPage.TimelineType == TimelineType.Trend ||
+                    this.Data.CurrentPage.TimelineType == TimelineType.Notifications ||
+                    this.Data.CurrentPage.TimelineType == TimelineType.NotificationsStack)
+                    return true;
+                else if (maxId == null)
                     this.Message = "読み込み中にエラーが発生しました。タイムライン左下のリロードボタンで再度読み込み試行をしてください。";
                 else if (this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties != null)
                     this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
