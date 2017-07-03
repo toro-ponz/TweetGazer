@@ -14,6 +14,7 @@
 
     <DataTemplate x:Key="Status">
         <StackPanel DataContext="{Binding Path=StatusProperties}">
+            <!--  リプライ先ツイート  -->
             <Grid
                 Background="{DynamicResource GrayBrush8}"
                 DataContext="{Binding Path=ReplyToStatusProperties}"
@@ -112,6 +113,8 @@
                     BorderBrush="#FFA8A8A8"
                     BorderThickness="0,0,0,1" />
             </Grid>
+
+            <!--  メインツイート  -->
             <Button
                 HorizontalContentAlignment="Stretch"
                 VerticalContentAlignment="Stretch"
@@ -128,6 +131,8 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
+
+                        <!--  リツイートユーザー  -->
                         <TextBlock
                             Grid.Row="0"
                             Grid.ColumnSpan="2"
@@ -142,6 +147,8 @@
                                 Foreground="{DynamicResource GrayBrush2}"
                                 Text="{Binding Path=RetweetedTime, Mode=OneWay}" />
                         </TextBlock>
+
+                        <!--  ツイートユーザーアイコン  -->
                         <Button
                             Grid.Row="1"
                             Width="50"
@@ -161,6 +168,8 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
+
+                        <!--  メインツイート  -->
                         <Grid
                             Grid.Row="1"
                             Grid.Column="1"
@@ -173,6 +182,8 @@
                                 <RowDefinition />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
+
+                            <!--  ツイートユーザー  -->
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
@@ -207,6 +218,7 @@
                                     TextAlignment="Right" />
                             </Grid>
 
+                            <!--  ツイート本文  -->
                             <TextBlock
                                 Grid.Row="1"
                                 Behaviors:TextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
@@ -280,7 +292,7 @@
                                                         Text="{Binding Path=Text, Mode=OneTime}"
                                                         TextWrapping="Wrap" />
 
-                                                    <!--  トリミング(Crop)せずに表示  -->
+                                                    <!--  メディア領域 トリミング(Crop)せずに表示  -->
                                                     <ItemsControl
                                                         Grid.Row="1"
                                                         ItemsSource="{Binding Path=Media, Mode=OneTime}"
@@ -295,7 +307,7 @@
                                                         </ItemsControl.ItemsPanel>
                                                     </ItemsControl>
 
-                                                    <!--  トリミング(Crop)して表示(横に4つ)  -->
+                                                    <!--  メディア領域 トリミング(Crop)して表示(横に4つ)  -->
                                                     <ItemsControl
                                                         Grid.Row="1"
                                                         HorizontalAlignment="Left"
@@ -328,7 +340,6 @@
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
-
                                 <ItemsControl.Template>
                                     <ControlTemplate TargetType="{x:Type ItemsControl}">
                                         <Button Command="{Binding Path=SelectQuotationStatusCommand, Mode=OneTime}" Style="{StaticResource UwpLikeButtonStyle1}">
@@ -338,7 +349,7 @@
                                 </ItemsControl.Template>
                             </ItemsControl>
 
-                            <!--  トリミング(Crop)せずに表示  -->
+                            <!--  メディア領域 トリミング(Crop)せずに表示  -->
                             <ItemsControl
                                 Grid.Row="3"
                                 ItemsSource="{Binding Path=Media, Mode=OneTime}"
@@ -353,7 +364,7 @@
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
 
-                            <!--  トリミング(Crop)して表示(横に4つ)  -->
+                            <!--  メディア領域 トリミング(Crop)して表示(横に4つ)  -->
                             <ItemsControl
                                 Grid.Row="3"
                                 HorizontalAlignment="Left"
@@ -382,137 +393,145 @@
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
 
-                            <Grid Grid.Row="4">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="20" />
-                                    <ColumnDefinition Width="45" />
-                                    <ColumnDefinition Width="20" />
-                                    <ColumnDefinition Width="45" />
-                                    <ColumnDefinition Width="20" />
-                                    <ColumnDefinition Width="45" />
-                                </Grid.ColumnDefinitions>
-                                <Button
-                                    Padding="0"
-                                    HorizontalContentAlignment="Center"
-                                    Command="{Binding Path=ReplyCommand, Mode=OneTime}"
-                                    Style="{StaticResource UwpLikeButtonStyle2}">
-                                    <ContentControl ContentTemplate="{StaticResource FrontColorReplyIcon}" />
-                                </Button>
-                                <TextBlock
-                                    Grid.Column="1"
-                                    Margin="2,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="12"
-                                    Foreground="{DynamicResource TextBrush}"
-                                    Text="{Binding Path=ReplyCount, Mode=OneTime}" />
-                                <Button
-                                    x:Name="RetweetButton"
-                                    Grid.Column="2"
-                                    Padding="0"
-                                    HorizontalContentAlignment="Center"
-                                    Style="{StaticResource UwpLikeButtonStyle2}">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Click">
-                                            <ei:ChangePropertyAction
-                                                PropertyName="IsOpen"
-                                                TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
-                                                Value="True" />
-                                            <ei:ChangePropertyAction
-                                                PropertyName="HorizontalOffset"
-                                                TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
-                                                Value="100" />
-                                            <ei:ChangePropertyAction
-                                                PropertyName="Placement"
-                                                TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
-                                                Value="Mouse" />
-                                            <ei:ChangePropertyAction
-                                                PropertyName="PlacementTarget"
-                                                TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
-                                                Value="{Binding ElementName=RetweetButton, Mode=OneWay}" />
-                                        </i:EventTrigger>
-                                        <i:EventTrigger EventName="MouseRightButtonDown">
-                                            <ei:ChangePropertyAction
-                                                PropertyName="HorizontalOffset"
-                                                TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
-                                                Value="100" />
-                                            <ei:ChangePropertyAction
-                                                PropertyName="Placement"
-                                                TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
-                                                Value="MousePoint" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                    <Button.ContextMenu>
-                                        <ContextMenu Width="200">
-                                            <MenuItem
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Command="{Binding Path=RetweetCommand, Mode=OneTime}"
-                                                IsEnabled="{Binding Path=CanRetweet, Mode=OneTime}">
-                                                <MenuItem.Header>
-                                                    <TextBlock
-                                                        HorizontalAlignment="Center"
-                                                        Foreground="{DynamicResource TextBrush}"
-                                                        Text="{Binding Path=RetweetMenuText, Mode=OneWay}"
-                                                        TextAlignment="Center" />
-                                                </MenuItem.Header>
-                                            </MenuItem>
-                                            <MenuItem
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Command="{Binding Path=QuotationLinkRetweetCommand, Mode=OneTime}"
-                                                IsEnabled="{Binding Path=CanRetweet, Mode=OneTime}">
-                                                <MenuItem.Header>
-                                                    <TextBlock
-                                                        HorizontalAlignment="Center"
-                                                        Foreground="{DynamicResource TextBrush}"
-                                                        Text="引用リツイート(リンク)"
-                                                        TextAlignment="Center" />
-                                                </MenuItem.Header>
-                                            </MenuItem>
-                                            <MenuItem
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Command="{Binding Path=QuotationTextRetweetCommand, Mode=OneTime}"
-                                                IsEnabled="{Binding Path=CanRetweet, Mode=OneTime}">
-                                                <MenuItem.Header>
-                                                    <TextBlock
-                                                        HorizontalAlignment="Center"
-                                                        Foreground="{DynamicResource TextBrush}"
-                                                        Text="引用リツイート(文字列)"
-                                                        TextAlignment="Center" />
-                                                </MenuItem.Header>
-                                            </MenuItem>
-                                        </ContextMenu>
-                                    </Button.ContextMenu>
-                                    <ContentControl ContentTemplate="{Binding Path=RetweetIcon, Mode=OneWay}" />
-                                </Button>
-                                <TextBlock
-                                    Grid.Column="3"
-                                    Margin="2,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="12"
-                                    Foreground="{DynamicResource TextBrush}"
-                                    Text="{Binding Path=RetweetCount, Mode=OneWay}" />
-                                <Button
-                                    Grid.Column="4"
-                                    Padding="0"
-                                    HorizontalContentAlignment="Center"
-                                    Command="{Binding Path=FavoriteCommand, Mode=OneTime}"
-                                    Style="{StaticResource UwpLikeButtonStyle2}">
-                                    <Grid>
-                                        <ContentControl ContentTemplate="{Binding Path=FavoriteHeartIcon, Mode=OneWay}" Visibility="{Binding Path=IsUseFavoriteStar, Source={x:Static Properties:Settings.Default}, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}" />
-                                        <ContentControl ContentTemplate="{Binding Path=FavoriteStarIcon, Mode=OneWay}" Visibility="{Binding Path=IsUseFavoriteStar, Source={x:Static Properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                    </Grid>
-                                </Button>
-                                <TextBlock
-                                    Grid.Column="5"
-                                    Margin="2,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="12"
-                                    Foreground="{DynamicResource TextBrush}"
-                                    Text="{Binding Path=FavoriteCount, Mode=OneWay}" />
-                            </Grid>
+                            <!--  下部ボタン  -->
+                            <WrapPanel Grid.Row="4">
+                                <!--  リプライボタン  -->
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Width="20"
+                                        Height="20"
+                                        Padding="0"
+                                        HorizontalContentAlignment="Center"
+                                        Command="{Binding Path=ReplyCommand, Mode=OneTime}"
+                                        Style="{StaticResource UwpLikeButtonStyle2}">
+                                        <ContentControl ContentTemplate="{StaticResource FrontColorReplyIcon}" />
+                                    </Button>
+                                    <TextBlock
+                                        MinWidth="35"
+                                        Margin="2,1,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextBrush}"
+                                        Text="{Binding Path=ReplyCount, Mode=OneTime}" />
+                                </StackPanel>
 
+                                <!--  リツイートボタン  -->
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        x:Name="RetweetButton"
+                                        Width="20"
+                                        Height="20"
+                                        Padding="0"
+                                        HorizontalContentAlignment="Center"
+                                        Style="{StaticResource UwpLikeButtonStyle2}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="IsOpen"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
+                                                    Value="True" />
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="HorizontalOffset"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
+                                                    Value="100" />
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="Placement"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
+                                                    Value="Mouse" />
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="PlacementTarget"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
+                                                    Value="{Binding ElementName=RetweetButton, Mode=OneWay}" />
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseRightButtonDown">
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="HorizontalOffset"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
+                                                    Value="100" />
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="Placement"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
+                                                    Value="MousePoint" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <Button.ContextMenu>
+                                            <ContextMenu Width="200">
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=RetweetCommand, Mode=OneTime}"
+                                                    IsEnabled="{Binding Path=CanRetweet, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Foreground="{DynamicResource TextBrush}"
+                                                            Text="{Binding Path=RetweetMenuText, Mode=OneWay}"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=QuotationLinkRetweetCommand, Mode=OneTime}"
+                                                    IsEnabled="{Binding Path=CanRetweet, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Foreground="{DynamicResource TextBrush}"
+                                                            Text="引用リツイート(リンク)"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=QuotationTextRetweetCommand, Mode=OneTime}"
+                                                    IsEnabled="{Binding Path=CanRetweet, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Foreground="{DynamicResource TextBrush}"
+                                                            Text="引用リツイート(文字列)"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </Button.ContextMenu>
+                                        <ContentControl ContentTemplate="{Binding Path=RetweetIcon, Mode=OneWay}" />
+                                    </Button>
+                                    <TextBlock
+                                        MinWidth="35"
+                                        Margin="2,1,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextBrush}"
+                                        Text="{Binding Path=RetweetCount, Mode=OneWay}" />
+                                </StackPanel>
+
+                                <!--  いいねボタン  -->
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Width="20"
+                                        Height="20"
+                                        HorizontalContentAlignment="Center"
+                                        Command="{Binding Path=FavoriteCommand, Mode=OneTime}"
+                                        Style="{StaticResource UwpLikeButtonStyle2}">
+                                        <Grid>
+                                            <ContentControl ContentTemplate="{Binding Path=FavoriteHeartIcon, Mode=OneWay}" Visibility="{Binding Path=IsUseFavoriteStar, Source={x:Static Properties:Settings.Default}, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}" />
+                                            <ContentControl ContentTemplate="{Binding Path=FavoriteStarIcon, Mode=OneWay}" Visibility="{Binding Path=IsUseFavoriteStar, Source={x:Static Properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        </Grid>
+                                    </Button>
+                                    <TextBlock
+                                        MinWidth="35"
+                                        Margin="2,1,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextBrush}"
+                                        Text="{Binding Path=FavoriteCount, Mode=OneWay}" />
+                                </StackPanel>
+                            </WrapPanel>
+
+                            <!--  Via情報  -->
                             <Grid Grid.Row="5">
                                 <TextBlock
                                     FontSize="12"
