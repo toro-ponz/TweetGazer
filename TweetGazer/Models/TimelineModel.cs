@@ -499,22 +499,22 @@ namespace TweetGazer.Models
             switch (this.Data.CurrentPage.TimelineType)
             {
                 case TimelineType.Home:
-                    this.Title = "HomeTimeline";
+                    this.Title = "ホーム";
                     break;
                 case TimelineType.List:
                     this.Title = this.Data.CurrentPage.ListName;
                     break;
                 case TimelineType.DirectMessage:
-                    this.Title = "DirectMessage";
+                    this.Title = "ダイレクトメッセージ";
                     break;
                 case TimelineType.Favorite:
-                    this.Title = "Favorite";
+                    this.Title = "いいね";
                     break;
                 case TimelineType.Notifications:
-                    this.Title = "Notice";
+                    this.Title = "通知";
                     break;
                 case TimelineType.Mentions:
-                    this.Title = "Mention";
+                    this.Title = "メンション";
                     break;
                 case TimelineType.User:
                     this.Title = this.Data.CurrentPage.TargetUserName;
@@ -523,7 +523,7 @@ namespace TweetGazer.Models
                     this.Title = this.Data.CurrentPage.SearchText;
                     break;
                 case TimelineType.Trend:
-                    this.Title = "Trend";
+                    this.Title = "トレンド";
                     break;
             }
         }
