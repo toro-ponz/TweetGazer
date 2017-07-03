@@ -26,7 +26,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.0.8.%2a</ApplicationVersion>
+    <ApplicationVersion>0.0.9.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -57,7 +57,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Assets\Images\icon.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Images\app.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -183,15 +183,17 @@
     <Compile Include="Converters\NullImageConverter.cs" />
     <Compile Include="Models\MainWindow\AccountSettingsParameters.cs" />
     <Compile Include="Models\MainWindow\AddAccount.cs" />
+    <Compile Include="Models\MainWindow\CreateStatusBase.cs" />
     <Compile Include="Models\MainWindow\CreateStatusUserProperties.cs" />
     <Compile Include="Models\MainWindow\DirectMessages.cs" />
     <Compile Include="Models\MainWindow\Instructions.cs" />
     <Compile Include="Models\MainWindow\MovableCreateStatus.cs" />
-    <Compile Include="Models\MainWindow\Notice.cs" />
+    <Compile Include="Models\MainWindow\NetworkState.cs" />
+    <Compile Include="Models\MainWindow\Notifications.cs" />
     <Compile Include="Models\MainWindow\Search.cs" />
     <Compile Include="Models\MainWindow\StatusMedia.cs" />
     <Compile Include="Models\MainWindow\TimelinesGrid.cs" />
-    <Compile Include="Models\MainWindow\ToastNotice.cs" />
+    <Compile Include="Models\MainWindow\TrayNotification.cs" />
     <Compile Include="Models\ShowDialongs\SearchRepliesProperties.cs" />
     <Compile Include="Models\ShowDialongs\ShowImageModel.cs" />
     <Compile Include="Models\ShowDialongs\ShowStatusModel.cs" />
@@ -203,6 +205,7 @@
     <Compile Include="Models\MainWindow\FlyoutBase.cs" />
     <Compile Include="Models\MainWindow\Mentions.cs" />
     <Compile Include="Common\MentionsStack.cs" />
+    <Compile Include="Models\Timeline\NotificationProperties.cs" />
     <Compile Include="Models\Timeline\QuotationStatusProperties.cs" />
     <Compile Include="Models\Timeline\ReplyToStatusProperties.cs" />
     <Compile Include="Models\Timeline\StatusProperties.cs" />
@@ -216,6 +219,8 @@
     <Compile Include="Models\Timeline\UserOverviewProperties.cs" />
     <Compile Include="Models\Timeline\UserProperties.cs" />
     <Compile Include="Models\Timeline\UserTimelineTab.cs" />
+    <Compile Include="Selectors\MainWindowNotificationTrayTemplateSelector.cs" />
+    <Compile Include="Selectors\TimelineNotificationTrayTemplateSelector.cs" />
     <Compile Include="Selectors\StatusMediaTemplateSelector.cs" />
     <Compile Include="Selectors\ShowStatusItemTemplateSelector.cs" />
     <Compile Include="Selectors\TimelineItemTemplateSelector.cs" />
@@ -231,7 +236,8 @@
     <Compile Include="ViewModels\MainWindow\InstructionsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MentionsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MovableCreateStatusViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\NoticeViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\NetworkStateViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\NotificationsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TimelinesGridViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowImageViewModel.cs" />
@@ -274,10 +280,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
-    <Resource Include="Resources\Dictionaries\AddTimelineListItems.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Resources\Dictionaries\ApplicationResources.xaml">
       <SubType>Designer</SubType>
-    </Resource>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Dictionaries\MainWindowFlyouts.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -366,9 +372,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\icon.ico" />
+    <Resource Include="Assets\Images\app.ico" />
     <EmbeddedResource Include="Assets\Sounds\notification01.wav" />
-    <EmbeddedResource Include="Assets\Sounds\notification02.wav" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">

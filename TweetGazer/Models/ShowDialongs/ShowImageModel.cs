@@ -58,6 +58,14 @@ namespace TweetGazer.Models.ShowDialongs
             this.ChangeImage(true);
         }
 
+        /// <summary>
+        /// ズームの切り替え
+        /// </summary>
+        public void ToggleZoom()
+        {
+            this.IsZoom = !this._IsZoom;
+        }
+
         #region Image 変更通知プロパティ
         public ImageProperties Image
         {
@@ -106,6 +114,22 @@ namespace TweetGazer.Models.ShowDialongs
                 return false;
             }
         }
+        #endregion
+
+        #region IsZoom 変更通知プロパティ
+        public bool IsZoom
+        {
+            get
+            {
+                return this._IsZoom;
+            }
+            set
+            {
+                this._IsZoom = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private bool _IsZoom;
         #endregion
 
         public int ImageCount;

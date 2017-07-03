@@ -83,7 +83,7 @@ namespace TweetGazer.Models.Timeline
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow == null)
             {
-                CommonMethods.Notify("内部エラー．", MainWindow.NoticeType.Error);
+                CommonMethods.Notify("内部エラー．", MainWindow.NotificationType.Error);
                 return;
             }
 
@@ -95,11 +95,11 @@ namespace TweetGazer.Models.Timeline
                     var user = await AccountTokens.DestroyBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
                     if (user != null)
                     {
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックを解除しました．", MainWindow.NoticeType.Success);
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックを解除しました．", MainWindow.NotificationType.Success);
                         this.LoadRelationship(user);
                     }
                     else
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロック解除が正常に完了しませんでした．", MainWindow.NoticeType.Error);
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロック解除が正常に完了しませんでした．", MainWindow.NotificationType.Error);
                 }
             }
             // フォロー中のときはフォロー解除を行う
@@ -110,11 +110,11 @@ namespace TweetGazer.Models.Timeline
                     var user = await AccountTokens.DestroyFriendshipAsync(this.TimelineModel.TokenSuffix, this.Id);
                     if (user != null)
                     {
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローを解除しました．", MainWindow.NoticeType.Success);
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローを解除しました．", MainWindow.NotificationType.Success);
                         this.LoadRelationship(user);
                     }
                     else
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォロー解除が正常に完了しませんでした．", MainWindow.NoticeType.Error);
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォロー解除が正常に完了しませんでした．", MainWindow.NotificationType.Error);
                 }
             }
             // フォローリクエスト承認待ちのときは謝罪文を表示する
@@ -133,11 +133,11 @@ namespace TweetGazer.Models.Timeline
                     var user = await AccountTokens.CreateFriendshipAsync(this.TimelineModel.TokenSuffix, this.Id);
                     if (user != null)
                     {
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")" + text + "しました．", MainWindow.NoticeType.Success);
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")" + text + "しました．", MainWindow.NotificationType.Success);
                         this.LoadRelationship(user);
                     }
                     else
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローが正常に完了しませんでした．", MainWindow.NoticeType.Error);
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローが正常に完了しませんでした．", MainWindow.NotificationType.Error);
                 }
             }
         }
@@ -196,7 +196,7 @@ namespace TweetGazer.Models.Timeline
         {
             if (e == null || e.Uri == null || e.Uri.AbsoluteUri == null)
             {
-                this.TimelineModel.Notify("URL値がエラーです．", NoticeType.Error);
+                this.TimelineModel.Notify("URL値がエラーです．", NotificationType.Error);
                 return;
             }
 
@@ -206,8 +206,8 @@ namespace TweetGazer.Models.Timeline
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
-                this.TimelineModel.Notify("URLが開けませんでした．", NoticeType.Error);
+                Debug.Write(ex);
+                this.TimelineModel.Notify("URLが開けませんでした．", NotificationType.Error);
             }
         }
 
@@ -219,7 +219,7 @@ namespace TweetGazer.Models.Timeline
         {
             if (url == null || url.AbsoluteUri == null)
             {
-                this.TimelineModel.Notify("URL値がエラーです．", NoticeType.Error);
+                this.TimelineModel.Notify("URL値がエラーです．", NotificationType.Error);
                 return;
             }
 
@@ -229,8 +229,8 @@ namespace TweetGazer.Models.Timeline
             }
             catch (Exception e)
             {
-                Console.Write(e);
-                this.TimelineModel.Notify("URLが開けませんでした．", NoticeType.Error);
+                Debug.Write(e);
+                this.TimelineModel.Notify("URLが開けませんでした．", NotificationType.Error);
             }
         }
 

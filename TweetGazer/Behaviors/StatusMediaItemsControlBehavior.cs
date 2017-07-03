@@ -1,5 +1,6 @@
 ﻿using CoreTweet;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -90,7 +91,7 @@ namespace TweetGazer.Behaviors
                 }
                 catch(Exception e)
                 {
-                    Console.Write(e);
+                    Debug.Write(e);
                 }
             }
         }

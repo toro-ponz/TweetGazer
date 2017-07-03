@@ -4,6 +4,7 @@ using Livet.EventListeners;
 using MahApps.Metro;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,7 +25,7 @@ namespace TweetGazer.ViewModels
         public MainWindowViewModel()
         {
             this.MainWindowModel = new MainWindowModel();
-            this.ToastNotice = this.MainWindowModel.ToastNotice;
+            this.TrayNotifications = this.MainWindowModel.TrayNotifications;
             this.Login();
 
             this.CreateStatus = new CreateStatusViewModel();
@@ -32,12 +33,13 @@ namespace TweetGazer.ViewModels
             this.AddTimeline = new AddTimelineViewModel(this);
             this.AddAccount = new AddAccountViewModel();
             this.Mentions = new MentionsViewModel();
-            this.Notice = new NoticeViewModel();
+            this.Notifications = new NotificationsViewModel();
             this.DirectMessages = new DirectMessagesViewModel();
             this.AccountSettings = new AccountSettingsViewModel();
             this.Search = new SearchViewModel();
             this.ApplicationSettings = new ApplicationSettingsViewModel();
             this.AddAccount = new AddAccountViewModel();
+            this.NetworkState = new NetworkStateViewModel();
             this.Instructions = new InstructionsViewModel();
             this.Timelines = new TimelinesGridViewModel();
             
@@ -97,11 +99,11 @@ namespace TweetGazer.ViewModels
                 })
             );
             this.CompositeDisposable.Add(
-                new PropertyChangedEventListener(this.Notice, (_, __) =>
+                new PropertyChangedEventListener(this.Notifications, (_, __) =>
                 {
                     switch (__.PropertyName)
                     {
-                        case nameof(this.Notice.IsOpen):
+                        case nameof(this.Notifications.IsOpen):
                             this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
                             break;
                     }
@@ -153,7 +155,7 @@ namespace TweetGazer.ViewModels
             this.CompositeDisposable.Add(this.MovableCreateStatus);
             this.CompositeDisposable.Add(this.AddTimeline);
             this.CompositeDisposable.Add(this.Mentions);
-            this.CompositeDisposable.Add(this.Notice);
+            this.CompositeDisposable.Add(this.Notifications);
             this.CompositeDisposable.Add(this.DirectMessages);
             this.CompositeDisposable.Add(this.AccountSettings);
             this.CompositeDisposable.Add(this.ApplicationSettings);
@@ -161,6 +163,7 @@ namespace TweetGazer.ViewModels
             this.CompositeDisposable.Add(this.AddAccount);
             this.CompositeDisposable.Add(this.Instructions);
             this.CompositeDisposable.Add(this.Search);
+            this.CompositeDisposable.Add(this.NetworkState);
 
             this.CompositeDisposable.Add(this.MainWindowModel);
         }
@@ -188,8 +191,8 @@ namespace TweetGazer.ViewModels
                 this.AddTimeline.ToggleOpen();
             if (this.Mentions.IsOpen)
                 this.Mentions.ToggleOpen();
-            if (this.Notice.IsOpen)
-                this.Notice.ToggleOpen();
+            if (this.Notifications.IsOpen)
+                this.Notifications.ToggleOpen();
             if (this.DirectMessages.IsOpen)
                 this.DirectMessages.ToggleOpen();
             if (this.AccountSettings.IsOpen)
@@ -224,7 +227,7 @@ namespace TweetGazer.ViewModels
         {
             if (AccountTokens.TokensCount == 0 || AccountTokens.Users.Count == 0)
             {
-                this.MainWindowModel.Notify("トークン再認証開始．", NoticeType.Normal);
+                this.MainWindowModel.Notify("トークン再認証開始．", NotificationType.Normal);
                 await AccountTokens.LoadTokensAsync();
                 return;
             }
@@ -244,7 +247,7 @@ namespace TweetGazer.ViewModels
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public void Notify(string message, NoticeType type)
+        public void Notify(string message, NotificationType type)
         {
             this.MainWindowModel.Notify(message, type);
         }
@@ -294,7 +297,7 @@ namespace TweetGazer.ViewModels
             this.CreateStatus.StatusText = "\n" + text;
             this.CreateStatus.SelectUser(tokenSuffix);
         }
-        
+
         /// <summary>
         /// 起動時のログイン
         /// </summary>
@@ -317,24 +320,24 @@ namespace TweetGazer.ViewModels
                 //列データの読み込み
                 else if (this.Timelines.LoadColumnData())
                 {
-                    this.MainWindowModel.Notify("カラム読み込み完了.", NoticeType.Normal);
+                    this.MainWindowModel.Notify("カラム読み込み完了.", NotificationType.Normal);
                 }
             }
             catch (TwitterException e)
             {
-                this.MainWindowModel.Notify("トークン認証失敗.", NoticeType.Error);
-                Console.Write(e);
+                this.MainWindowModel.Notify("トークン認証失敗.", NotificationType.Error);
+                Debug.Write(e);
                 return;
             }
             catch (Exception e) when (e is HttpRequestException || e is WebException)
             {
-                this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした．\n左下の更新ボタンを押して再認証してください．", NoticeType.Error);
-                Console.Write(e);
+                this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした．\n左下の更新ボタンを押して再認証してください．", NotificationType.Error);
+                Debug.Write(e);
                 return;
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return;
             }
 
@@ -358,8 +361,8 @@ namespace TweetGazer.ViewModels
                 }
                 catch (Exception e)
                 {
-                    this.Notify("エラーが発生しました．", NoticeType.Error);
-                    Console.Write(e);
+                    this.Notify("エラーが発生しました．", NotificationType.Error);
+                    Debug.Write(e);
                 }
             }
         }
@@ -396,7 +399,7 @@ namespace TweetGazer.ViewModels
                 if (!this.CreateStatus.IsOpen &&
                     !this.AddTimeline.IsOpen &&
                     !this.Mentions.IsOpen &&
-                    !this.Notice.IsOpen &&
+                    !this.Notifications.IsOpen &&
                     !this.DirectMessages.IsOpen &&
                     !this.AccountSettings.IsOpen &&
                     !this.ApplicationSettings.IsOpen &&
@@ -409,35 +412,20 @@ namespace TweetGazer.ViewModels
         }
         #endregion
 
-        #region CreateStatusTrayVisibility 変更通知プロパティ
-        public Visibility CreateStatusTrayVisibility
-        {
-            get
-            {
-                return this._CreateStatusTrayVisibility;
-            }
-            set
-            {
-                this._CreateStatusTrayVisibility = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        private Visibility _CreateStatusTrayVisibility;
-        #endregion
-
         public CreateStatusViewModel CreateStatus { get; }
         public MovableCreateStatusViewModel MovableCreateStatus { get; }
         public AddTimelineViewModel AddTimeline { get; }
         public MentionsViewModel Mentions { get; }
-        public NoticeViewModel Notice { get; }
+        public NotificationsViewModel Notifications { get; }
         public DirectMessagesViewModel DirectMessages { get; }
         public AccountSettingsViewModel AccountSettings { get; }
         public SearchViewModel Search { get; }
         public ApplicationSettingsViewModel ApplicationSettings { get; }
         public TimelinesGridViewModel Timelines { get; }
         public AddAccountViewModel AddAccount { get; }
+        public NetworkStateViewModel NetworkState { get; }
         public InstructionsViewModel Instructions { get; }
-        public ObservableCollection<ToastNotice> ToastNotice { get; }
+        public ObservableCollection<TrayNotification> TrayNotifications { get; }
 
         private MainWindowModel MainWindowModel;
     }

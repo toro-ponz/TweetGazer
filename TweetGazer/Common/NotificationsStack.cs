@@ -1,12 +1,15 @@
-﻿using System.Collections.ObjectModel;
+﻿using CoreTweet;
+using System.Collections.ObjectModel;
 using System.Windows.Data;
+using TweetGazer.Models;
+using TweetGazer.Models.Timeline;
 
 namespace TweetGazer.Common
 {
     public static class NotificationsStack
     {
         /// <summary>
-        /// コンストラクタ
+        /// 初期化
         /// </summary>
         public static void Initialize()
         {
@@ -18,17 +21,14 @@ namespace TweetGazer.Common
         /// 通知をスタックに積む
         /// </summary>
         /// <param name="text">通知内容</param>
-        public static void StackNotification(string text)
+        public static void StackNotification(User sentUser, User receiveUser, NotificationPropertiesType type, object parameter = null, long? id = null)
         {
             if (Notifications == null)
             {
                 Notifications = new ObservableCollection<Notification>();
                 BindingOperations.EnableCollectionSynchronization(Notifications, new object());
             }
-            Notifications.Add(new Notification()
-            {
-                Text = text
-            });
+            Notifications.Add(new Notification(sentUser, receiveUser, type, parameter, id));
         }
 
         /// <summary>

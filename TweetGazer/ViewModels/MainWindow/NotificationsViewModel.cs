@@ -12,34 +12,34 @@ using TweetGazer.Models.Timeline;
 
 namespace TweetGazer.ViewModels.MainWindow
 {
-    public class MentionsViewModel : ViewModel, IFlyoutViewModel
+    public class NotificationsViewModel : ViewModel, IFlyoutViewModel
     {
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MentionsViewModel()
+        public NotificationsViewModel()
         {
-            MentionsStack.Initialize();
+            NotificationsStack.Initialize();
 
-            this.Mentions = new Mentions();
+            this.Notifications = new Notifications();
 
             this._IsVisibleBackButton = false;
             this._TimelineItems = new List<TimelineItemProperties>();
             this.CompositeDisposable.Add(
-                new PropertyChangedEventListener(this.Mentions, (_, __) =>
+                new PropertyChangedEventListener(this.Notifications, (_, __) =>
                 {
                     switch (__.PropertyName)
                     {
-                        case nameof(this.Mentions.ScreenNames):
+                        case nameof(this.Notifications.ScreenNames):
                             this.RaisePropertyChanged(() => this.ScreenNames);
                             break;
-                        case nameof(this.Mentions.IsOpen):
+                        case nameof(this.Notifications.IsOpen):
                             this.RaisePropertyChanged(() => this.IsOpen);
                             break;
-                        case nameof(this.Mentions.ProfileImageUrl):
+                        case nameof(this.Notifications.ProfileImageUrl):
                             this.RaisePropertyChanged(() => this.ProfileImageUrl);
                             break;
-                        case nameof(this.Mentions.TokenSuffix):
+                        case nameof(this.Notifications.TokenSuffix):
                             this.RaisePropertyChanged(() => this.TokenSuffix);
                             break;
                     }
@@ -62,10 +62,10 @@ namespace TweetGazer.ViewModels.MainWindow
         /// </summary>
         public void ToggleOpen()
         {
-            this.Mentions.ToggleOpen();
+            this.Notifications.ToggleOpen();
             if (this.Timeline == null)
             {
-                this.Timeline = this.Mentions.Timeline;
+                this.Timeline = this.Notifications.Timeline;
                 this.TimelineItems = this.Timeline.TimelineItems;
                 this.CompositeDisposable.Add(
                     new PropertyChangedEventListener(this.Timeline.TimelineItems, (_, __) =>
@@ -99,7 +99,7 @@ namespace TweetGazer.ViewModels.MainWindow
         /// </summary>
         public void Delete()
         {
-            this.Mentions.Delete();
+            this.Notifications.Delete();
         }
 
         #region TimelineItems 変更通知プロパティ
@@ -123,11 +123,11 @@ namespace TweetGazer.ViewModels.MainWindow
         {
             get
             {
-                return this.Mentions.IsOpen;
+                return this.Notifications.IsOpen;
             }
             set
             {
-                this.Mentions.IsOpen = value;
+                this.Notifications.IsOpen = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -154,7 +154,7 @@ namespace TweetGazer.ViewModels.MainWindow
         {
             get
             {
-                return this.Mentions.ScreenNames;
+                return this.Notifications.ScreenNames;
             }
         }
         #endregion
@@ -164,11 +164,11 @@ namespace TweetGazer.ViewModels.MainWindow
         {
             get
             {
-                return this.Mentions.TokenSuffix;
+                return this.Notifications.TokenSuffix;
             }
             set
             {
-                this.Mentions.TokenSuffix = value;
+                this.Notifications.TokenSuffix = value;
                 this.Timeline.TokenSuffix = value;
                 Task.Run(async () =>
                 {
@@ -184,7 +184,7 @@ namespace TweetGazer.ViewModels.MainWindow
         {
             get
             {
-                return this.Mentions.ProfileImageUrl;
+                return this.Notifications.ProfileImageUrl;
             }
         }
         #endregion
@@ -192,6 +192,6 @@ namespace TweetGazer.ViewModels.MainWindow
         public ICommand CloseCommand { get; }
 
         private TimelineModel Timeline;
-        private Mentions Mentions;
+        private Notifications Notifications;
     }
 }

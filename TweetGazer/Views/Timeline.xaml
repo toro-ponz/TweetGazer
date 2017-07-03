@@ -9,6 +9,7 @@
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    MinWidth="200"
     Foreground="{DynamicResource TextBrush}"
     mc:Ignorable="d">
 
@@ -23,9 +24,10 @@
     <Grid Background="{DynamicResource ControlBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
-            <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
+
+        <!--  タイトル等  -->
         <Grid>
             <StackPanel Orientation="Horizontal">
                 <Button
@@ -72,14 +74,170 @@
             </StackPanel>
         </Grid>
 
+        <!--  メッセージ  -->
+        <TextBlock
+            Grid.Row="1"
+            Margin="10"
+            VerticalAlignment="Center"
+            FontSize="25"
+            Foreground="{DynamicResource TextBrush}"
+            Text="{Binding Path=Message, Mode=OneWay}"
+            TextAlignment="Center"
+            TextWrapping="Wrap" />
+
+        <!--  タイムライン  -->
+        <ItemsControl
+            Grid.Row="1"
+            Margin="0,20,0,0"
+            Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
+            ItemsSource="{Binding Path=TimelineItems, Mode=OneWay}"
+            ScrollViewer.CanContentScroll="True"
+            VirtualizingPanel.CacheLength="0"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingStackPanel.IsVirtualizing="True">
+            <ItemsControl.ItemTemplateSelector>
+                <Selectors:TimelineItemTemplateSelector />
+            </ItemsControl.ItemTemplateSelector>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="{x:Type ItemsControl}">
+                    <ScrollViewer
+                        Behaviors:ScrollViewerBehavior.AnimationScrolling="True"
+                        Behaviors:ScrollViewerBehavior.VerticalOffset="{Binding Path=VerticalOffset, Mode=TwoWay}"
+                        VerticalScrollBarVisibility="Visible">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+        </ItemsControl>
+
+        <!--  各種ボタン等  -->
         <Grid
             Grid.Row="1"
-            MaxHeight="200"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  更新ボタン  -->
+            <Grid
+                Margin="15,0,0,10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Opacity="0.6">
+                <Button Command="{Binding Path=UpdateCommand, Mode=OneTime}" Style="{StaticResource UwpLikeButtonStyle1}">
+                    <Grid>
+                        <Rectangle
+                            Width="40"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Fill="{DynamicResource AccentColorBrush}"
+                            RadiusX="20"
+                            RadiusY="20" />
+                        <Rectangle
+                            Width="32"
+                            Height="32"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Fill="{DynamicResource WhiteBrush}"
+                            RadiusX="16"
+                            RadiusY="16" />
+                        <ContentControl
+                            Width="26"
+                            Height="26"
+                            HorizontalAlignment="Center"
+                            ContentTemplate="{StaticResource AccentColorReloadIcon}" />
+                    </Grid>
+                </Button>
+            </Grid>
+
+            <!--  トップに戻るボタン  -->
+            <Grid
+                Margin="0,0,15,10"
+                HorizontalAlignment="Right"
+                Opacity="0.6"
+                Visibility="{Binding Path=UpButtonVisibility, Mode=OneWay}">
+                <Button Style="{StaticResource UwpLikeButtonStyle1}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Up" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <Grid>
+                        <Rectangle
+                            Width="40"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Fill="{DynamicResource AccentColorBrush}"
+                            RadiusX="20"
+                            RadiusY="20" />
+                        <Rectangle
+                            Width="32"
+                            Height="32"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Fill="{DynamicResource WhiteBrush}"
+                            RadiusX="16"
+                            RadiusY="16" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="{DynamicResource AccentColorBrush}"
+                            Text="▲" />
+                    </Grid>
+                </Button>
+            </Grid>
+
+            <!--  トレイ通知領域  -->
+            <Grid Grid.Row="1" Background="{DynamicResource AccentColorBrush}">
+                <ItemsControl MaxHeight="100" ItemsSource="{Binding Path=TimelineNotice, Mode=OneTime}">
+                    <ItemsControl.ItemTemplateSelector>
+                        <Selectors:TimelineNotificationTrayTemplateSelector />
+                    </ItemsControl.ItemTemplateSelector>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel>
+                                <i:Interaction.Behaviors>
+                                    <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5">
+                                        <ei:FluidMoveBehavior.EaseY>
+                                            <QuadraticEase EasingMode="EaseOut" />
+                                        </ei:FluidMoveBehavior.EaseY>
+                                    </ei:FluidMoveBehavior>
+                                </i:Interaction.Behaviors>
+                            </VirtualizingStackPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="{x:Type ItemsControl}">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                </ItemsControl>
+            </Grid>
+        </Grid>
+
+        <!--  設定  -->
+        <Grid
+            Grid.Row="1"
+            VerticalAlignment="Top"
             Background="{DynamicResource AccentColorBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20" />
-                <RowDefinition Height="Auto" MaxHeight="180" />
+                <RowDefinition />
             </Grid.RowDefinitions>
+
+            <!--  設定の開閉ボタン  -->
             <Grid Grid.Row="0">
                 <Button
                     HorizontalAlignment="Stretch"
@@ -99,9 +257,10 @@
                         Text="Settings" />
                 </Button>
             </Grid>
+
+            <!--  設定  -->
             <ScrollViewer
                 Grid.Row="1"
-                MaxHeight="180"
                 Behaviors:ScrollViewerBehavior.AnimationScrolling="True"
                 Foreground="White"
                 VerticalScrollBarVisibility="Auto"
@@ -219,156 +378,8 @@
             </ScrollViewer>
         </Grid>
 
-        <ItemsControl
-            x:Name="ItemsControl"
-            Grid.Row="2"
-            Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
-            ItemsSource="{Binding Path=TimelineItems, Mode=OneWay}"
-            ScrollViewer.CanContentScroll="True"
-            VirtualizingPanel.CacheLength="0"
-            VirtualizingPanel.ScrollUnit="Pixel"
-            VirtualizingStackPanel.IsVirtualizing="True">
-            <ItemsControl.ItemTemplateSelector>
-                <Selectors:TimelineItemTemplateSelector />
-            </ItemsControl.ItemTemplateSelector>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.Template>
-                <ControlTemplate TargetType="{x:Type ItemsControl}">
-                    <ScrollViewer
-                        x:Name="ScrollViewer"
-                        Behaviors:ScrollViewerBehavior.AnimationScrolling="True"
-                        Behaviors:ScrollViewerBehavior.VerticalOffset="{Binding Path=VerticalOffset, Mode=TwoWay}"
-                        VerticalScrollBarVisibility="Visible">
-                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ItemsControl.Template>
-        </ItemsControl>
-
-        <Grid
-            Grid.Row="2"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Bottom">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid
-                Margin="15,0,0,10"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                Opacity="0.6">
-                <Button Command="{Binding Path=UpdateCommand, Mode=OneTime}" Style="{StaticResource UwpLikeButtonStyle1}">
-                    <Grid>
-                        <Rectangle
-                            Width="40"
-                            Height="40"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Fill="{DynamicResource AccentColorBrush}"
-                            RadiusX="20"
-                            RadiusY="20" />
-                        <Rectangle
-                            Width="32"
-                            Height="32"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Fill="{DynamicResource WhiteBrush}"
-                            RadiusX="16"
-                            RadiusY="16" />
-                        <ContentControl
-                            Width="26"
-                            Height="26"
-                            HorizontalAlignment="Center"
-                            ContentTemplate="{StaticResource AccentColorReloadIcon}" />
-                    </Grid>
-                </Button>
-            </Grid>
-
-            <Grid
-                Margin="0,0,15,10"
-                HorizontalAlignment="Right"
-                Opacity="0.6"
-                Visibility="{Binding Path=UpButtonVisibility, Mode=OneWay}">
-                <Button Style="{StaticResource UwpLikeButtonStyle1}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction MethodName="Up" TargetObject="{Binding}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <Grid>
-                        <Rectangle
-                            Width="40"
-                            Height="40"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Fill="{DynamicResource AccentColorBrush}"
-                            RadiusX="20"
-                            RadiusY="20" />
-                        <Rectangle
-                            Width="32"
-                            Height="32"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Fill="{DynamicResource WhiteBrush}"
-                            RadiusX="16"
-                            RadiusY="16" />
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="{DynamicResource AccentColorBrush}"
-                            Text="▲" />
-                    </Grid>
-                </Button>
-            </Grid>
-
-            <Grid Grid.Row="1" Background="{DynamicResource AccentColorBrush}">
-                <ItemsControl MaxHeight="100" ItemsSource="{Binding Path=TimelineNotice, Mode=OneTime}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid VerticalAlignment="Bottom" Background="{Binding Path=BackgroundColor, Mode=OneTime}">
-                                <TextBlock
-                                    Margin="10"
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="{Binding Path=Message, Mode=OneTime}"
-                                    TextWrapping="Wrap" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel>
-                                <i:Interaction.Behaviors>
-                                    <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5">
-                                        <ei:FluidMoveBehavior.EaseY>
-                                            <QuadraticEase EasingMode="EaseOut" />
-                                        </ei:FluidMoveBehavior.EaseY>
-                                    </ei:FluidMoveBehavior>
-                                </i:Interaction.Behaviors>
-                            </VirtualizingStackPanel>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.Template>
-                        <ControlTemplate TargetType="{x:Type ItemsControl}">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                            </ScrollViewer>
-                        </ControlTemplate>
-                    </ItemsControl.Template>
-                </ItemsControl>
-            </Grid>
-        </Grid>
-
-        <Grid
-            Grid.Row="1"
-            Grid.RowSpan="2"
-            Visibility="{Binding Path=ProgressRingVisibility, Mode=OneWay}">
+        <!--  プログレスリング  -->
+        <Grid Grid.Row="1" Visibility="{Binding Path=ProgressRingVisibility, Mode=OneWay}">
             <Grid.Background>
                 <SolidColorBrush Opacity="0.2" Color="Black" />
             </Grid.Background>

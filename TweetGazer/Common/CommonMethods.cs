@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -124,9 +125,6 @@ namespace TweetGazer.Common
                 case SoundEffect.Notification1:
                     player = new SoundPlayer(assembly.GetManifestResourceStream("TweetGazer.Assets.Sounds.notification01.wav"));
                     break;
-                case SoundEffect.Notification2:
-                    player = new SoundPlayer(assembly.GetManifestResourceStream("TweetGazer.Assets.Sounds.notification02.wav"));
-                    break;
             }
 
             if (player != null)
@@ -155,7 +153,7 @@ namespace TweetGazer.Common
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public static void Notify(string message, NoticeType type = NoticeType.Normal)
+        public static void Notify(string message, NotificationType type = NotificationType.Normal)
         {
             var mainWindow = MainWindow;
             if (mainWindow != null)
@@ -245,7 +243,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return null;
             }
         }
@@ -270,7 +268,7 @@ namespace TweetGazer.Common
                 }
                 catch (Exception e)
                 {
-                    Console.Write(e);
+                    Debug.Write(e);
                     return null;
                 }
                 finally
@@ -325,7 +323,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
         
@@ -355,7 +353,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return true;
             }
         }
@@ -377,8 +375,45 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// インターネット接続が有効か否か
+        /// </summary>
+        /// <returns>インターネット接続が有効か否か</returns>
+        public static bool CheckInternetConnectEnabled()
+        {
+            return NativeMethods.InternetGetConnectedState(out int flag, 0);
+        }
+
+        /// <summary>
+        /// Twitterに接続可能か否か
+        /// </summary>
+        /// <returns>Twitterに接続可能か否か</returns>
+        public static bool CheckTwitterConnectEnabled()
+        {
+            HttpWebRequest webreq = null;
+            HttpWebResponse webres = null;
+            try
+            {
+                webreq = (HttpWebRequest)WebRequest.Create("http://www.twitter.com");
+                webreq.Method = "HEAD";
+                webres = (HttpWebResponse)webreq.GetResponse();
+                Console.WriteLine(webres.StatusCode);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e);
+                return false;
+            }
+            finally
+            {
+                if (webres != null)
+                    webres.Close();
             }
         }
 
@@ -396,7 +431,7 @@ namespace TweetGazer.Common
                 }
                 catch (Exception e)
                 {
-                    Console.Write(e);
+                    Debug.Write(e);
                     return null;
                 }
             }
@@ -409,9 +444,5 @@ namespace TweetGazer.Common
         /// 通知音
         /// </summary>
         Notification1,
-        /// <summary>
-        /// エラー音
-        /// </summary>
-        Notification2
     }
 }

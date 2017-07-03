@@ -4,6 +4,7 @@ using Livet;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -32,15 +33,7 @@ namespace TweetGazer.Models
             this.Timers = new List<Timer>();
             this._ProgressRingVisibility = Visibility.Collapsed;
             this._IsVisibleSettings = false;
-
-            this._IsVisibleRetweet = true;
-            this._IsVisibleReply = true;
-            this._IsVisibleIncludeImagesStatus = true;
-            this._IsVisibleIncludeGifStatus = true;
-            this._IsVisibleIncludeVideoStatus = true;
-            this._IsVisibleIncludeLinkStatus = true;
-            this._IsVisibleOtherStatus = true;
-
+            
             this.TimelineItems = new ObservableCollection<TimelineItemProperties>();
             BindingOperations.EnableCollectionSynchronization(this.TimelineItems, new object());
             this.TimelineNotice = new ObservableCollection<TimelineNotice>();
@@ -94,7 +87,7 @@ namespace TweetGazer.Models
             if (this.Data.PageSuffix == 0 || this.Data.Pages.Count < 2)
                 return;
 
-            while (1 < this.Data.Pages.Count)
+            while (this.Data.Pages.Count > 1)
                 this.Data.Pages.RemoveAt(1);
 
             this.Data.PageSuffix = 0;
@@ -116,12 +109,11 @@ namespace TweetGazer.Models
             if (this.IsLoading)
                 return false;
 
+            this.Message = "";
+
             this.IsLoading = true;
             if (maxId == null)
-            {
                 ProgressRingVisibility = Visibility.Visible;
-                CommonMethods.UpdateUI();
-            }
 
             IEnumerable<Status> loadedTimeline = null;
             try
@@ -181,18 +173,18 @@ namespace TweetGazer.Models
                     case TimelineType.List:
                         loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, maxId);
                         break;
-                    case TimelineType.Mention:
+                    case TimelineType.Mentions:
                         loadedTimeline = await AccountTokens.LoadMentionsTimelineAsync(this.Data.TokenSuffix, maxId);
+                        break;
+                    case TimelineType.MentionsStack:
+                        foreach (var me in MentionsStack.Mentions)
+                            this.TimelineItems.Add(new TimelineItemProperties(this, me.Status));
                         break;
                     case TimelineType.Favorite:
                         loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, maxId);
                         break;
                     case TimelineType.DirectMessage:
-                        {
-                            //var loadedDirectMessages = await AccountTokens.LoadDirectMessageListAsync(this.Data.TokenSuffix);
-                            //this.InsertDirectMessage(loadedDirectMessages);
-                            break;
-                        }
+                        break;
                     case TimelineType.Trend:
                         {
                             var loadedTrends = await AccountTokens.LoadTrendsAsync(this.Data.TokenSuffix);
@@ -208,48 +200,78 @@ namespace TweetGazer.Models
                     case TimelineType.Search:
                         loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId);
                         break;
-                    case TimelineType.Notice:
+                    case TimelineType.Notifications:
+                        break;
+                    case TimelineType.NotificationsStack:
+                        foreach (var no in NotificationsStack.Notifications)
+                            this.TimelineItems.Add(new TimelineItemProperties(this, no.SentUser, no.ReceiveUser, no.NotificationPropertiesType, no.Text, no.Id));
                         break;
                 }
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 this.ProgressRingVisibility = Visibility.Collapsed;
                 this.IsLoading = false;
+
+                if (maxId == null)
+                    this.Message = "読み込み中にエラーが発生しました。タイムライン左下のリロードボタンで再度読み込み試行をしてください。";
+                else if (this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties != null)
+                    this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+
                 return false;
             }
 
-            //読み込めていれば追加する
-            if (loadedTimeline != null && loadedTimeline.Count() > 1)
+            // 読み込めていれば追加する
+            if (loadedTimeline != null && loadedTimeline.Count() > 0)
             {
                 if (maxId == null)
                 {
                     this.InsertStatus(loadedTimeline);
-                    //もっと読むボタン
-                    if (this.Data.CurrentPage.TimelineType != TimelineType.DirectMessage && this.Data.CurrentPage.TimelineType != TimelineType.Trend && this.Data.CurrentPage.TimelineType != TimelineType.Search && this.Data.CurrentPage.TimelineType != TimelineType.Notice)
+                    // 末尾にローディングプログレスリングを追加
+                    if (this.Data.CurrentPage.TimelineType != TimelineType.DirectMessage &&
+                        this.Data.CurrentPage.TimelineType != TimelineType.MentionsStack &&
+                        this.Data.CurrentPage.TimelineType != TimelineType.Trend &&
+                        this.Data.CurrentPage.TimelineType != TimelineType.Notifications &&
+                        this.Data.CurrentPage.TimelineType != TimelineType.NotificationsStack)
                     {
                         this.TimelineItems.Add(new TimelineItemProperties(this, LoadingType.ReadMore, loadedTimeline.Last().Id - 1));
                     }
                 }
-                //もっと読むの時
+                // ローディングプログレスリングによる古いツイートの読み込みのとき
                 else
                 {
-                    //最新ツイートを更新しないように追加
+                    // 最新ツイートを更新しないように追加
                     this.InsertStatus(loadedTimeline, true);
-                    //ボタンのパラメータを設定
-                    this.TimelineItems.Last().LoadingProperties.Parameter = loadedTimeline.Last().Id - 1;
+                    // ローディングプログレスリングを削除して再追加
+                    if (this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties != null)
+                    {
+                        var loadingType = this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties.Type;
+                        this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+                        this.TimelineItems.Add(new TimelineItemProperties(this, loadingType, loadedTimeline.Last().Id - 1));
+                    }
                 }
             }
             else
             {
                 this.ProgressRingVisibility = Visibility.Collapsed;
                 this.IsLoading = false;
+
+                if (this.Data.CurrentPage.TimelineType == TimelineType.DirectMessage ||
+                    this.Data.CurrentPage.TimelineType == TimelineType.MentionsStack ||
+                    this.Data.CurrentPage.TimelineType == TimelineType.Trend ||
+                    this.Data.CurrentPage.TimelineType == TimelineType.Notifications ||
+                    this.Data.CurrentPage.TimelineType == TimelineType.NotificationsStack)
+                    return true;
+                else if (maxId == null)
+                    this.Message = "読み込み中にエラーが発生しました。タイムライン左下のリロードボタンで再度読み込み試行をしてください。";
+                else if (this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties != null)
+                    this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+
                 return false;
             }
 
-            if (maxId == null)
-                this.ProgressRingVisibility = Visibility.Collapsed;
+            this.ProgressRingVisibility = Visibility.Collapsed;
             this.IsLoading = false;
             return true;
         }
@@ -345,13 +367,13 @@ namespace TweetGazer.Models
             this.TimelineItems.Clear();
             this.Data.Pages.RemoveAt(this.Data.PageSuffix);
             this.Data.PageSuffix--;
-            var verticalOffset = this.Data.CurrentPage.VerticalOffset;
+            var verticalOffset = this.VerticalOffset;
             this.Initialize(Data.CurrentPage);
             Task.Run(() =>
             {
                 for (int i = 0; i < 200; i++)
                     System.Threading.Thread.Sleep(10);
-                this.Data.CurrentPage.VerticalOffset = verticalOffset;
+                this.VerticalOffset = verticalOffset;
             });
         }
 
@@ -386,7 +408,7 @@ namespace TweetGazer.Models
                 }
             }
         }
-        
+
         /// <summary>
         /// 設定画面の開閉
         /// </summary>
@@ -394,7 +416,7 @@ namespace TweetGazer.Models
         {
             this.IsVisibleSettings = !this.IsVisibleSettings;
         }
-        
+
         /// <summary>
         /// タイムラインをクリアする
         /// </summary>
@@ -408,7 +430,7 @@ namespace TweetGazer.Models
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public void Notify(string message, NoticeType type)
+        public void Notify(string message, NotificationType type)
         {
             try
             {
@@ -421,7 +443,7 @@ namespace TweetGazer.Models
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
 
@@ -488,10 +510,10 @@ namespace TweetGazer.Models
                 case TimelineType.Favorite:
                     this.Title = "Favorite";
                     break;
-                case TimelineType.Notice:
+                case TimelineType.Notifications:
                     this.Title = "Notice";
                     break;
-                case TimelineType.Mention:
+                case TimelineType.Mentions:
                     this.Title = "Mention";
                     break;
                 case TimelineType.User:
@@ -511,9 +533,11 @@ namespace TweetGazer.Models
         /// </summary>
         private void StartStreaming()
         {
-            if (!(this.Data.CurrentPage.TimelineType == TimelineType.Notice || this.Data.CurrentPage.TimelineType == TimelineType.Trend))
+            if (this.Data.CurrentPage.TimelineType != TimelineType.Notifications &&
+                this.Data.CurrentPage.TimelineType != TimelineType.NotificationsStack &&
+                this.Data.CurrentPage.TimelineType != TimelineType.Trend)
             {
-                //ツイート時間の更新タイマー
+                // ツイート時間の更新タイマー
                 var reculcTimeTimer = new Timer();
                 reculcTimeTimer.Elapsed += new ElapsedEventHandler(this.RecalculateTime);
                 reculcTimeTimer.Interval = 1000;
@@ -529,15 +553,20 @@ namespace TweetGazer.Models
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
                         if (stream != null)
                         {
-                            //ツイートが流れてきたとき
+                            // 再接続
+                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
+                            // ツイートが流れてきたとき
                             stream.OfType<StatusMessage>().Subscribe(x => {
-                                //通知
-                                NotifyStatus(x.Status);
+                                // フォローしていない人のツイート(RTされたイベント等)を弾く
 
-                                //流れてきたツイートを挿入
-                                InsertStatus(new List<Status>() { x.Status });
+
+                                // 通知
+                                this.NotifyStatus(x.Status);
+
+                                // 流れてきたツイートを挿入
+                                this.InsertStatus(new List<Status>() { x.Status });
                             });
-                            //ツイートが削除されたとき
+                            // ツイートが削除されたとき
                             stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
                             stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
                             this.Disposables.Add(stream.Connect());
@@ -546,10 +575,10 @@ namespace TweetGazer.Models
                     }
                 case TimelineType.List:
                     {
-                        //3.1秒間隔でリストを更新するタイマー
+                        // 5秒間隔でリストを更新するタイマー
                         var timer = new Timer();
                         timer.Elapsed += new ElapsedEventHandler(this.LoadListTimelineAsync);
-                        timer.Interval = 3100;
+                        timer.Interval = 5000;
                         timer.AutoReset = true;
                         timer.Enabled = true;
                         this.Timers.Add(timer);
@@ -557,7 +586,7 @@ namespace TweetGazer.Models
                     }
                 case TimelineType.User:
                     {
-                        //30秒間隔でユーザータイムラインを更新するタイマー
+                        // 30秒間隔でユーザータイムラインを更新するタイマー
                         var timer = new Timer();
                         timer.Elapsed += new ElapsedEventHandler(this.LoadUserTimelineAsync);
                         timer.Interval = 30000;
@@ -566,43 +595,47 @@ namespace TweetGazer.Models
                         this.Timers.Add(timer);
                         break;
                     }
-                case TimelineType.Notice:
+                case TimelineType.Notifications:
                     {
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
                         if (stream != null)
                         {
+                            // 再接続
+                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
                             stream.OfType<EventMessage>().Subscribe(x => ProcessEventMessage(x));
                             stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
                             this.Disposables.Add(stream.Connect());
                         }
                         break;
                     }
-                case TimelineType.Mention:
+                case TimelineType.Mentions:
                     {
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
                         if (stream != null)
                         {
-                            //ツイートが流れてきたとき
+                            // 再接続
+                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
+                            // ツイートが流れてきたとき
                             stream.OfType<StatusMessage>().Subscribe(x => {
-                                //リプライでない場合リターン
+                                // リプライでない場合リターン
                                 if (x.Status.Entities == null || x.Status.Entities.UserMentions == null)
                                     return;
 
                                 foreach (var entity in x.Status.Entities.UserMentions)
                                 {
-                                    //自分へのリプライの場合処理する
+                                    // 自分へのリプライの場合処理する
                                     if (entity.Id == this.Data.UserId)
                                     {
-                                        //通知
+                                        // 通知
                                         this.NotifyStatus(x.Status);
 
-                                        //流れてきたツイートを挿入
+                                        // 流れてきたツイートを挿入
                                         this.InsertStatus(new List<Status>() { x.Status });
                                         break;
                                     }
                                 }
                             });
-                            //リプライが削除されたとき
+                            // リプライが削除されたとき
                             stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
                             stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
                             this.Disposables.Add(stream.Connect());
@@ -624,17 +657,19 @@ namespace TweetGazer.Models
                         var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.Filter, this.Data.CurrentPage.SearchText);
                         if (stream != null)
                         {
-                            //検索ワードに引っかかる新規ツイートが流れてきたとき
+                            // 再接続
+                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
+                            // 検索ワードに引っかかる新規ツイートが流れてきたとき
                             stream.OfType<StatusMessage>().Subscribe(x =>
                             {
-                                //RTなら処理しない
+                                // RTなら処理しない
                                 if (x.Status.RetweetedStatus != null)
                                     return;
 
-                                //通知
+                                // 通知
                                 this.NotifyStatus(x.Status);
 
-                                //流れてきたツイートを挿入
+                                // 流れてきたツイートを挿入
                                 this.InsertStatus(new List<Status>() { x.Status });
                             });
                             stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
@@ -679,7 +714,7 @@ namespace TweetGazer.Models
         /// <param name="disconnectMessage">切断情報</param>
         private void ProcessDisconnectMessage(DisconnectMessage disconnectMessage)
         {
-            CommonMethods.PlaySoundEffect(SoundEffect.Notification2);
+
         }
 
         /// <summary>
@@ -693,10 +728,10 @@ namespace TweetGazer.Models
             if (!statuses.Any())
                 return false;
 
-            //もっと読むの場合最後のID-1をMaxIdとして控える
+            // もっと読むの場合最後のID - 1をMaxIdとして控える
             if (loadMore)
                 this.TimelineItems.Last().LoadingProperties.Parameter = statuses.Last().Id - 1;
-            //そうでない場合最初のID+1をSinceIdとして控える
+            // そうでない場合最初のID + 1をSinceIdとして控える
             else
                 this.Data.SinceId = statuses.First().Id + 1;
 
@@ -712,10 +747,8 @@ namespace TweetGazer.Models
                 if (loadMore)
                     this.TimelineItems.Insert(this.TimelineItems.Count - 1, properties);
                 else
-                {
                     this.TimelineItems.Insert(i + insertPosition, properties);
-                }
-                this.RaisePropertyChanged(nameof(this.TimelineItems));
+
                 i++;
             }
 
@@ -800,7 +833,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
             }
         }
 
@@ -848,7 +881,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
             }
         }
 
@@ -872,7 +905,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
             }
         }
 
@@ -897,7 +930,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Console.Write(ex);
+                Debug.Write(ex);
                 return;
             }
         }
@@ -921,7 +954,7 @@ namespace TweetGazer.Models
                 else if (status.Text != null)
                     text += status.Text;
 
-                this.Notify(text, NoticeType.Normal);
+                this.Notify(text, NotificationType.Normal);
             }
         }
 
@@ -950,7 +983,7 @@ namespace TweetGazer.Models
                 var status = item.StatusProperties != null;
                 var media = status && item.StatusProperties.Media.Count > 0;
                 var excludeRetweet = !this.IsVisibleRetweet && (status && item.StatusProperties.IsRetweetedByUser);
-                var excludeReply = !this.IsVisibleReply && (status && item.StatusProperties.ReplyToStatusProperties.Visibility != Visibility.Collapsed);
+                var excludeReply = !this.IsVisibleReply && (status && item.StatusProperties.ReplyToStatusProperties.IsExist);
                 var excludeImage = !this.IsVisibleIncludeImagesStatus && (media && item.StatusProperties.Media.First().Type == Behaviors.StatusMediaType.Image);
                 var excludeGif = !this.IsVisibleIncludeGifStatus && (media && item.StatusProperties.Media.First().Type == Behaviors.StatusMediaType.AnimationGif);
                 var excludeVideo = !this.IsVisibleIncludeVideoStatus && (media && item.StatusProperties.Media.First().Type == Behaviors.StatusMediaType.Video);
@@ -959,7 +992,7 @@ namespace TweetGazer.Models
                     (status &&
                     !media &&
                     !item.StatusProperties.IsRetweetedByUser &&
-                    item.StatusProperties.ReplyToStatusProperties.Visibility == Visibility.Collapsed &&
+                    !item.StatusProperties.ReplyToStatusProperties.IsExist &&
                     item.StatusProperties.HyperlinkText.Urls.Count <= 0);
                 return !excludeRetweet && !excludeReply && !excludeImage && !excludeGif && !excludeVideo && !excludeLink && !excludeOther;
             };
@@ -979,6 +1012,22 @@ namespace TweetGazer.Models
             }
         }
         private Visibility _ProgressRingVisibility;
+        #endregion
+
+        #region Message 変更通知プロパティ
+        public string Message
+        {
+            get
+            {
+                return this._Message;
+            }
+            set
+            {
+                this._Message = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private string _Message;
         #endregion
 
         #region Title 変更通知プロパティ
@@ -1032,16 +1081,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleRetweet;
+                return this.Data.CurrentPage.IsVisibleRetweet;
             }
             set
             {
-                this._IsVisibleRetweet = value;
+                this.Data.CurrentPage.IsVisibleRetweet = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleRetweet;
         #endregion
 
         #region IsVisibleReply 変更通知プロパティ
@@ -1049,11 +1097,11 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleReply;
+                return this.Data.CurrentPage.IsVisibleReply;
             }
             set
             {
-                this._IsVisibleReply = value;
+                this.Data.CurrentPage.IsVisibleReply = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
@@ -1066,16 +1114,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleIncludeImagesStatus;
+                return this.Data.CurrentPage.IsVisibleIncludeImagesStatus;
             }
             set
             {
-                this._IsVisibleIncludeImagesStatus = value;
+                this.Data.CurrentPage.IsVisibleIncludeImagesStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleIncludeImagesStatus;
         #endregion
 
         #region IsVisibleIncludeGifStatus 変更通知プロパティ
@@ -1083,16 +1130,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleIncludeGifStatus;
+                return this.Data.CurrentPage.IsVisibleIncludeGifStatus;
             }
             set
             {
-                this._IsVisibleIncludeGifStatus = value;
+                this.Data.CurrentPage.IsVisibleIncludeGifStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleIncludeGifStatus;
         #endregion
 
         #region IsVisibleIncludeVideoStatus 変更通知プロパティ
@@ -1100,16 +1146,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleIncludeVideoStatus;
+                return this.Data.CurrentPage.IsVisibleIncludeVideoStatus;
             }
             set
             {
-                this._IsVisibleIncludeVideoStatus = value;
+                this.Data.CurrentPage.IsVisibleIncludeVideoStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleIncludeVideoStatus;
         #endregion
 
         #region IsVisibleIncludeLinkStatus 変更通知プロパティ
@@ -1117,16 +1162,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleIncludeLinkStatus;
+                return this.Data.CurrentPage.IsVisibleIncludeLinkStatus;
             }
             set
             {
-                this._IsVisibleIncludeLinkStatus = value;
+                this.Data.CurrentPage.IsVisibleIncludeLinkStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleIncludeLinkStatus;
         #endregion
 
         #region IsVisibleOtherStatus 変更通知プロパティ
@@ -1134,16 +1178,15 @@ namespace TweetGazer.Models
         {
             get
             {
-                return this._IsVisibleOtherStatus;
+                return this.Data.CurrentPage.IsVisibleOtherStatus;
             }
             set
             {
-                this._IsVisibleOtherStatus = value;
+                this.Data.CurrentPage.IsVisibleOtherStatus = value;
                 this.RaisePropertyChanged();
                 this.Filtering();
             }
         }
-        private bool _IsVisibleOtherStatus;
         #endregion
 
         #region TokenSuffix 変更通知プロパティ

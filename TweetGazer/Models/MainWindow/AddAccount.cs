@@ -1,6 +1,7 @@
 ﻿using CoreTweet;
 using Livet;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using TweetGazer.Common;
@@ -80,7 +81,7 @@ namespace TweetGazer.Models.MainWindow
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
 

@@ -34,12 +34,6 @@ namespace TweetGazer.ViewModels.MainWindow
                         case nameof(this.MovableCreateStatus.IsSelectButtonEnabled):
                             this.IsSelectButtonEnabled = this.MovableCreateStatus.IsSelectButtonEnabled;
                             break;
-                        case nameof(this.MovableCreateStatus.IsTrayVisible):
-                            this.RaisePropertyChanged(() => this.IsTrayVisible);
-                            break;
-                        case nameof(this.MovableCreateStatus.IsMinimized):
-                            this.RaisePropertyChanged(() => this.IsMinimized);
-                            break;
                         case nameof(this.MovableCreateStatus.StatusText):
                             this.RaisePropertyChanged(() => this.StatusText);
                             break;
@@ -152,26 +146,6 @@ namespace TweetGazer.ViewModels.MainWindow
             {
                 this.MovableCreateStatus.StatusText = value;
                 this.RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        #region IsTrayVisible 変更通知プロパティ
-        public bool IsTrayVisible
-        {
-            get
-            {
-                return this.MovableCreateStatus.IsTrayVisible;
-            }
-        }
-        #endregion
-
-        #region IsMinimized 変更通知プロパティ
-        public bool IsMinimized
-        {
-            get
-            {
-                return this.MovableCreateStatus.IsMinimized;
             }
         }
         #endregion

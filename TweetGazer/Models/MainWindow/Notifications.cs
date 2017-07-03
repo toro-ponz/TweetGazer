@@ -4,12 +4,12 @@ using TweetGazer.Common;
 
 namespace TweetGazer.Models.MainWindow
 {
-    public class Mentions : FlyoutBase
+    public class Notifications : FlyoutBase
     {
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public Mentions() : base()
+        public Notifications() : base()
         {
 
         }
@@ -32,7 +32,7 @@ namespace TweetGazer.Models.MainWindow
                         {
                             new Timeline.TimelinePageData()
                             {
-                                TimelineType = TimelineType.MentionsStack
+                                TimelineType = TimelineType.NotificationsStack
                             }
                         }
                     }
@@ -65,15 +65,15 @@ namespace TweetGazer.Models.MainWindow
         }
 
         /// <summary>
-        /// メンションを削除する
+        /// 通知を削除する
         /// </summary>
         public void Delete()
         {
             while (this.Timeline.TimelineItems.Count != 0)
             {
                 this.Timeline.TimelineItems.RemoveAt(0);
-                if (MentionsStack.Mentions.Count != 0)
-                    MentionsStack.Mentions.RemoveAt(0);
+                if (NotificationsStack.Notifications.Count != 0)
+                    NotificationsStack.Notifications.RemoveAt(0);
             }
         }
 

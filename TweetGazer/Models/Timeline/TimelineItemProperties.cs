@@ -1,5 +1,4 @@
 ﻿using CoreTweet;
-using TweetGazer.ViewModels;
 
 namespace TweetGazer.Models.Timeline
 {
@@ -71,6 +70,34 @@ namespace TweetGazer.Models.Timeline
             LoadingProperties = new LoadingProperties(timelineModel, type, parameter);
         }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="timelineModel"></param>
+        /// <param name="sentUser"></param>
+        /// <param name="receiveUser"></param>
+        /// <param name="type"></param>
+        /// <param name="parameter"></param>
+        public TimelineItemProperties(TimelineModel timelineModel, User sentUser, User receiveUser, NotificationPropertiesType type, object parameter = null, long? id = null)
+        {
+            this.Type = TimelineItemType.Notification;
+            this.NotificationProperties = new NotificationProperties(timelineModel, sentUser, receiveUser, type, parameter, id);
+        }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="timelineModel"></param>
+        /// <param name="sentUser"></param>
+        /// <param name="receiveUser"></param>
+        /// <param name="type"></param>
+        /// <param name="parameter"></param>
+        public TimelineItemProperties(TimelineModel timelineModel, UserOverviewProperties sentUser, UserOverviewProperties receiveUser, NotificationPropertiesType type, object parameter = null, long? id = null)
+        {
+            this.Type = TimelineItemType.Notification;
+            this.NotificationProperties = new NotificationProperties(timelineModel, sentUser, receiveUser, type, parameter, id);
+        }
+
         public TimelineItemType Type { get; }
 
         public StatusProperties StatusProperties { get; }
@@ -78,6 +105,7 @@ namespace TweetGazer.Models.Timeline
         public TrendProperties TrendProperties { get; }
         public UserTimelineTabProperties TabProperties { get; }
         public LoadingProperties LoadingProperties { get; }
+        public NotificationProperties NotificationProperties { get; }
     }
 
     public enum TimelineItemType
@@ -86,6 +114,7 @@ namespace TweetGazer.Models.Timeline
         UserOverview,
         Trend,
         TabButton,
+        Notification,
         Button
     }
 }

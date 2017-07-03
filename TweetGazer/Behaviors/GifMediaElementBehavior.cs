@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -54,7 +55,7 @@ namespace TweetGazer.Behaviors
                 }
                 catch (Exception ex)
                 {
-                    Console.Write(ex);
+                    Debug.Write(ex);
                 }
                 finally
                 {
@@ -83,7 +84,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         });
 
@@ -96,7 +97,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
             }
         }
     }

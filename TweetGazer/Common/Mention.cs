@@ -1,5 +1,4 @@
 ﻿using CoreTweet;
-using TweetGazer.Models.Timeline;
 
 namespace TweetGazer.Common
 {
@@ -9,12 +8,14 @@ namespace TweetGazer.Common
     public class Mention
     {
         /// <summary>
-        /// メンションを送ってきたユーザー
+        /// コンストラクタ
         /// </summary>
-        public UserOverviewProperties User { get; set; }
-        /// <summary>
-        /// 当該ツイート
-        /// </summary>
-        public Status Status { get; set; }
+        /// <param name="status">メンション</param>
+        public Mention(Status status)
+        {
+            this.Status = status;
+        }
+        
+        public Status Status { get; }
     }
 }

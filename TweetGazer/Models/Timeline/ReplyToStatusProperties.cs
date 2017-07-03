@@ -1,5 +1,6 @@
 ﻿using CoreTweet;
 using Livet;
+using SourceChord.Lighty;
 using System.Windows;
 using System.Windows.Input;
 using TweetGazer.Common;
@@ -11,8 +12,9 @@ namespace TweetGazer.Models.Timeline
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ReplyToStatusProperties()
+        public ReplyToStatusProperties(bool isExist)
         {
+            this.IsExist = isExist;
             this._Visibility = Visibility.Collapsed;
         }
 
@@ -23,9 +25,12 @@ namespace TweetGazer.Models.Timeline
         /// <param name="id">ツイートID</param>
         public ReplyToStatusProperties(TimelineModel timelineModel, long id)
         {
+            this.IsExist = true;
             this._Visibility = Visibility.Visible;
             this._TextVisibility = Visibility.Collapsed;
             this.ToggleOpenCommand = new RelayCommand(this.ToggleOpen);
+            this.SelectCommand = new RelayCommand(this.Select);
+            this.SelectIconCommand = new RelayCommand(this.SelectIcon);
             this.TimelineModel = timelineModel;
             this.Initialize(id);
         }
@@ -74,6 +79,32 @@ namespace TweetGazer.Models.Timeline
                 this.TextVisibility = Visibility.Visible;
             else
                 this.TextVisibility = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// リプライ先ツイートをクリックしたとき
+        /// </summary>
+        public void Select()
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null && this.Id != null)
+            {
+                using (var status = new Views.ShowDialogs.ShowStatus(this.TimelineModel, (long)this.Id))
+                {
+                    LightBox.ShowDialog(mainWindow, status);
+                }
+            }
+        }
+
+        /// <summary>
+        /// アイコンをクリックしたとき
+        /// </summary>
+        private void SelectIcon()
+        {
+            if (this.TimelineModel == null)
+                return;
+
+            this.TimelineModel.ShowUserTimeline(this.User);
         }
 
         #region Visibility 変更通知プロパティ
@@ -142,6 +173,8 @@ namespace TweetGazer.Models.Timeline
         #endregion
 
         public ICommand ToggleOpenCommand { get; }
+        public ICommand SelectCommand { get; }
+        public ICommand SelectIconCommand { get; }
 
         public string OpenButtonText
         {
@@ -154,6 +187,8 @@ namespace TweetGazer.Models.Timeline
         }
 
         public long? Id { get; set; }
+
+        public bool IsExist { get; }
 
         private TimelineModel TimelineModel;
     }

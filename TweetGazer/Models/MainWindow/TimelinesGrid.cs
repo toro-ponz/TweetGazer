@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -71,8 +72,7 @@ namespace TweetGazer.Models.MainWindow
             //タイムライン用のカラムを生成
             var columnDefinition = new ColumnDefinition()
             {
-                //Width = new GridLength(1, GridUnitType.Star),
-                MinWidth = 280.0d
+                Width = new GridLength(1, GridUnitType.Star)
             };
             //タイムラインの幅をカラムにバインド
             var width = new Binding("Timelines.Timelines[" + this.Timelines.Count + "].TimelineViewModel.GridWidth")
@@ -175,7 +175,7 @@ namespace TweetGazer.Models.MainWindow
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return false;
             }
             finally
@@ -242,7 +242,7 @@ namespace TweetGazer.Models.MainWindow
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Debug.Write(e);
                 return false;
             }
             finally

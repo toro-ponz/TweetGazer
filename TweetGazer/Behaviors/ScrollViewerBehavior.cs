@@ -29,14 +29,19 @@ namespace TweetGazer.Behaviors
 
         private static void AnimationScrolling_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (sender is ScrollViewer element && e.NewValue as bool? == true)
+            if (sender is ScrollViewer element)
             {
-                element.ScrollChanged += (s, eventArgs) =>
+                if (e.NewValue as bool? == true)
                 {
-                    SetVerticalOffset(element, eventArgs.VerticalOffset);
-                };
-                CreateAnimation();
-                element.PreviewMouseWheel += PreviewMouseWheel;
+                    CreateAnimation();
+                    element.ScrollChanged += ScrollChanged;
+                    element.PreviewMouseWheel += PreviewMouseWheel;
+                }
+                else
+                {
+                    element.ScrollChanged -= ScrollChanged;
+                    element.PreviewMouseWheel -= PreviewMouseWheel;
+                }
             }
         }
         
@@ -83,7 +88,7 @@ namespace TweetGazer.Behaviors
             var element = sender as ScrollViewer;
             if (element == null)
                 return;
-            
+
             element.ScrollToVerticalOffset((double)e.NewValue);
             SetOffsetMediator(element, (double)e.NewValue);
             SetVerticalOffset(element, (double)e.NewValue);
@@ -102,20 +107,21 @@ namespace TweetGazer.Behaviors
         {
             if (element == null)
                 return;
-
-            if (GetVerticalOffset(element) != value)
-                element.SetValue(VerticalOffsetProperty, value);
+            element.SetValue(VerticalOffsetProperty, value);
         }
 
-        public static readonly DependencyProperty VerticalOffsetProperty =
+        public static DependencyProperty VerticalOffsetProperty =
             DependencyProperty.RegisterAttached("VerticalOffset", typeof(double), typeof(ScrollViewerBehavior), new PropertyMetadata(0.0d, VerticalOffset_Changed));
 
         private static void VerticalOffset_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
+            if (e.NewValue == e.OldValue)
+                return;
+
             var element = sender as ScrollViewer;
             if (element == null)
                 return;
-            
+
             OffsetMediator_Changed(sender, e);
         }
 
@@ -124,6 +130,15 @@ namespace TweetGazer.Behaviors
             if (Properties.Settings.Default.IsSmoothScrolling &&
                 Animate(sender, -Math.Sign(e.Delta / 2) * GetScrollAmount(sender as ScrollViewer)))
                 e.Handled = true;
+        }
+
+        private static void ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            var element = sender as ScrollViewer;
+            if (element == null)
+                return;
+
+            SetVerticalOffset(element, e.VerticalOffset);
         }
 
         private static bool Animate(object sender, double offset)

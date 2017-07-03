@@ -21,6 +21,7 @@ namespace TweetGazer.ViewModels
             this.Timeline = new TimelineModel(data);
 
             this.TimelineNotice = this.Timeline.TimelineNotice;
+            this._Message = this.Timeline.Message;
             this._Title = this.Timeline.Data.CurrentPage.Title;
             this.ScreenName = this.Timeline.ScreenName;
             this._IsVisibleSettings = this.Timeline.IsVisibleSettings;
@@ -30,8 +31,8 @@ namespace TweetGazer.ViewModels
                 {
                     switch (__.PropertyName)
                     {
-                        case nameof(this.Timeline.TimelineItems):
-                            this.RaisePropertyChanged(() => this.TimelineItems);
+                        case nameof(this.Timeline.Message):
+                            this.Message = this.Timeline.Message;
                             break;
                         case nameof(this.Timeline.ProgressRingVisibility):
                             this.RaisePropertyChanged(() => this.ProgressRingVisibility);
@@ -55,11 +56,17 @@ namespace TweetGazer.ViewModels
                         case nameof(this.Timeline.IsVisibleIncludeImagesStatus):
                             this.RaisePropertyChanged(() => this.IsVisibleIncludeImagesStatus);
                             break;
+                        case nameof(this.Timeline.IsVisibleIncludeGifStatus):
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeGifStatus);
+                            break;
                         case nameof(this.Timeline.IsVisibleIncludeVideoStatus):
                             this.RaisePropertyChanged(() => this.IsVisibleIncludeVideoStatus);
                             break;
                         case nameof(this.Timeline.IsVisibleIncludeLinkStatus):
                             this.RaisePropertyChanged(() => this.IsVisibleIncludeLinkStatus);
+                            break;
+                        case nameof(this.Timeline.IsVisibleOtherStatus):
+                            this.RaisePropertyChanged(() => this.IsVisibleOtherStatus);
                             break;
                     }
                 })
@@ -82,6 +89,13 @@ namespace TweetGazer.ViewModels
                             this.RaisePropertyChanged(() => this.IsVisibleBackButton);
                             this.RaisePropertyChanged(() => this.VerticalOffset);
                             this.RaisePropertyChanged(() => this.UpButtonVisibility);
+                            this.RaisePropertyChanged(() => this.IsVisibleRetweet);
+                            this.RaisePropertyChanged(() => this.IsVisibleReply);
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeImagesStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeGifStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeVideoStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleIncludeLinkStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleOtherStatus);
                             break;
                         case nameof(this.Timeline.Data.GridWidth):
                             this.RaisePropertyChanged(() => this.GridWidth);
@@ -203,6 +217,22 @@ namespace TweetGazer.ViewModels
         }
         #endregion
 
+        #region Message 変更通知プロパティ
+        public string Message
+        {
+            get
+            {
+                return this._Message;
+            }
+            set
+            {
+                this._Message = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private string _Message;
+        #endregion
+
         #region Title 変更通知プロパティ
         public string Title
         {
@@ -264,11 +294,11 @@ namespace TweetGazer.ViewModels
         {
             get
             {
-                return this.Timeline.Data.CurrentPage.VerticalOffset;
+                return this.Timeline.VerticalOffset;
             }
             set
             {
-                this.Timeline.Data.CurrentPage.VerticalOffset = value;
+                this.Timeline.VerticalOffset = value;
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(nameof(this.UpButtonVisibility));
             }
