@@ -4,6 +4,9 @@ namespace TweetGazer.Models.Timeline
 {
     public class TimelinePageData : NotificationObject
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public TimelinePageData()
         {
             this._IsVisibleRetweet = true;
@@ -11,6 +14,7 @@ namespace TweetGazer.Models.Timeline
             this._IsVisibleIncludeImagesStatus = true;
             this._IsVisibleIncludeGifStatus = true;
             this._IsVisibleIncludeVideoStatus = true;
+            this._IsVisibleIncludeLinkStatus = true;
             this._IsVisibleOtherStatus = true;
         }
 
