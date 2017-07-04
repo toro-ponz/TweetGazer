@@ -134,7 +134,6 @@ namespace TweetGazer.Models.Timeline
                     j++;
                 }
                 this.HyperlinkText.Media = status.ExtendedEntities.Media.ToList();
-                //this.HyperlinkText.Text = this.HyperlinkText.Text.Replace(status.Entities.Media[0].Url, "");
             }
 
             //引用が含まれるツイートの場合
