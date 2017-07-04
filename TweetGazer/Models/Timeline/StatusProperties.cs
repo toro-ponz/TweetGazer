@@ -54,6 +54,7 @@ namespace TweetGazer.Models.Timeline
             this.NotifyCommand = new RelayCommand<bool>(this.Notify);
             this.ShareCommand = new RelayCommand(this.Share);
             this.CopyCommand = new RelayCommand(this.Copy);
+            this.OpenWebBrowserCommand = new RelayCommand(this.OpenWebBrowser);
             this.DeleteCommand = new RelayCommand(this.Delete);
             this.SelectQuotationStatusCommand = new RelayCommand(this.SelectQuotationStatus);
             this.SelectQuotationUserCommand = new RelayCommand(this.SelectQuotationUser);
@@ -244,7 +245,7 @@ namespace TweetGazer.Models.Timeline
             if (!this.CanRetweet)
                 return;
 
-            string link = "https://twitter.com/" + this.User.ScreenName + "/status/" + Id;
+            string link = "https://twitter.com/" + this.User.ScreenName + "/status/" + this.Id;
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow != null)
             {
@@ -363,6 +364,21 @@ namespace TweetGazer.Models.Timeline
             {
                 using (var showCopiableText = new Views.ShowDialogs.ShowCopiableText(this.FullText))
                     LightBox.ShowDialog(mainWindow, showCopiableText);
+            }
+        }
+
+        /// <summary>
+        /// Webブラウザで開くボタンを押したとき
+        /// </summary>
+        private void OpenWebBrowser()
+        {
+            try
+            {
+                Process.Start("https://twitter.com/" + this.User.ScreenName + "/status/" + this.Id);
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e);
             }
         }
 
@@ -714,6 +730,7 @@ namespace TweetGazer.Models.Timeline
         public ICommand NotifyCommand { get; }
         public ICommand ShareCommand { get; }
         public ICommand CopyCommand { get; }
+        public ICommand OpenWebBrowserCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SelectQuotationStatusCommand { get; }
         public ICommand SelectQuotationUserCommand { get; }

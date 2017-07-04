@@ -649,6 +649,17 @@
                                                 <MenuItem
                                                     HorizontalContentAlignment="Center"
                                                     VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=OpenWebBrowserCommand, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Text="Webブラウザで開く"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
                                                     Command="{Binding Path=DeleteCommand, Mode=OneTime}"
                                                     IsEnabled="{Binding Path=CanDelete, Mode=OneTime}">
                                                     <MenuItem.Header>
