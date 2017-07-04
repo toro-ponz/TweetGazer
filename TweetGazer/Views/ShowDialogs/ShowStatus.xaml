@@ -86,17 +86,17 @@
                                         Foreground="Black"
                                         Text="{Binding Path=Name, Mode=OneTime}"
                                         TextDecorations="Underline" />
-                                        <ContentControl
-                                            Width="18"
-                                            VerticalAlignment="Bottom"
-                                            Height="18"
-                                            ContentTemplate="{StaticResource FrontColorLockedIcon}"
-                                            Visibility="{Binding Path=IsProtected, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
-                                        <ContentControl
-                                            Width="18"
-                                            Height="18"
-                                            ContentTemplate="{StaticResource AccentColorVerifiedIcon}"
-                                            Visibility="{Binding Path=IsVerified, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
+                                    <ContentControl
+                                        Width="18"
+                                        Height="18"
+                                        VerticalAlignment="Bottom"
+                                        ContentTemplate="{StaticResource FrontColorLockedIcon}"
+                                        Visibility="{Binding Path=IsProtected, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
+                                    <ContentControl
+                                        Width="18"
+                                        Height="18"
+                                        ContentTemplate="{StaticResource AccentColorVerifiedIcon}"
+                                        Visibility="{Binding Path=IsVerified, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
                                     <Run
                                         FontSize="16"
                                         Foreground="#FF747474"
@@ -112,7 +112,7 @@
 
                             <TextBlock
                                 Grid.Row="1"
-                                Behaviors:TextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
+                                Behaviors:StatausTextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
                                 FontSize="16"
                                 Foreground="Black"
                                 TextWrapping="Wrap" />
@@ -508,6 +508,17 @@
                                             <MenuItem
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
+                                                Command="{Binding Path=OpenWebBrowserCommand, Mode=OneTime}">
+                                                <MenuItem.Header>
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        Text="Webブラウザで開く"
+                                                        TextAlignment="Center" />
+                                                </MenuItem.Header>
+                                            </MenuItem>
+                                            <MenuItem
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
                                                 Command="{Binding Path=DeleteCommand, Mode=OneTime}"
                                                 IsEnabled="{Binding Path=CanDelete, Mode=OneTime}">
                                                 <MenuItem.Header>
@@ -621,7 +632,7 @@
 
                                 <TextBlock
                                     Grid.Row="1"
-                                    Behaviors:TextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
+                                    Behaviors:StatausTextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
                                     FontSize="16"
                                     Foreground="Black"
                                     TextWrapping="Wrap" />
@@ -1016,6 +1027,17 @@
                                                 <MenuItem
                                                     HorizontalContentAlignment="Center"
                                                     VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=OpenWebBrowserCommand, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Text="Webブラウザで開く"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
                                                     Command="{Binding Path=DeleteCommand, Mode=OneTime}"
                                                     IsEnabled="{Binding Path=CanDelete, Mode=OneTime}">
                                                     <MenuItem.Header>
@@ -1041,9 +1063,9 @@
                     Width="50"
                     Height="50"
                     Margin="10"
-                    DataContext="{Binding Path=LoadingProperties}"
                     Behaviors:ReadMoreBehavior.Command="{Binding Path=LoadCommand, Mode=OneTime}"
                     Behaviors:ReadMoreBehavior.CommandParameter="{Binding Path=DataContext.ReadMoreRepliesCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl}}"
+                    DataContext="{Binding Path=LoadingProperties}"
                     IsActive="False"
                     Visibility="{Binding Path=Visibility}" />
             </DataTemplate>
@@ -1051,9 +1073,9 @@
             <DataTemplate x:Key="ReadMoreRepliesButton">
                 <Button
                     Height="40"
-                    DataContext="{Binding Path=LoadingProperties}"
                     Command="{Binding Path=LoadCommand, Mode=OneTime}"
                     CommandParameter="{Binding Path=DataContext.ReadMoreRepliesCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl}}"
+                    DataContext="{Binding Path=LoadingProperties}"
                     Style="{StaticResource FlatButtonStyle}">
                     <Grid>
                         <Rectangle RadiusX="5" RadiusY="5">
@@ -1076,9 +1098,9 @@
                     Width="50"
                     Height="50"
                     Margin="10"
-                    DataContext="{Binding Path=LoadingProperties}"
                     Behaviors:ReadMoreBehavior.Command="{Binding Path=LoadCommand, Mode=OneTime}"
                     Behaviors:ReadMoreBehavior.CommandParameter="{Binding Path=DataContext.ReadMoreRepliesToMainStatusCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl}}"
+                    DataContext="{Binding Path=LoadingProperties}"
                     IsActive="False"
                     Visibility="{Binding Path=Visibility}" />
             </DataTemplate>

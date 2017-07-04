@@ -110,10 +110,10 @@ namespace TweetGazer.Views.ShowDialogs
                 if (Double.IsNaN(this.ZoomImage.Height))
                     this.ZoomImage.Height = this.Image.ActualHeight * 3;
 
-                // 拡大部分のサイズは画像サイズの大きい方の2/5
+                // 拡大部分のサイズは画像サイズの小さい方の2/5
                 if (Double.IsNaN(this.ZoomScrollViewer.Width) || Double.IsNaN(this.ZoomScrollViewer.Height))
                 {
-                    if (this.Image.ActualHeight < this.Image.ActualWidth)
+                    if (this.Image.ActualHeight > this.Image.ActualWidth)
                     {
                         this.ZoomScrollViewer.Width = this.Image.ActualWidth / 2.5;
                         this.ZoomScrollViewer.Height = this.Image.ActualWidth / 2.5;
