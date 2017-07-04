@@ -170,7 +170,7 @@
     <Compile Include="Behaviors\ItemsControlBehavior.cs" />
     <Compile Include="Behaviors\ReadMoreBehavior.cs" />
     <Compile Include="Behaviors\StatusMediaItemsControlBehavior.cs" />
-    <Compile Include="Behaviors\TextBlockBehavior.cs" />
+    <Compile Include="Behaviors\StatausTextBlockBehavior.cs" />
     <Compile Include="Common\DirectMessage.cs" />
     <Compile Include="Common\DirectMessagesStack.cs" />
     <Compile Include="Common\Mention.cs" />

@@ -24,26 +24,19 @@ namespace TweetGazer.Models.Timeline
 
             this.Description = new HyperlinkTextProperties()
             {
-                HashtagCommand = new RelayCommand<RequestNavigateEventArgs>(this.HashTagCommandEntity),
-                MentionCommand = new RelayCommand<RequestNavigateEventArgs>(this.MentionCommandEntity),
-                UrlCommand = new RelayCommand<RequestNavigateEventArgs>(this.UrlCommandEntity)
+                HashtagCommand = new RelayCommand<string>(this.SelectHashTag),
+                MentionCommand = new RelayCommand<string>(this.SelectMention),
+                UrlCommand = new RelayCommand<string>(this.SelectUrl)
             };
             this.Description.Text = user.Description;
             if (user.Entities != null && user.Entities.Description != null)
             {
                 if (user.Entities.Description.HashTags != null)
                     this.Description.Hashtags = user.Entities.Description.HashTags.ToList();
-
                 if (user.Entities.Description.UserMentions != null)
                     this.Description.Mentions = user.Entities.Description.UserMentions.ToList();
-
                 if (user.Entities.Description.Urls != null)
-                {
-                    foreach (var url in user.Entities.Description.Urls)
-                        this.Description.Text = Description.Text.Replace(url.Url, url.ExpandedUrl);
-
                     this.Description.Urls = user.Entities.Description.Urls.ToList();
-                }
             }
 
             this.StatusesCount = user.StatusesCount;
@@ -70,7 +63,7 @@ namespace TweetGazer.Models.Timeline
                 this._IsMuting = (bool)user.IsMuting;
 
             this.FollowCommand = new RelayCommand(this.Follow);
-            this.UrlCommand = new RelayCommand<Uri>(this.UrlCommandEntity);
+            this.UrlCommand = new RelayCommand<Uri>(this.SelectUrl);
 
             this.LoadRelationship(user);
         }
@@ -167,47 +160,35 @@ namespace TweetGazer.Models.Timeline
         /// <summary>
         /// ハッシュタグをクリックしたとき
         /// </summary>
-        /// <param name="e">RequestNavigateEventArgs</param>
-        public void HashTagCommandEntity(RequestNavigateEventArgs e)
+        /// <param name="hashtag">ハッシュタグ</param>
+        private void SelectHashTag(string hashtag)
         {
-            if (e == null)
-                return;
-
-            e.Handled = true;
-            this.TimelineModel.ShowSearchTimeline(e.Uri.OriginalString);
+            this.TimelineModel.ShowSearchTimeline(hashtag);
         }
 
         /// <summary>
         /// @useridをクリックしたとき
         /// </summary>
-        /// <param name="e">RequestNavigateEventArgs</param>
-        public async void MentionCommandEntity(RequestNavigateEventArgs e)
+        /// <param name="screenName">スクリーンネーム</param>
+        private async void SelectMention(string screenName)
         {
-            e.Handled = true;
-            var user = await AccountTokens.ShowUserAsync(this.TimelineModel.TokenSuffix, e.Uri.OriginalString);
+            var user = await AccountTokens.ShowUserAsync(this.TimelineModel.TokenSuffix, screenName);
             this.TimelineModel.ShowUserTimeline(new UserOverviewProperties(user));
         }
 
         /// <summary>
         /// URLをクリックしたとき
         /// </summary>
-        /// <param name="e">RequestNavigateEventArgs</param>
-        public void UrlCommandEntity(RequestNavigateEventArgs e)
+        /// <param name="url">URL</param>
+        private void SelectUrl(string url)
         {
-            if (e == null || e.Uri == null || e.Uri.AbsoluteUri == null)
-            {
-                this.TimelineModel.Notify("URL値がエラーです．", NotificationType.Error);
-                return;
-            }
-
             try
             {
-                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                Process.Start(new ProcessStartInfo(url));
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Debug.Write(ex);
-                this.TimelineModel.Notify("URLが開けませんでした．", NotificationType.Error);
+                Debug.Write(e);
             }
         }
 
@@ -215,22 +196,15 @@ namespace TweetGazer.Models.Timeline
         /// URLをクリックしたとき
         /// </summary>
         /// <param name="url">URL</param>
-        public void UrlCommandEntity(Uri url)
+        private void SelectUrl(Uri url)
         {
-            if (url == null || url.AbsoluteUri == null)
-            {
-                this.TimelineModel.Notify("URL値がエラーです．", NotificationType.Error);
-                return;
-            }
-
             try
             {
-                Process.Start(new ProcessStartInfo(url.AbsoluteUri.ToString()));
+                Process.Start(new ProcessStartInfo(url.ToString()));
             }
             catch (Exception e)
             {
                 Debug.Write(e);
-                this.TimelineModel.Notify("URLが開けませんでした．", NotificationType.Error);
             }
         }
 

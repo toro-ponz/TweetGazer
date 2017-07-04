@@ -61,9 +61,9 @@ namespace TweetGazer.Models.Timeline
 
             this.HyperlinkText = new HyperlinkTextProperties()
             {
-                HashtagCommand = new RelayCommand<RequestNavigateEventArgs>(this.HashTag),
-                MentionCommand = new RelayCommand<RequestNavigateEventArgs>(this.Mention),
-                UrlCommand = new RelayCommand<RequestNavigateEventArgs>(this.Url)
+                HashtagCommand = new RelayCommand<string>(this.SelectHashTag),
+                MentionCommand = new RelayCommand<string>(this.SelectMention),
+                UrlCommand = new RelayCommand<string>(this.SelectUrl)
             };
 
             this.QuotationIds = new List<long>();
@@ -133,7 +133,8 @@ namespace TweetGazer.Models.Timeline
                     this.MediaColumnWidth[j] = new GridLength(1, GridUnitType.Star);
                     j++;
                 }
-                this.HyperlinkText.Text = this.HyperlinkText.Text.Replace(status.Entities.Media[0].Url, "");
+                this.HyperlinkText.Media = status.ExtendedEntities.Media.ToList();
+                //this.HyperlinkText.Text = this.HyperlinkText.Text.Replace(status.Entities.Media[0].Url, "");
             }
 
             //引用が含まれるツイートの場合
@@ -141,25 +142,8 @@ namespace TweetGazer.Models.Timeline
             {
                 this.QuotationIds.Add(status.QuotedStatus.Id);
                 this.QuotationStatus.Add(new QuotationStatusProperties(status.QuotedStatus));
-                if (status.Entities.Urls != null)
-                {
-                    foreach (var url in status.Entities.Urls)
-                    {
-                        if (url.ExpandedUrl.ToLower(CultureInfo.InvariantCulture) == "https://twitter.com/" + status.QuotedStatus.User.ScreenName.ToLower(CultureInfo.InvariantCulture) + "/status/" + status.QuotedStatusId.ToString())
-                            this.HyperlinkText.Text = HyperlinkText.Text.Replace(url.Url, "");
-                    }
-                }
             }
-
-            //URLが含まれるツイートの場合
-            if (status.Entities.Urls != null)
-            {
-                foreach (var url in status.Entities.Urls)
-                {
-                    this.HyperlinkText.Text = this.HyperlinkText.Text.Replace(url.Url, url.ExpandedUrl);
-                }
-            }
-
+            
             //リプライの場合
             if (Properties.Settings.Default.IsDisplayReplyStatus && status.InReplyToStatusId != null)
                 this.ReplyToStatusProperties = new ReplyToStatusProperties(this.TimelineModel, (long)status.InReplyToStatusId);
@@ -459,38 +443,35 @@ namespace TweetGazer.Models.Timeline
         /// <summary>
         /// ハッシュタグをクリックしたとき
         /// </summary>
-        /// <param name="e">RequestNavigateEventArgs</param>
-        private void HashTag(RequestNavigateEventArgs e)
+        /// <param name="hashtag">ハッシュタグ</param>
+        private void SelectHashTag(string hashtag)
         {
-            e.Handled = true;
-            this.TimelineModel.ShowSearchTimeline(e.Uri.OriginalString);
+            this.TimelineModel.ShowSearchTimeline(hashtag);
         }
 
         /// <summary>
         /// @useridをクリックしたとき
         /// </summary>
-        /// <param name="e">RequestNavigateEventArgs</param>
-        private async void Mention(RequestNavigateEventArgs e)
+        /// <param name="screenName">スクリーンネーム</param>
+        private async void SelectMention(string screenName)
         {
-            e.Handled = true;
-            var user = await AccountTokens.ShowUserAsync(this.TimelineModel.TokenSuffix, e.Uri.OriginalString);
+            var user = await AccountTokens.ShowUserAsync(this.TimelineModel.TokenSuffix, screenName);
             this.TimelineModel.ShowUserTimeline(new UserOverviewProperties(user));
         }
 
         /// <summary>
         /// URLをクリックしたとき
         /// </summary>
-        /// <param name="e">RequestNavigateEventArgs</param>
-        private void Url(RequestNavigateEventArgs e)
+        /// <param name="url">URL</param>
+        private void SelectUrl(string url)
         {
             try
             {
-                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-                e.Handled = true;
+                Process.Start(new ProcessStartInfo(url));
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Debug.Write(ex);
+                Debug.Write(e);
             }
         }
 

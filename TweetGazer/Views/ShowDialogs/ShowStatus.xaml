@@ -112,7 +112,7 @@
 
                             <TextBlock
                                 Grid.Row="1"
-                                Behaviors:TextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
+                                Behaviors:StatausTextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
                                 FontSize="16"
                                 Foreground="Black"
                                 TextWrapping="Wrap" />
@@ -621,7 +621,7 @@
 
                                 <TextBlock
                                     Grid.Row="1"
-                                    Behaviors:TextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
+                                    Behaviors:StatausTextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
                                     FontSize="16"
                                     Foreground="Black"
                                     TextWrapping="Wrap" />

@@ -221,7 +221,7 @@
                             <!--  ツイート本文  -->
                             <TextBlock
                                 Grid.Row="1"
-                                Behaviors:TextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
+                                Behaviors:StatausTextBlockBehavior.Source="{Binding Path=HyperlinkText, Mode=OneWay}"
                                 Foreground="{DynamicResource TextBrush}"
                                 TextWrapping="Wrap" />
 
@@ -632,7 +632,7 @@
                     <Run Foreground="{DynamicResource GrayBrush2}" Text="{Binding Path=ScreenName, Mode=OneTime, StringFormat=@{0}}" />
                 </TextBlock>
                 <TextBlock
-                    Behaviors:TextBlockBehavior.Source="{Binding Path=Description, Mode=OneTime}"
+                    Behaviors:StatausTextBlockBehavior.Source="{Binding Path=Description, Mode=OneTime}"
                     FontSize="16"
                     Foreground="{DynamicResource TextBrush}"
                     TextWrapping="Wrap" />
