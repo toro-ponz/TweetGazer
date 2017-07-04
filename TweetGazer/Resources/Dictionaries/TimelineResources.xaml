@@ -6,7 +6,8 @@
     xmlns:Properties="clr-namespace:TweetGazer.Properties"
     xmlns:Selectors="clr-namespace:TweetGazer.Selectors"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:s="clr-namespace:System;assembly=mscorlib">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/StatusMediaTemplates.xaml" />
@@ -528,6 +529,139 @@
                                         FontSize="12"
                                         Foreground="{DynamicResource TextBrush}"
                                         Text="{Binding Path=FavoriteCount, Mode=OneWay}" />
+                                </StackPanel>
+
+                                <!--  その他ボタン  -->
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        x:Name="OthersButton"
+                                        Grid.Column="6"
+                                        Width="20"
+                                        Height="20"
+                                        HorizontalContentAlignment="Center"
+                                        Style="{StaticResource UwpLikeButtonStyle2}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="IsOpen"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
+                                                    Value="True" />
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="HorizontalOffset"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
+                                                    Value="100" />
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="Placement"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
+                                                    Value="Mouse" />
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="PlacementTarget"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
+                                                    Value="{Binding ElementName=OthersButton, Mode=OneWay}" />
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseRightButtonDown">
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="HorizontalOffset"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
+                                                    Value="100" />
+                                                <ei:ChangePropertyAction
+                                                    PropertyName="Placement"
+                                                    TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
+                                                    Value="MousePoint" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <Button.ContextMenu>
+                                            <ContextMenu Width="300">
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=BlockCommand, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Text="このユーザーをブロックする"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=MuteCommand, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Text="このユーザーをミュートする"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=NotifyCommand, Mode=OneTime}">
+                                                    <MenuItem.CommandParameter>
+                                                        <s:Boolean>True</s:Boolean>
+                                                    </MenuItem.CommandParameter>
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Text="このユーザーのツイートを通知する(すべて)"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=NotifyCommand, Mode=OneTime}">
+                                                    <MenuItem.CommandParameter>
+                                                        <s:Boolean>False</s:Boolean>
+                                                    </MenuItem.CommandParameter>
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Text="このユーザーのツイートを通知する(RT除外)"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=ShareCommand, Mode=OneTime}"
+                                                    IsEnabled="{Binding Path=CanRetweet, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Text="共有"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=CopyCommand, Mode=OneTime}"
+                                                    IsEnabled="{Binding Path=CanRetweet, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Text="コピー"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                                <MenuItem
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Command="{Binding Path=DeleteCommand, Mode=OneTime}"
+                                                    IsEnabled="{Binding Path=CanDelete, Mode=OneTime}">
+                                                    <MenuItem.Header>
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            Text="削除"
+                                                            TextAlignment="Center" />
+                                                    </MenuItem.Header>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </Button.ContextMenu>
+                                        <ContentControl ContentTemplate="{StaticResource FrontColorEllipsisIcon}" />
+                                    </Button>
                                 </StackPanel>
                             </WrapPanel>
 
