@@ -42,7 +42,7 @@ namespace TweetGazer.Behaviors
             if (element == null)
                 return;
 
-            if (source == null || source.Text == null || String.IsNullOrEmpty(source.Text))
+            if (source == null || source.Text == null || String.IsNullOrEmpty(Escape(source.Text, source.Media)))
             {
                 element.Visibility = Visibility.Collapsed;
                 return;
