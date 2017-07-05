@@ -1,5 +1,4 @@
-﻿using CoreTweet;
-using SourceChord.Lighty;
+﻿using SourceChord.Lighty;
 using System.Windows.Input;
 using TweetGazer.Common;
 
@@ -7,24 +6,6 @@ namespace TweetGazer.Models.Timeline
 {
     public class NotificationProperties
     {
-        public NotificationProperties(TimelineModel timelineModel, User sentUser, User receiveUser, NotificationPropertiesType type, object parameter = null, long? id = null)
-        {
-            this.TimelineModel = timelineModel;
-            this.NotificationPropertiesType = type;
-            this.SentUser = new UserOverviewProperties(sentUser);
-            this.ReceiveUser = new UserOverviewProperties(receiveUser);
-
-            if (parameter is string)
-                this.Text = parameter as string;
-
-            if (id != null)
-                this.Id = (long)id;
-
-            this.SelectCommand = new RelayCommand(this.Select);
-            this.SelectSentUserCommand = new RelayCommand(this.SelectSentUser);
-            this.SelectReceiveUserCommand = new RelayCommand(this.SelectReceiveUser);
-        }
-
         public NotificationProperties(TimelineModel timelineModel, UserOverviewProperties sentUser, UserOverviewProperties receiveUser, NotificationPropertiesType type, object parameter = null, long? id = null)
         {
             this.TimelineModel = timelineModel;

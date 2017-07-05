@@ -78,20 +78,6 @@ namespace TweetGazer.Models.Timeline
         /// <param name="receiveUser"></param>
         /// <param name="type"></param>
         /// <param name="parameter"></param>
-        public TimelineItemProperties(TimelineModel timelineModel, User sentUser, User receiveUser, NotificationPropertiesType type, object parameter = null, long? id = null)
-        {
-            this.Type = TimelineItemType.Notification;
-            this.NotificationProperties = new NotificationProperties(timelineModel, sentUser, receiveUser, type, parameter, id);
-        }
-
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        /// <param name="timelineModel"></param>
-        /// <param name="sentUser"></param>
-        /// <param name="receiveUser"></param>
-        /// <param name="type"></param>
-        /// <param name="parameter"></param>
         public TimelineItemProperties(TimelineModel timelineModel, UserOverviewProperties sentUser, UserOverviewProperties receiveUser, NotificationPropertiesType type, object parameter = null, long? id = null)
         {
             this.Type = TimelineItemType.Notification;

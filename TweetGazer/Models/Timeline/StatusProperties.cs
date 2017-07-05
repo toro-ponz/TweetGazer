@@ -5,16 +5,13 @@ using SourceChord.Lighty;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Navigation;
 using TweetGazer.Behaviors;
 using TweetGazer.Common;
 using TweetGazer.ViewModels;
-using TweetGazer.Views;
 
 namespace TweetGazer.Models.Timeline
 {
