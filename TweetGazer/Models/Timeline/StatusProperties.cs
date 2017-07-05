@@ -750,6 +750,7 @@ namespace TweetGazer.Models.Timeline
         public UserOverviewProperties User { get; }
         public UserOverviewProperties RetweetedUser { get; }
 
+        public string FullText;
         public string Via { get; }
 
         public bool IsRetweetedByUser { get; }
@@ -758,8 +759,6 @@ namespace TweetGazer.Models.Timeline
 
         private DateTimeOffset CreatedAt;
         private DateTimeOffset RetweetedAt;
-
-        private string FullText;
 
         private TimelineModel TimelineModel;
     }
