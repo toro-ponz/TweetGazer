@@ -817,7 +817,7 @@
                         </i:Interaction.Triggers>-->
                     </Controls:Tile>
                     <Controls:Tile
-                        Title="Serach"
+                        Title="Search"
                         Grid.Row="1"
                         Grid.Column="2"
                         Width="80"
