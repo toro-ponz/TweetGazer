@@ -238,9 +238,9 @@ namespace TweetGazer.Behaviors
             if (media != null && media.Count != 0)
                 text = text.Replace(media[0].Url, "");
 
-            return text.Replace(@"&amp;", "&")
-                       .Replace(@"&lt;", "<")
-                       .Replace(@"&gt;", ">");
+            return text.Replace(@"&lt;", "<")
+                       .Replace(@"&gt;", ">")
+                       .Replace(@"&amp;", "&");
         }
     }
 
