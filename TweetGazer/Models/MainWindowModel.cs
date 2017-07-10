@@ -137,7 +137,7 @@ namespace TweetGazer.Models
         }
 
         /// <summary>
-        /// ウィンドウのテーマを変更する
+        /// ウィンドウのカラーを変更する
         /// </summary>
         public void ChangeColors()
         {
@@ -146,8 +146,6 @@ namespace TweetGazer.Models
             {
                 try
                 {
-                    Debug.WriteLine(Properties.Settings.Default.AccentColor);
-                    Debug.WriteLine(Properties.Settings.Default.BaseColor);
                     ThemeManager.ChangeAppStyle(
                             mainWindow.Resources,
                             ThemeManager.GetAccent(Properties.Settings.Default.AccentColor.Replace("System.Windows.Controls.ComboBoxItem: ", "")),
