@@ -208,6 +208,8 @@
     <Compile Include="Models\Timeline\NotificationProperties.cs" />
     <Compile Include="Models\Timeline\QuotationStatusProperties.cs" />
     <Compile Include="Models\Timeline\ReplyToStatusProperties.cs" />
+    <Compile Include="Models\Timeline\SearchTimelineTab.cs" />
+    <Compile Include="Models\Timeline\SearchTimelineTabProperties.cs" />
     <Compile Include="Models\Timeline\StatusProperties.cs" />
     <Compile Include="Models\Timeline\TimelineNotice.cs" />
     <Compile Include="Models\Timeline\UserTimelineTabProperties.cs" />

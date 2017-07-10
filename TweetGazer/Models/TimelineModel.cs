@@ -124,7 +124,9 @@ namespace TweetGazer.Models
             if (this.IsLoading)
                 return false;
 
-            if (maxId == null)
+            if (maxId == null &&
+                this.Data.CurrentPage.TimelineType != TimelineType.User &&
+                this.Data.CurrentPage.TimelineType != TimelineType.Search)
                 this.TimelineItems.Clear();
 
             this.Message = "";
@@ -134,7 +136,7 @@ namespace TweetGazer.Models
             if (maxId == null)
             {
                 this.IsInitializing = true;
-                ProgressRingVisibility = Visibility.Visible;
+                this.ProgressRingVisibility = Visibility.Visible;
             }
 
             IEnumerable<Status> loadedTimeline = null;
@@ -223,7 +225,15 @@ namespace TweetGazer.Models
                             break;
                         }
                     case TimelineType.Search:
-                        loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId);
+                        // タブがない場合は追加
+                        if (this.TimelineItems.Count == 0)
+                            this.TimelineItems.Add(new TimelineItemProperties(this, this.Data.CurrentPage.SearchTimelineTab));
+
+                        // ストリーミングの場合は空にする
+                        if (this.Data.CurrentPage.SearchTimelineTab == SearchTimelineTab.Top)
+                            loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId);
+                        else if (this.Data.CurrentPage.SearchTimelineTab == SearchTimelineTab.Latest)
+                            loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId);
                         break;
                     case TimelineType.Notifications:
                         break;
@@ -260,6 +270,7 @@ namespace TweetGazer.Models
                     if (this.Data.CurrentPage.TimelineType != TimelineType.DirectMessage &&
                         this.Data.CurrentPage.TimelineType != TimelineType.MentionsStack &&
                         this.Data.CurrentPage.TimelineType != TimelineType.Trend &&
+                        !(this.Data.CurrentPage.TimelineType == TimelineType.Search && this.Data.CurrentPage.SearchTimelineTab == SearchTimelineTab.Streaming) &&
                         this.Data.CurrentPage.TimelineType != TimelineType.Notifications &&
                         this.Data.CurrentPage.TimelineType != TimelineType.NotificationsStack)
                     {
@@ -289,6 +300,7 @@ namespace TweetGazer.Models
                 if (this.Data.CurrentPage.TimelineType == TimelineType.DirectMessage ||
                     this.Data.CurrentPage.TimelineType == TimelineType.MentionsStack ||
                     this.Data.CurrentPage.TimelineType == TimelineType.Trend ||
+                    (this.Data.CurrentPage.TimelineType == TimelineType.Search && this.Data.CurrentPage.SearchTimelineTab == SearchTimelineTab.Streaming) ||
                     this.Data.CurrentPage.TimelineType == TimelineType.Notifications ||
                     this.Data.CurrentPage.TimelineType == TimelineType.NotificationsStack)
                     return true;
@@ -359,17 +371,28 @@ namespace TweetGazer.Models
         {
             System.Windows.Input.Keyboard.ClearFocus();
             this.Data.CurrentPage.UserTimelineTab = tab;
-            switch (this.Data.CurrentPage.TimelineType)
-            {
-                case TimelineType.User:
-                    while (this.TimelineItems.Count > 2)
-                    {
-                        this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
-                    }
-                    this.Data.SinceId = null;
-                    this.Initialize(Data.CurrentPage);
-                    break;
-            }
+
+            while (this.TimelineItems.Count > 2)
+                this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+
+            this.Data.SinceId = null;
+            this.Initialize(this.Data.CurrentPage);
+        }
+
+        /// <summary>
+        /// 検索ページのタブを変更したとき
+        /// </summary>
+        /// <param name="tab">変更後のタブ</param>
+        public void ChangeSearchTimelineTab(SearchTimelineTab tab)
+        {
+            System.Windows.Input.Keyboard.ClearFocus();
+            this.Data.CurrentPage.SearchTimelineTab = tab;
+
+            while (this.TimelineItems.Count > 1)
+                this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+
+            this.Data.SinceId = null;
+            this.Initialize(this.Data.CurrentPage);
         }
 
         /// <summary>
@@ -674,24 +697,27 @@ namespace TweetGazer.Models
                     }
                 case TimelineType.Search:
                     {
-                        var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.Filter, this.Data.CurrentPage.SearchText);
-                        if (stream != null)
+                        if (this.Data.CurrentPage.SearchTimelineTab == SearchTimelineTab.Streaming)
                         {
-                            // 再接続
-                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
-                            // 検索ワードに引っかかる新規ツイートが流れてきたとき
-                            stream.OfType<StatusMessage>().Subscribe(x =>
+                            var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.Filter, this.Data.CurrentPage.SearchText);
+                            if (stream != null)
                             {
-                                // RTなら処理しない
-                                if (x.Status.RetweetedStatus != null)
-                                    return;
-                                
-                                // 流れてきたツイートを挿入
-                                this.InsertStatus(new List<Status>() { x.Status });
-                            });
-                            stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
-                            stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
-                            this.Disposables.Add(stream.Connect());
+                                // 再接続
+                                stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
+                                // 検索ワードに引っかかる新規ツイートが流れてきたとき
+                                stream.OfType<StatusMessage>().Subscribe(x =>
+                                {
+                                    // RTなら処理しない
+                                    if (x.Status.RetweetedStatus != null)
+                                        return;
+
+                                    // 流れてきたツイートを挿入
+                                    this.InsertStatus(new List<Status>() { x.Status });
+                                });
+                                stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
+                                stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
+                                this.Disposables.Add(stream.Connect());
+                            }
                         }
                         break;
                     }
@@ -756,6 +782,8 @@ namespace TweetGazer.Models
             int insertPosition = 0;
             if (this.Data.CurrentPage.TimelineType == TimelineType.User)
                 insertPosition = 2;
+            else if (this.Data.CurrentPage.TimelineType == TimelineType.Search)
+                insertPosition = 1;
 
             foreach (var status in statuses)
             {

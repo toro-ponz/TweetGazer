@@ -164,6 +164,7 @@ namespace TweetGazer.Models.Timeline
 
         public TimelineType TimelineType { get; set; }
         public UserTimelineTab UserTimelineTab { get; set; }
+        public SearchTimelineTab SearchTimelineTab { get; set; }
 
         public string ListName { get; set; }
         public long? ListNumber { get; set; }

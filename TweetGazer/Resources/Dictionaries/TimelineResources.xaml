@@ -860,8 +860,8 @@
             DataContext="{Binding Path=LoadingProperties}" />
     </DataTemplate>
 
-    <DataTemplate x:Key="Tab">
-        <Grid DataContext="{Binding Path=TabProperties}">
+    <DataTemplate x:Key="UserTimelineTab">
+        <Grid DataContext="{Binding Path=UserTimelineTabProperties}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -924,6 +924,58 @@
                 BorderBrush="{DynamicResource AccentBaseColorBrush}"
                 BorderThickness="0,0,0,3"
                 Visibility="{Binding Path=FavoritesTabSelectedVisibility, Mode=OneWay}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SearchTimelineTab">
+        <Grid DataContext="{Binding Path=SearchTimelineTabProperties}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Background="{x:Null}"
+                BorderBrush="{x:Null}"
+                Command="{Binding Path=TopCommand, Mode=OneTime}"
+                Content="トップ"
+                FontSize="13"
+                Foreground="{DynamicResource TextBrush}" />
+            <Border
+                Grid.Column="0"
+                VerticalAlignment="Bottom"
+                BorderBrush="DodgerBlue"
+                BorderThickness="0,0,0,3"
+                Visibility="{Binding Path=IsTop, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Button
+                Grid.Column="1"
+                Background="{x:Null}"
+                BorderBrush="{x:Null}"
+                Command="{Binding Path=LatestCommand, Mode=OneTime}"
+                Content="最新"
+                FontSize="13"
+                Foreground="{DynamicResource TextBrush}" />
+            <Border
+                Grid.Column="1"
+                VerticalAlignment="Bottom"
+                BorderBrush="DodgerBlue"
+                BorderThickness="0,0,0,3"
+                Visibility="{Binding Path=IsLatest, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Button
+                Grid.Column="2"
+                Background="{x:Null}"
+                BorderBrush="{x:Null}"
+                Command="{Binding Path=StreamingCommand, Mode=OneTime}"
+                Content="ストリーミング"
+                FontSize="13"
+                Foreground="{DynamicResource TextBrush}" />
+            <Border
+                Grid.Column="2"
+                VerticalAlignment="Bottom"
+                BorderBrush="DodgerBlue"
+                BorderThickness="0,0,0,3"
+                Visibility="{Binding Path=IsStreaming, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </DataTemplate>
 

@@ -20,8 +20,8 @@ namespace TweetGazer.Models.Timeline
         /// <param name="type">ツイートの表示タイプ</param>
         public TimelineItemProperties(TimelineModel timelineModel, Status status, StatusType type = StatusType.Timeline)
         {
-            Type = TimelineItemType.Status;
-            StatusProperties = new StatusProperties(timelineModel, status, type);
+            this.Type = TimelineItemType.Status;
+            this.StatusProperties = new StatusProperties(timelineModel, status, type);
         }
 
         /// <summary>
@@ -31,8 +31,8 @@ namespace TweetGazer.Models.Timeline
         /// <param name="user">ユーザーデータ</param>
         public TimelineItemProperties(TimelineModel timelineModel, User user)
         {
-            Type = TimelineItemType.UserOverview;
-            UserProperties = new UserProperties(timelineModel, user);
+            this.Type = TimelineItemType.UserOverview;
+            this.UserProperties = new UserProperties(timelineModel, user);
         }
 
         /// <summary>
@@ -43,8 +43,8 @@ namespace TweetGazer.Models.Timeline
         /// <param name="rank">順位</param>
         public TimelineItemProperties(TimelineModel timelineModel, Trend trend, int rank)
         {
-            Type = TimelineItemType.Trend;
-            TrendProperties = new TrendProperties(timelineModel, trend, rank);
+            this.Type = TimelineItemType.Trend;
+            this.TrendProperties = new TrendProperties(timelineModel, trend, rank);
         }
 
         /// <summary>
@@ -54,8 +54,19 @@ namespace TweetGazer.Models.Timeline
         /// <param name="tab">タブ</param>
         public TimelineItemProperties(TimelineModel timelineModel, UserTimelineTab tab)
         {
-            Type = TimelineItemType.TabButton;
-            TabProperties = new UserTimelineTabProperties(timelineModel, tab);
+            this.Type = TimelineItemType.UserTimelineTab;
+            this.UserTimelineTabProperties = new UserTimelineTabProperties(timelineModel, tab);
+        }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="timelineModel">TimelineModel</param>
+        /// <param name="tab">タブ</param>
+        public TimelineItemProperties(TimelineModel timelineModel, SearchTimelineTab tab)
+        {
+            this.Type = TimelineItemType.SearchTimelineTab;
+            this.SearchTimelineTabProperties = new SearchTimelineTabProperties(timelineModel, tab);
         }
 
         /// <summary>
@@ -66,8 +77,8 @@ namespace TweetGazer.Models.Timeline
         /// <param name="parameter">パラメーター</param>
         public TimelineItemProperties(TimelineModel timelineModel, LoadingType type, object parameter = null)
         {
-            Type = TimelineItemType.Button;
-            LoadingProperties = new LoadingProperties(timelineModel, type, parameter);
+            this.Type = TimelineItemType.Button;
+            this.LoadingProperties = new LoadingProperties(timelineModel, type, parameter);
         }
 
         /// <summary>
@@ -89,7 +100,8 @@ namespace TweetGazer.Models.Timeline
         public StatusProperties StatusProperties { get; }
         public UserProperties UserProperties { get; }
         public TrendProperties TrendProperties { get; }
-        public UserTimelineTabProperties TabProperties { get; }
+        public UserTimelineTabProperties UserTimelineTabProperties { get; }
+        public SearchTimelineTabProperties SearchTimelineTabProperties { get; }
         public LoadingProperties LoadingProperties { get; }
         public NotificationProperties NotificationProperties { get; }
     }
@@ -99,7 +111,8 @@ namespace TweetGazer.Models.Timeline
         Status,
         UserOverview,
         Trend,
-        TabButton,
+        UserTimelineTab,
+        SearchTimelineTab,
         Notification,
         Button
     }
