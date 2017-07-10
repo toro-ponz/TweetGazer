@@ -231,9 +231,9 @@ namespace TweetGazer.Models
 
                         // ストリーミングの場合は空にする
                         if (this.Data.CurrentPage.SearchTimelineTab == SearchTimelineTab.Top)
-                            loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId);
+                            loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId, resultType: "mixed");
                         else if (this.Data.CurrentPage.SearchTimelineTab == SearchTimelineTab.Latest)
-                            loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId);
+                            loadedTimeline = await AccountTokens.LoadSearchTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.SearchText, maxId, resultType: "recent");
                         break;
                     case TimelineType.Notifications:
                         break;

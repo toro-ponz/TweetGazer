@@ -144,14 +144,14 @@ namespace TweetGazer.Common
             }
         }
 
-        public static async Task<SearchResult> LoadSearchTimelineAsync(int suffix, string query, long? maxId = null, long? sinceId = null, string includeEntities = "true")
+        public static async Task<SearchResult> LoadSearchTimelineAsync(int suffix, string query, long? maxId = null, long? sinceId = null, string includeEntities = "true", string resultType = "recent")
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
                 return null;
 
             try
             {
-                return await Tokens[suffix].Search.TweetsAsync(count => LoadStatusCount, max_id => maxId, q => query + " exclude:retweets", result_type => "recent", since_id => sinceId, tweet_mode => "extended", include_entities => includeEntities);
+                return await Tokens[suffix].Search.TweetsAsync(count => LoadStatusCount, max_id => maxId, q => query + " exclude:retweets", result_type => resultType, since_id => sinceId, tweet_mode => "extended", include_entities => includeEntities);
             }
             catch (Exception e)
             {
