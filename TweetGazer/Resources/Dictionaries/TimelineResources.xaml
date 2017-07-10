@@ -879,7 +879,7 @@
             <Border
                 Grid.Column="0"
                 VerticalAlignment="Bottom"
-                BorderBrush="DodgerBlue"
+                BorderBrush="{DynamicResource AccentColorBrush}"
                 BorderThickness="0,0,0,3"
                 Visibility="{Binding Path=TweetsTabSelectedVisibility, Mode=OneWay}" />
             <Button
@@ -893,7 +893,7 @@
             <Border
                 Grid.Column="1"
                 VerticalAlignment="Bottom"
-                BorderBrush="DodgerBlue"
+                BorderBrush="{DynamicResource AccentColorBrush}"
                 BorderThickness="0,0,0,3"
                 Visibility="{Binding Path=TweetsAndRepliesTabSelectedVisibility, Mode=OneWay}" />
             <Button
@@ -907,7 +907,7 @@
             <Border
                 Grid.Column="2"
                 VerticalAlignment="Bottom"
-                BorderBrush="DodgerBlue"
+                BorderBrush="{DynamicResource AccentColorBrush}"
                 BorderThickness="0,0,0,3"
                 Visibility="{Binding Path=MediaTabSelectedVisibility, Mode=OneWay}" />
             <Button
@@ -921,7 +921,7 @@
             <Border
                 Grid.Column="3"
                 VerticalAlignment="Bottom"
-                BorderBrush="{DynamicResource AccentBaseColorBrush}"
+                BorderBrush="{DynamicResource AccentColorBrush}"
                 BorderThickness="0,0,0,3"
                 Visibility="{Binding Path=FavoritesTabSelectedVisibility, Mode=OneWay}" />
         </Grid>
@@ -945,7 +945,7 @@
             <Border
                 Grid.Column="0"
                 VerticalAlignment="Bottom"
-                BorderBrush="DodgerBlue"
+                BorderBrush="{DynamicResource AccentColorBrush}"
                 BorderThickness="0,0,0,3"
                 Visibility="{Binding Path=IsTop, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <Button
@@ -959,7 +959,7 @@
             <Border
                 Grid.Column="1"
                 VerticalAlignment="Bottom"
-                BorderBrush="DodgerBlue"
+                BorderBrush="{DynamicResource AccentColorBrush}"
                 BorderThickness="0,0,0,3"
                 Visibility="{Binding Path=IsLatest, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <Button
@@ -973,7 +973,7 @@
             <Border
                 Grid.Column="2"
                 VerticalAlignment="Bottom"
-                BorderBrush="DodgerBlue"
+                BorderBrush="{DynamicResource AccentColorBrush}"
                 BorderThickness="0,0,0,3"
                 Visibility="{Binding Path=IsStreaming, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
