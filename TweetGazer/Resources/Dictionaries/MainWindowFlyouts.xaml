@@ -26,7 +26,7 @@
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Top">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}"/>
         </Controls:Flyout.Background>
         <Grid Margin="50,50,0,30">
             <Grid.RowDefinitions>
@@ -311,7 +311,7 @@
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
         </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
@@ -406,7 +406,7 @@
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
         </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
@@ -500,7 +500,7 @@
         IsOpen="{Binding Path=DirectMessages.IsOpen, Mode=TwoWay}"
         Position="Left">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
         </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
             <TextBlock
@@ -522,7 +522,7 @@
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
         </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
@@ -687,7 +687,7 @@
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
         </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
@@ -901,7 +901,7 @@
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
         </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
@@ -1002,7 +1002,7 @@
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Left">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.8" Color="{DynamicResource WhiteColor}" />
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
         </Controls:Flyout.Background>
         <Grid Width="280" HorizontalAlignment="Right">
             <Grid.RowDefinitions>

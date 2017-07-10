@@ -11,6 +11,8 @@ using TweetGazer.Models.MainWindow;
 using System.Windows.Data;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using MahApps.Metro;
+using System.Windows;
 
 namespace TweetGazer.Models
 {
@@ -131,6 +133,31 @@ namespace TweetGazer.Models
             {
                 Debug.Write(e);
                 return;
+            }
+        }
+
+        /// <summary>
+        /// ウィンドウのテーマを変更する
+        /// </summary>
+        public void ChangeColors()
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+            {
+                try
+                {
+                    Debug.WriteLine(Properties.Settings.Default.AccentColor);
+                    Debug.WriteLine(Properties.Settings.Default.BaseColor);
+                    ThemeManager.ChangeAppStyle(
+                            mainWindow.Resources,
+                            ThemeManager.GetAccent(Properties.Settings.Default.AccentColor.Replace("System.Windows.Controls.ComboBoxItem: ", "")),
+                            ThemeManager.GetAppTheme(Properties.Settings.Default.BaseColor.Replace("System.Windows.Controls.ComboBoxItem: ", "")));
+                }
+                catch (Exception e)
+                {
+                    this.Notify("アクセントカラー・テーマカラーの変更中にエラーが発生しました．", NotificationType.Error);
+                    Debug.Write(e);
+                }
             }
         }
 

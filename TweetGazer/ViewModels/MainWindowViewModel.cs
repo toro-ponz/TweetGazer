@@ -143,10 +143,10 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(Properties.Settings.Default.AccentColor):
-                            this.ChangeTheme();
+                            this.ChangeColors();
                             break;
                         case nameof(Properties.Settings.Default.BaseColor):
-                            this.ChangeTheme();
+                            this.ChangeColors();
                             break;
                     }
                 })
@@ -345,26 +345,11 @@ namespace TweetGazer.ViewModels
         }
 
         /// <summary>
-        /// ウィンドウのテーマを変更する
+        /// ウィンドウのカラーを変更する
         /// </summary>
-        private void ChangeTheme()
+        private void ChangeColors()
         {
-            var mainWindow = Common.CommonMethods.MainWindow;
-            if (mainWindow != null)
-            {
-                try
-                {
-                    ThemeManager.ChangeAppStyle(
-                            mainWindow,
-                            ThemeManager.GetAccent(Properties.Settings.Default.AccentColor.Replace("System.Windows.Controls.ComboBoxItem: ", "")),
-                            ThemeManager.GetAppTheme(Properties.Settings.Default.BaseColor.Replace("System.Windows.Controls.ComboBoxItem: ", "")));
-                }
-                catch (Exception e)
-                {
-                    this.Notify("エラーが発生しました．", NotificationType.Error);
-                    Debug.Write(e);
-                }
-            }
+            this.MainWindowModel.ChangeColors();
         }
 
         #region MentionsNotificationVisibility 変更通知プロパティ
