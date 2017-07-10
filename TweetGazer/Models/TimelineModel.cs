@@ -119,6 +119,7 @@ namespace TweetGazer.Models
                 this.TimelineItems.Clear();
 
             this.Message = "";
+            this.VerticalOffset = 0;
 
             this.IsLoading = true;
             if (maxId == null)
