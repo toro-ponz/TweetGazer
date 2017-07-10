@@ -919,7 +919,7 @@ namespace TweetGazer.Models
                 {
                     if (this.TimelineItems[i].StatusProperties != null)
                     {
-                        if (this.TimelineItems[i].StatusProperties.RecalculateTime(currentTime))
+                        if (!this.TimelineItems[i].StatusProperties.RecalculateTime(currentTime))
                             break;
                     }
                 }

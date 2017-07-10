@@ -157,7 +157,7 @@ namespace TweetGazer.Models.Timeline
         /// <returns>時間表示の更新が行われたか否か</returns>
         public bool RecalculateTime(DateTimeOffset currentTime)
         {
-            var oldTime = Time;
+            var oldTime = this.Time;
             var oldRetweetedTime = this.RetweetedTime;
 
             this.Time = CommonMethods.CalculateTime(currentTime, this.CreatedAt);
