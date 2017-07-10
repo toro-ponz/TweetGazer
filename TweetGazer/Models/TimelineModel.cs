@@ -304,7 +304,7 @@ namespace TweetGazer.Models
                     this.Data.CurrentPage.TimelineType == TimelineType.Notifications ||
                     this.Data.CurrentPage.TimelineType == TimelineType.NotificationsStack)
                     return true;
-                else if (maxId == null)
+                else if (loadedTimeline == null && maxId == null)
                     this.Message = "読み込み中にエラーが発生しました。タイムライン左下のリロードボタンで再度読み込み試行をしてください。";
                 else if (this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties != null)
                     this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
