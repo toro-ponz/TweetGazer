@@ -60,6 +60,15 @@ namespace TweetGazer.Models
         /// <param name="pageData">タイムラインデータ</param>
         public async void Initialize(TimelinePageData pageData)
         {
+            await this.InitializeAsync(pageData);
+        }
+
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="pageData">タイムラインデータ</param>
+        public async Task InitializeAsync(TimelinePageData pageData)
+        {
             this.IsInitializing = true;
 
             //ストリームを切断
@@ -380,7 +389,7 @@ namespace TweetGazer.Models
         /// <summary>
         /// 1つ前のページへ戻る
         /// </summary>
-        public void Back()
+        public async void Back()
         {
             if (this.Data.PageSuffix == 0)
                 return;
@@ -389,13 +398,8 @@ namespace TweetGazer.Models
             this.Data.Pages.RemoveAt(this.Data.PageSuffix);
             this.Data.PageSuffix--;
             var verticalOffset = this.VerticalOffset;
-            this.Initialize(Data.CurrentPage);
-            Task.Run(() =>
-            {
-                for (int i = 0; i < 200; i++)
-                    System.Threading.Thread.Sleep(10);
-                this.VerticalOffset = verticalOffset;
-            });
+            await this.InitializeAsync(this.Data.CurrentPage);
+            this.VerticalOffset = verticalOffset;
         }
 
         /// <summary>
