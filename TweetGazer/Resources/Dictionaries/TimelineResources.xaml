@@ -1018,13 +1018,11 @@
                     </Button>
                 </Grid>
                 <Grid Grid.Row="1">
-                    <Button Style="{StaticResource UwpLikeButtonStyle1}">
-                        <TextBlock
-                            FontSize="13"
-                            Foreground="{DynamicResource TextBrush}"
-                            Text="{Binding Path=Text, Mode=OneTime}"
-                            TextTrimming="CharacterEllipsis" />
-                    </Button>
+                    <TextBlock
+                        FontSize="13"
+                        Foreground="{DynamicResource TextBrush}"
+                        Text="{Binding Path=Text, Mode=OneTime}"
+                        TextTrimming="CharacterEllipsis" />
                 </Grid>
                 <Border
                     Grid.Row="2"
