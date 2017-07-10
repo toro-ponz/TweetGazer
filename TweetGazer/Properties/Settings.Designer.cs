@@ -301,7 +301,7 @@ namespace TweetGazer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("BaseDark")]
+        [global::System.Configuration.DefaultSettingValueAttribute("BaseLight")]
         public string BaseColor {
             get {
                 return ((string)(this["BaseColor"]));

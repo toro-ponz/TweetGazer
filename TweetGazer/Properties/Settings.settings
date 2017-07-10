@@ -72,7 +72,7 @@
       <Value Profile="(Default)">Cobalt</Value>
     </Setting>
     <Setting Name="BaseColor" Type="System.String" Scope="User">
-      <Value Profile="(Default)">BaseDark</Value>
+      <Value Profile="(Default)">BaseLight</Value>
     </Setting>
     <Setting Name="AccentColorIndex" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
