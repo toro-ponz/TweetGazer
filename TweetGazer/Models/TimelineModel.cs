@@ -450,11 +450,11 @@ namespace TweetGazer.Models
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public void Notify(string message, NotificationType type)
+        public async void Notify(string message, NotificationType type)
         {
             try
             {
-                Task.Run(async () =>
+                await Task.Run(async () =>
                 {
                     this.TimelineNotice.Add(new TimelineNotice(message, type));
                     await Task.Delay(5000);

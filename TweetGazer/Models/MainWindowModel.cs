@@ -35,11 +35,11 @@ namespace TweetGazer.Models
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public void Notify(string message, NotificationType type)
+        public async void Notify(string message, NotificationType type)
         {
             try
             {
-                Task.Run(async  () =>
+                await Task.Run(async  () =>
                 {
                     this.TrayNotifications.Add(new TrayNotification(message, type));
                     await Task.Delay(7000);
@@ -56,7 +56,7 @@ namespace TweetGazer.Models
         /// 通知を削除する
         /// </summary>
         /// <param name="noticeNumber">削除する通知番号</param>
-        public void RemoveNotice(int noticeNumber = 0)
+        private void RemoveNotice(int noticeNumber = 0)
         {
             if (noticeNumber < this.TrayNotifications.Count)
                 this.TrayNotifications.RemoveAt(noticeNumber);
