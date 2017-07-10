@@ -305,7 +305,7 @@ namespace TweetGazer.ViewModels
         {
             await Task.Run(() =>
             {
-                while (AddAccount == null)
+                while (this.AddAccount == null)
                     System.Threading.Thread.Sleep(100);
             });
 

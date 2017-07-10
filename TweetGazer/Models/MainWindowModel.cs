@@ -65,7 +65,7 @@ namespace TweetGazer.Models
         /// <summary>
         /// ストリーミングを開始する
         /// </summary>
-        public void StartStreaming()
+        public async void StartStreaming()
         {
             if (this.Disposables != null)
             {
@@ -76,7 +76,14 @@ namespace TweetGazer.Models
                     this.Disposables.RemoveAt(0);
             }
 
-            //ストリーミング開始
+            // アカウントが追加されるのを待つ
+            await Task.Run(() =>
+            {
+                while (AccountTokens.Users.Count == 0)
+                    System.Threading.Thread.Sleep(500);
+            });
+
+            // ストリーミング開始
             try
             {
                 if (this.Disposables == null)
