@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TweetGazer.Common;
 
@@ -16,7 +17,6 @@ namespace TweetGazer.Models.MainWindow
         {
             this.Users = new List<AccountSettingsParameters>();
             this.IsSaving = false;
-            base._TokenSuffix = 0;
             this.ReloadUsers();
         }
 
@@ -25,14 +25,11 @@ namespace TweetGazer.Models.MainWindow
         /// </summary>
         public async void ReloadUsers()
         {
-            this.TokenSuffix = 0;
-            while (this.IsSaving || AccountTokens.IsVerifying)
+            await Task.Run(() =>
             {
-                await Task.Run(() =>
-                {
+                while (AccountTokens.Users.Count == 0 || this.IsSaving)
                     System.Threading.Thread.Sleep(100);
-                });
-            }
+            });
 
             this.Users.Clear();
             this.ScreenNames.Clear();
@@ -43,6 +40,8 @@ namespace TweetGazer.Models.MainWindow
                 this.ScreenNames.Add(user.ScreenName);
                 i++;
             }
+
+            this.TokenSuffix = 0;
         }
 
         /// <summary>

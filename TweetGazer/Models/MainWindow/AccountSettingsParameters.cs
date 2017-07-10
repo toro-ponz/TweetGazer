@@ -85,7 +85,7 @@ namespace TweetGazer.Models.MainWindow
         {
             if (this.ProfileImageIsChanged)
             {
-                if (await AccountTokens.UpdateProfileImage(this.TokenSuffix, this.ProfileImage.OriginalString))
+                if (await AccountTokens.UpdateProfileImageAsync(this.TokenSuffix, this.ProfileImage.OriginalString))
                 {
                     CommonMethods.Notify("プロフィール画像の更新成功．", NotificationType.Success);
                     this.ReloadProfileImage(AccountTokens.Users[TokenSuffix]);
@@ -97,7 +97,7 @@ namespace TweetGazer.Models.MainWindow
             }
             if (this.ProfileBannerIsChanged)
             {
-                if (await AccountTokens.UpdateProfileBanner(this.TokenSuffix, this.ProfileBanner.OriginalString))
+                if (await AccountTokens.UpdateProfileBannerAsync(this.TokenSuffix, this.ProfileBanner.OriginalString))
                 {
                     CommonMethods.Notify("プロフィールバナーの更新成功．", NotificationType.Success);
                     this.ReloadProfileBanner(AccountTokens.Users[TokenSuffix]);
@@ -109,7 +109,7 @@ namespace TweetGazer.Models.MainWindow
             }
             if (this.OtherProfileIsChanged)
             {
-                if (await AccountTokens.UpdateProfile(this.TokenSuffix, this.Name, this.Url, this.Location, this.Description))
+                if (await AccountTokens.UpdateProfileAsync(this.TokenSuffix, this.Name, this.Url, this.Location, this.Description))
                 {
                     CommonMethods.Notify("プロフィールの更新成功．", NotificationType.Success);
                     this.ReloadProfile(AccountTokens.Users[this.TokenSuffix]);
@@ -127,7 +127,7 @@ namespace TweetGazer.Models.MainWindow
         /// <returns></returns>
         public async Task RemoveProfileBanner()
         {
-            if (await AccountTokens.RemoveProfileBanner(this.TokenSuffix))
+            if (await AccountTokens.RemoveProfileBannerAsync(this.TokenSuffix))
             {
                 CommonMethods.Notify("プロフィールバナーの削除成功．", NotificationType.Success);
             }

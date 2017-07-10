@@ -681,7 +681,7 @@ namespace TweetGazer.Common
             return true;
         }
 
-        public static async Task<bool> UpdateProfile(int suffix, string name, string url, string location, string description)
+        public static async Task<bool> UpdateProfileAsync(int suffix, string name, string url, string location, string description)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
                 return false;
@@ -705,7 +705,7 @@ namespace TweetGazer.Common
             return true;
         }
 
-        public static async Task<bool> UpdateProfileImage(int suffix, string filePath)
+        public static async Task<bool> UpdateProfileImageAsync(int suffix, string filePath)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
                 return false;
@@ -729,7 +729,7 @@ namespace TweetGazer.Common
             return true;
         }
 
-        public static async Task<bool> UpdateProfileBanner(int suffix, string filePath)
+        public static async Task<bool> UpdateProfileBannerAsync(int suffix, string filePath)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
                 return false;
@@ -749,7 +749,7 @@ namespace TweetGazer.Common
             return true;
         }
 
-        public static async Task<bool> RemoveProfileBanner(int suffix)
+        public static async Task<bool> RemoveProfileBannerAsync(int suffix)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
                 return false;
@@ -814,6 +814,7 @@ namespace TweetGazer.Common
             catch (Exception e)
             {
                 Debug.Write(e);
+                IsVerifying = false;
                 return false;
             }
             finally
