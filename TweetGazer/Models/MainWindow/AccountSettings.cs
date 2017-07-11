@@ -37,7 +37,7 @@ namespace TweetGazer.Models.MainWindow
             foreach (var user in AccountTokens.Users)
             {
                 this.Users.Add(new AccountSettingsParameters(i, user));
-                this.ScreenNames.Add(user.ScreenName);
+                this.ScreenNames.Add("@" + user.ScreenName);
                 i++;
             }
 
