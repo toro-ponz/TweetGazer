@@ -88,7 +88,13 @@ namespace TweetGazer.Models.Timeline
 
             this.FullText = this.HyperlinkText.Text;
 
-            if (status.Entities != null)
+            if (status.ExtendedTweet?.Entities != null)
+            {
+                this.HyperlinkText.Hashtags = status.ExtendedTweet.Entities.HashTags.ToList();
+                this.HyperlinkText.Mentions = status.ExtendedTweet.Entities.UserMentions.ToList();
+                this.HyperlinkText.Urls = status.ExtendedTweet.Entities.Urls.ToList();
+            }
+            else if (status.Entities != null)
             {
                 this.HyperlinkText.Hashtags = status.Entities.HashTags.ToList();
                 this.HyperlinkText.Mentions = status.Entities.UserMentions.ToList();
@@ -122,16 +128,25 @@ namespace TweetGazer.Models.Timeline
             this.Via = "via " + this.EscapeHtmlTags(status.Source);
 
             //メディアが含まれるツイートの場合
-            if (status.Entities.Media != null)
+            IEnumerable<MediaEntity> media = null;
+            if (status.ExtendedTweet?.ExtendedEntities?.Media != null)
+                media = status.ExtendedTweet.ExtendedEntities.Media;
+            else if (status.ExtendedEntities?.Media != null)
+                media = status.ExtendedEntities.Media;
+            else if (status.ExtendedTweet?.Entities?.Media != null)
+                media = status.ExtendedTweet?.Entities.Media;
+            else if (status.Entities?.Media != null)
+                media = status.Entities.Media;
+            if (media != null)
             {
                 var j = 0;
-                foreach (var media in status.ExtendedEntities.Media)
+                foreach (var m in media)
                 {
-                    this.Media.Add(new MediaProperties(media, j));
+                    this.Media.Add(new MediaProperties(m, j));
                     this.MediaColumnWidth[j] = new GridLength(1, GridUnitType.Star);
                     j++;
                 }
-                this.HyperlinkText.Media = status.ExtendedEntities.Media.ToList();
+                this.HyperlinkText.Media = media.ToList();
             }
 
             //引用が含まれるツイートの場合
