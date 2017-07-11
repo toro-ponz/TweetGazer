@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
+using TweetGazer.Behaviors;
 using TweetGazer.Common;
 
 namespace TweetGazer.Models.MainWindow
@@ -24,6 +25,7 @@ namespace TweetGazer.Models.MainWindow
             BindingOperations.EnableCollectionSynchronization(this.Users, new object());
             this.FileNames = new ObservableCollection<string>();
 
+            this._CaretPosition = CaretPosition.Undefined;
             this._StatusText = "";
             this._ReplyText = "リプライ先:なし";
             this.ReplyId = null;
@@ -218,6 +220,22 @@ namespace TweetGazer.Models.MainWindow
                 i++;
             }
         }
+
+        #region CaretPosition 変更通知プロパティ
+        public CaretPosition CaretPosition
+        {
+            get
+            {
+                return this._CaretPosition;
+            }
+            set
+            {
+                this._CaretPosition = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private CaretPosition _CaretPosition;
+        #endregion
 
         #region IsProgressRingVisible 変更通知プロパティ
         public bool IsProgressRingVisible

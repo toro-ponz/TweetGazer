@@ -1122,6 +1122,7 @@
                     MinHeight="200"
                     Margin="0,1"
                     Padding="0"
+                    Behaviors:TextBoxBehavior.CaretPosition="{Binding Path=CaretPosition, Mode=OneWay}"
                     Controls:TextBoxHelper.Watermark="今どうしてる？"
                     AcceptsReturn="True"
                     AllowDrop="True"

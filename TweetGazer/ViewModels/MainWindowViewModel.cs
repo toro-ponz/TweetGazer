@@ -267,6 +267,8 @@ namespace TweetGazer.ViewModels
             this.CreateStatus.StatusText = text;
             this.CreateStatus.ReplyText = replyText;
             this.CreateStatus.ReplyId = replyId;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Undefined;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Last;
             this.CreateStatus.SelectUser(tokenSuffix);
         }
 
@@ -281,6 +283,8 @@ namespace TweetGazer.ViewModels
                 this.CreateStatus.ToggleOpen();
 
             this.CreateStatus.StatusText = "\n" + link;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Undefined;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Top;
             this.CreateStatus.SelectUser(tokenSuffix);
         }
 
@@ -295,6 +299,8 @@ namespace TweetGazer.ViewModels
                 this.CreateStatus.ToggleOpen();
 
             this.CreateStatus.StatusText = "\n" + text;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Undefined;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Top;
             this.CreateStatus.SelectUser(tokenSuffix);
         }
 
