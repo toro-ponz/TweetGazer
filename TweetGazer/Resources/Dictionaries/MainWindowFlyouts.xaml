@@ -26,7 +26,7 @@
         IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
         Position="Top">
         <Controls:Flyout.Background>
-            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}"/>
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
         </Controls:Flyout.Background>
         <Grid Margin="50,50,0,30">
             <Grid.RowDefinitions>
@@ -505,9 +505,9 @@
         <Grid Width="280" HorizontalAlignment="Right">
             <TextBlock
                 FontSize="30"
-                TextAlignment="Center"
                 Foreground="{DynamicResource TextBrush}"
                 Text="未実装"
+                TextAlignment="Center"
                 TextWrapping="Wrap" />
         </Grid>
     </Controls:Flyout>
@@ -1193,6 +1193,7 @@
                         Background="{x:Null}"
                         Content="メディア"
                         FontSize="14"
+                        Foreground="{DynamicResource TextBrush}"
                         IsEnabled="{Binding Path=IsSelectButtonEnabled}"
                         Style="{StaticResource AccentedSquareButtonStyle}"
                         TabIndex="2">
@@ -1238,5 +1239,5 @@
             </Grid>
         </Grid>
     </Controls:Flyout>
-    
+
 </ResourceDictionary>

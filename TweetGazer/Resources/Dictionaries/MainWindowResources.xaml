@@ -226,6 +226,7 @@
                             Background="{x:Null}"
                             Content="メディア"
                             FontSize="14"
+                            Foreground="{DynamicResource TextBrush}"
                             IsEnabled="{Binding Path=IsSelectButtonEnabled}"
                             Style="{StaticResource AccentedSquareButtonStyle}"
                             TabIndex="2">
