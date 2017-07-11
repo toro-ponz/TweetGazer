@@ -53,7 +53,7 @@
                 <Button
                     Width="30"
                     Height="30"
-                    Margin="10,10,50,10"
+                    Margin="10,50,10,10"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Click="MoveButton_Click"
