@@ -127,6 +127,15 @@ namespace TweetGazer.Models.MainWindow
                 for (int i = index; i < this.Grid.First().Children.Count; i++)
                 {
                     System.Windows.Controls.Grid.SetColumn(this.Grid.First().Children[i], i);
+                    //タイムライン幅の再バインディング
+                    if (i % 2 == 0)
+                    {
+                        var width = new Binding("Timelines.Timelines[" + (int)(i / 2) + "].TimelineViewModel.GridWidth")
+                        {
+                            Mode = BindingMode.TwoWay
+                        };
+                        this.Grid.First().ColumnDefinitions[i].SetBinding(ColumnDefinition.WidthProperty, width);
+                    }
                 }
                 //タイムラインのColumnIndex値の再計算
                 for (int i = columnIndex; i < this.Timelines.Count; i++)
