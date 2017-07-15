@@ -675,7 +675,14 @@ namespace TweetGazer.Models
                         if (stream != null)
                         {
                             // 再接続
-                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
+                            stream
+                                .Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
+                                .Repeat()
+                                .Subscribe(
+                                    (StreamingMessage m) => Debug.WriteLine(m),
+                                    (Exception ex) => Debug.WriteLine(ex),
+                                    () => Debug.WriteLine("Streaming Ended.")
+                                );
                             stream.OfType<EventMessage>().Subscribe(x => ProcessEventMessage(x));
                             stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
                             this.Disposables.Add(stream.Connect());
@@ -700,7 +707,14 @@ namespace TweetGazer.Models
                             if (stream != null)
                             {
                                 // 再接続
-                                stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
+                                stream
+                                    .Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
+                                    .Repeat()
+                                    .Subscribe(
+                                        (StreamingMessage m) => Debug.WriteLine(m),
+                                        (Exception ex) => Debug.WriteLine(ex),
+                                        () => Debug.WriteLine("Streaming Ended.")
+                                    );
                                 // 検索ワードに引っかかる新規ツイートが流れてきたとき
                                 stream.OfType<StatusMessage>().Subscribe(x =>
                                 {

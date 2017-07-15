@@ -101,7 +101,14 @@ namespace TweetGazer.Models
                     {
                         var j = i;
                         //再接続
-                        stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
+                        stream
+                            .Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
+                            .Repeat()
+                            .Subscribe(
+                                (StreamingMessage m) => Debug.WriteLine(m),
+                                (Exception ex) => Debug.WriteLine(ex),
+                                () => Debug.WriteLine("Streaming Ended.")
+                            );
                         //ツイートが流れてきたとき
                         stream.OfType<StatusMessage>().Subscribe(x =>
                         {
@@ -145,6 +152,11 @@ namespace TweetGazer.Models
                         });
                         //ダイレクトメッセージを受け取ったとき
                         stream.OfType<CoreTweet.DirectMessage>().Subscribe(ReceiveDirectMessage);
+                        //切断されたとき
+                        stream.OfType<DisconnectMessage>().Subscribe(x =>
+                        {
+                            Debug.Write(x);
+                        });
 
                         this.Disposables.Add(stream.Connect());
                     }
