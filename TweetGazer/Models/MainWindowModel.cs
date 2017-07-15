@@ -128,7 +128,7 @@ namespace TweetGazer.Models
                                 foreach (var timeline in this.MainWindowViewModel.Timelines.Timelines)
                                 {
                                     var timelineViewModel = timeline.TimelineViewModel;
-                                    timelineViewModel.StreamStatusMessage(x);
+                                    timelineViewModel.StreamStatusMessage(x, users[j].Id);
                                 }
                             }
                         });
@@ -141,7 +141,7 @@ namespace TweetGazer.Models
                                 foreach (var timeline in this.MainWindowViewModel.Timelines.Timelines)
                                 {
                                     var timelineViewModel = timeline.TimelineViewModel;
-                                    timelineViewModel.StreamDeleteMessage(x);
+                                    timelineViewModel.StreamDeleteMessage(x, users[j].Id);
                                 }
                             }
                         });

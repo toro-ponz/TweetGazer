@@ -192,18 +192,20 @@ namespace TweetGazer.ViewModels
         /// ストリーミングで流れてきたツイートを流す
         /// </summary>
         /// <param name="statusMessage">ツイート</param>
-        public void StreamStatusMessage(StatusMessage statusMessage)
+        /// <param name="userId">受け取ったユーザーID</param>
+        public void StreamStatusMessage(StatusMessage statusMessage, long? userId)
         {
-            this.Timeline.StreamStatusMessage(statusMessage);
+            this.Timeline.StreamStatusMessage(statusMessage, userId);
         }
 
         /// <summary>
         /// ストリーミングで流れてきた削除されたツイートを削除する
         /// </summary>
         /// <param name="statusMessage">削除されたツイート</param>
-        public void StreamDeleteMessage(DeleteMessage deleteMessage)
+        /// <param name="userId">受け取ったユーザーID</param>
+        public void StreamDeleteMessage(DeleteMessage deleteMessage, long? userId)
         {
-            this.Timeline.StreamDeleteMessage(deleteMessage);
+            this.Timeline.StreamDeleteMessage(deleteMessage, userId);
         }
 
         /// <summary>

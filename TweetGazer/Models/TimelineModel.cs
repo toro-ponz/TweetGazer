@@ -499,8 +499,12 @@ namespace TweetGazer.Models
         /// ストリーミングで流れてきたツイートを流す
         /// </summary>
         /// <param name="statusMessage">ツイート</param>
-        public void StreamStatusMessage(StatusMessage statusMessage)
+        /// <param name="userId">受け取ったユーザーID</param>
+        public void StreamStatusMessage(StatusMessage statusMessage, long? userId)
         {
+            if (userId == null || this.Data.UserId != userId)
+                return;
+
             switch (this.Data.CurrentPage.TimelineType)
             {
                 case TimelineType.Home:
@@ -535,8 +539,12 @@ namespace TweetGazer.Models
         /// ストリーミングで流れてきた削除されたツイートを削除する
         /// </summary>
         /// <param name="statusMessage">削除されたツイート</param>
-        public void StreamDeleteMessage(DeleteMessage deleteMessage)
+        /// <param name="userId">受け取ったユーザーID</param>
+        public void StreamDeleteMessage(DeleteMessage deleteMessage, long? userId)
         {
+            if (userId == null || this.Data.UserId != userId)
+                return;
+
             switch (this.Data.CurrentPage.TimelineType)
             {
                 case TimelineType.Home:
