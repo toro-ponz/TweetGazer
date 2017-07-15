@@ -1,4 +1,5 @@
-﻿using Livet;
+﻿using CoreTweet.Streaming;
+using Livet;
 using Livet.EventListeners;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -185,6 +186,24 @@ namespace TweetGazer.ViewModels
         public void SetGridWidth(GridLength width)
         {
             this.GridWidth = width;
+        }
+
+        /// <summary>
+        /// ストリーミングで流れてきたツイートを流す
+        /// </summary>
+        /// <param name="statusMessage">ツイート</param>
+        public void StreamStatusMessage(StatusMessage statusMessage)
+        {
+            this.Timeline.StreamStatusMessage(statusMessage);
+        }
+
+        /// <summary>
+        /// ストリーミングで流れてきた削除されたツイートを削除する
+        /// </summary>
+        /// <param name="statusMessage">削除されたツイート</param>
+        public void StreamDeleteMessage(DeleteMessage deleteMessage)
+        {
+            this.Timeline.StreamDeleteMessage(deleteMessage);
         }
 
         /// <summary>

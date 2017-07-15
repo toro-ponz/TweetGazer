@@ -12,7 +12,7 @@ using System.Windows.Data;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using MahApps.Metro;
-using System.Windows;
+using TweetGazer.ViewModels;
 
 namespace TweetGazer.Models
 {
@@ -21,8 +21,10 @@ namespace TweetGazer.Models
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MainWindowModel()
+        public MainWindowModel(MainWindowViewModel mainWindowViewModel)
         {
+            this.MainWindowViewModel = mainWindowViewModel;
+
             //tempフォルダを削除
             CommonMethods.DeleteDirectory(SecretParameters.TemporaryDirectoryPath);
 
@@ -103,6 +105,7 @@ namespace TweetGazer.Models
                         //ツイートが流れてきたとき
                         stream.OfType<StatusMessage>().Subscribe(x =>
                         {
+                            // 通知
                             if (x.Status.Entities != null && x.Status.Entities.UserMentions != null)
                             {
                                 foreach (var mention in x.Status.Entities.UserMentions)
@@ -111,11 +114,29 @@ namespace TweetGazer.Models
                                         this.ReceiveMention(j, x);
                                 }
                             }
+
+                            // ストリーミングを利用するTLにツイートを流す
+                            if (this.MainWindowViewModel?.Timelines?.Timelines != null)
+                            {
+                                foreach (var timeline in this.MainWindowViewModel.Timelines.Timelines)
+                                {
+                                    var timelineViewModel = timeline.TimelineViewModel;
+                                    timelineViewModel.StreamStatusMessage(x);
+                                }
+                            }
                         });
                         //ツイート・ダイレクトメッセージが削除されたとき
                         stream.OfType<DeleteMessage>().Subscribe(x =>
                         {
-
+                            // ストリーミングを利用するTLにツイートを流す
+                            if (this.MainWindowViewModel?.Timelines?.Timelines != null)
+                            {
+                                foreach (var timeline in this.MainWindowViewModel.Timelines.Timelines)
+                                {
+                                    var timelineViewModel = timeline.TimelineViewModel;
+                                    timelineViewModel.StreamDeleteMessage(x);
+                                }
+                            }
                         });
                         //ツイート以外の通知を受け取ったとき
                         stream.OfType<EventMessage>().Subscribe(x =>
@@ -320,5 +341,7 @@ namespace TweetGazer.Models
 
         private List<IDisposable> Disposables;
         private List<Timer> Timers;
+
+        private MainWindowViewModel MainWindowViewModel;
     }
 }

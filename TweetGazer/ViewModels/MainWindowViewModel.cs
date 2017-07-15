@@ -24,7 +24,7 @@ namespace TweetGazer.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
-            this.MainWindowModel = new MainWindowModel();
+            this.MainWindowModel = new MainWindowModel(this);
             this.TrayNotifications = this.MainWindowModel.TrayNotifications;
             this.Login();
 

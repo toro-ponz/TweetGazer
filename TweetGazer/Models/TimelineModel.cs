@@ -496,6 +496,57 @@ namespace TweetGazer.Models
         }
 
         /// <summary>
+        /// ストリーミングで流れてきたツイートを流す
+        /// </summary>
+        /// <param name="statusMessage">ツイート</param>
+        public void StreamStatusMessage(StatusMessage statusMessage)
+        {
+            switch (this.Data.CurrentPage.TimelineType)
+            {
+                case TimelineType.Home:
+                    // 自分のツイートがRTされたイベントを弾く
+                    if (statusMessage.Status.RetweetedStatus != null &&
+                        statusMessage.Status.RetweetedStatus.User.Id == this.Data.UserId)
+                        return;
+
+                    // 流れてきたツイートを挿入
+                    this.InsertStatus(new List<Status>() { statusMessage.Status });
+                    break;
+                case TimelineType.Mentions:
+                    // リプライでない場合リターン
+                    if (statusMessage.Status.Entities == null || statusMessage.Status.Entities.UserMentions == null)
+                        return;
+
+                    foreach (var entity in statusMessage.Status.Entities.UserMentions)
+                    {
+                        // 自分へのリプライの場合処理する
+                        if (entity.Id == this.Data.UserId)
+                        {
+                            // 流れてきたツイートを挿入
+                            this.InsertStatus(new List<Status>() { statusMessage.Status });
+                            break;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// ストリーミングで流れてきた削除されたツイートを削除する
+        /// </summary>
+        /// <param name="statusMessage">削除されたツイート</param>
+        public void StreamDeleteMessage(DeleteMessage deleteMessage)
+        {
+            switch (this.Data.CurrentPage.TimelineType)
+            {
+                case TimelineType.Home:
+                case TimelineType.Mentions:
+                    this.DeleteStatus(deleteMessage.Id);
+                    break;
+            }
+        }
+
+        /// <summary>
         /// リソースの破棄
         /// </summary>
         public void Dispose()
@@ -596,29 +647,6 @@ namespace TweetGazer.Models
 
             switch (this.Data.CurrentPage.TimelineType)
             {
-                case TimelineType.Home:
-                    {
-                        var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
-                        if (stream != null)
-                        {
-                            // 再接続
-                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
-                            // ツイートが流れてきたとき
-                            stream.OfType<StatusMessage>().Subscribe(x =>
-                            {
-                                // フォローしていない人のツイート(RTされたイベント等)を弾く
-
-
-                                // 流れてきたツイートを挿入
-                                this.InsertStatus(new List<Status>() { x.Status });
-                            });
-                            // ツイートが削除されたとき
-                            stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
-                            stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
-                            this.Disposables.Add(stream.Connect());
-                        }
-                        break;
-                    }
                 case TimelineType.List:
                     {
                         // 5秒間隔でリストを更新するタイマー
@@ -649,37 +677,6 @@ namespace TweetGazer.Models
                             // 再接続
                             stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
                             stream.OfType<EventMessage>().Subscribe(x => ProcessEventMessage(x));
-                            stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
-                            this.Disposables.Add(stream.Connect());
-                        }
-                        break;
-                    }
-                case TimelineType.Mentions:
-                    {
-                        var stream = AccountTokens.StartStreaming(this.Data.TokenSuffix, StreamingMode.User);
-                        if (stream != null)
-                        {
-                            // 再接続
-                            stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
-                            // ツイートが流れてきたとき
-                            stream.OfType<StatusMessage>().Subscribe(x => {
-                                // リプライでない場合リターン
-                                if (x.Status.Entities == null || x.Status.Entities.UserMentions == null)
-                                    return;
-
-                                foreach (var entity in x.Status.Entities.UserMentions)
-                                {
-                                    // 自分へのリプライの場合処理する
-                                    if (entity.Id == this.Data.UserId)
-                                    {
-                                        // 流れてきたツイートを挿入
-                                        this.InsertStatus(new List<Status>() { x.Status });
-                                        break;
-                                    }
-                                }
-                            });
-                            // リプライが削除されたとき
-                            stream.OfType<DeleteMessage>().Subscribe(x => DeleteStatus(x.Id));
                             stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
                             this.Disposables.Add(stream.Connect());
                         }
