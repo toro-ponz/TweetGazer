@@ -14,5 +14,16 @@ namespace TweetGazer.Views
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// 閉じるボタン押下時にCloseをせずにVisibilityを変える
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Visibility = Visibility.Collapsed;
+        }
     }
 }

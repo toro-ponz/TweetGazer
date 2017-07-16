@@ -169,7 +169,10 @@ namespace TweetGazer.Models
         /// </summary>
         public void DebugConsoleOpen()
         {
-            this.DebugConsoleWindow.Show();
+            if (this.DebugConsoleWindow.Visibility == System.Windows.Visibility.Collapsed)
+                this.DebugConsoleWindow.Show();
+            else
+                this.DebugConsoleWindow.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         /// <summary>
