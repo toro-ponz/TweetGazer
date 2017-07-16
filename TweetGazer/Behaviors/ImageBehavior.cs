@@ -79,7 +79,7 @@ namespace TweetGazer.Behaviors
             var imageProperties = e.NewValue as ImageProperties;
             if (element == null || imageProperties == null)
                 return;
-            
+
             //画像サイズを元にロード中の仮画像を生成
             if (imageProperties.Height != 0 && imageProperties.Width != 0)
             {
