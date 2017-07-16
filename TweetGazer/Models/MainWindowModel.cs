@@ -224,6 +224,7 @@ namespace TweetGazer.Models
                     timer.Dispose();
             }
 
+            this.DebugConsoleWindow.Visibility = System.Windows.Visibility.Collapsed;
             this.DebugConsoleWindow.Close();
 
             Properties.Settings.Default.Save();

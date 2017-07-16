@@ -22,8 +22,11 @@ namespace TweetGazer.Views
         /// <param name="e"></param>
         protected virtual void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            e.Cancel = true;
-            this.Visibility = Visibility.Collapsed;
+            if (this.Visibility == Visibility.Visible)
+            {
+                e.Cancel = true;
+                this.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }
