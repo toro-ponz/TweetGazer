@@ -59,37 +59,12 @@
                 Style="{StaticResource UwpLikeButtonStyle2}">
                 <Grid>
                     <Image Behaviors:ImageBehavior.Source="{Binding Path=Image, Mode=OneTime}" />
-                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle
-                            Width="60"
-                            Height="60"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            RadiusX="30"
-                            RadiusY="30">
-                            <Rectangle.Fill>
-                                <SolidColorBrush Color="White" />
-                            </Rectangle.Fill>
-                        </Rectangle>
-                        <Rectangle
-                            Width="50"
-                            Height="50"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            RadiusX="25"
-                            RadiusY="25">
-                            <Rectangle.Fill>
-                                <SolidColorBrush Color="DodgerBlue" />
-                            </Rectangle.Fill>
-                        </Rectangle>
-                        <TextBlock
-                            Padding="5,0,0,1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="24"
-                            Foreground="White"
-                            Text="▶" />
-                    </Grid>
+                    <ContentControl
+                        Width="60"
+                        Height="60"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        ContentTemplate="{StaticResource VideoIcon}" />
                     <Grid
                         Width="40"
                         Height="24"
