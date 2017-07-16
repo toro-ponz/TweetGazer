@@ -172,6 +172,7 @@
     <Compile Include="Behaviors\ReadMoreBehavior.cs" />
     <Compile Include="Behaviors\StatusMediaItemsControlBehavior.cs" />
     <Compile Include="Behaviors\StatausTextBlockBehavior.cs" />
+    <Compile Include="Common\DebugConsole.cs" />
     <Compile Include="Common\DirectMessage.cs" />
     <Compile Include="Common\DirectMessagesStack.cs" />
     <Compile Include="Common\Mention.cs" />
@@ -247,6 +248,9 @@
     <Compile Include="ViewModels\ShowDialogs\ShowStatusViewModel.cs" />
     <Compile Include="ViewModels\TimelineViewModel.cs" />
     <Compile Include="Selectors\CreatingStatusMediaTemplateSelector.cs" />
+    <Compile Include="Views\DebugConsoleWindow.xaml.cs">
+      <DependentUpon>DebugConsoleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -310,6 +314,10 @@
     <Page Include="Resources\Dictionaries\TimelineResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DebugConsoleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -243,7 +243,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return null;
             }
         }
@@ -268,7 +268,7 @@ namespace TweetGazer.Common
                 }
                 catch (Exception e)
                 {
-                    Debug.Write(e);
+                    DebugConsole.Write(e);
                     return null;
                 }
                 finally
@@ -323,7 +323,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
         
@@ -353,7 +353,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return true;
             }
         }
@@ -375,7 +375,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return true;
             }
         }
@@ -407,7 +407,7 @@ namespace TweetGazer.Common
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return false;
             }
             finally
@@ -431,7 +431,7 @@ namespace TweetGazer.Common
                 }
                 catch (Exception e)
                 {
-                    Debug.Write(e);
+                    DebugConsole.Write(e);
                     return null;
                 }
             }

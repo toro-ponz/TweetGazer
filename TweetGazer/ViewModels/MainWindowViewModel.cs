@@ -1,10 +1,8 @@
 ﻿using CoreTweet;
 using Livet;
 using Livet.EventListeners;
-using MahApps.Metro;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -242,6 +240,14 @@ namespace TweetGazer.ViewModels
         }
 
         /// <summary>
+        /// デバッグコンソールを開く
+        /// </summary>
+        public void DebugConsoleOpen()
+        {
+            this.MainWindowModel.DebugConsoleOpen();
+        }
+
+        /// <summary>
         /// 通知を行う
         /// </summary>
         /// <param name="message">通知内容</param>
@@ -339,18 +345,18 @@ namespace TweetGazer.ViewModels
             catch (TwitterException e)
             {
                 this.MainWindowModel.Notify("トークン認証失敗.", NotificationType.Error);
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return;
             }
             catch (Exception e) when (e is HttpRequestException || e is WebException)
             {
                 this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした．\n左下の更新ボタンを押して再認証してください．", NotificationType.Error);
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return;
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return;
             }
 

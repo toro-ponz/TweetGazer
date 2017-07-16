@@ -79,7 +79,7 @@ namespace TweetGazer.Behaviors
                 }
                 catch (Exception ex)
                 {
-                    Debug.Write(ex);
+                    DebugConsole.Write(ex);
                 }
                 finally
                 {
@@ -416,7 +416,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
@@ -434,7 +434,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
@@ -447,7 +447,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 

@@ -144,7 +144,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 

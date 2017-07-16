@@ -53,6 +53,13 @@
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
+            <Button Content="DEBUG CONSOLE">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:CallMethodAction MethodName="DebugConsoleOpen" TargetObject="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
             <Button Content="SETTINGS">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">

@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using TweetGazer.Common;
 
 namespace TweetGazer.Behaviors
 {
@@ -60,7 +61,7 @@ namespace TweetGazer.Behaviors
                     Foreground = new SolidColorBrush(Colors.Red),
                     Text = "ツイート本文の表示処理において、予期せぬエラーが生じました。\nお手数をおかけしますが、別のクライアントからツイート内容をご確認ください。"
                 });
-                Debug.Write(ex);
+                DebugConsole.Write(ex);
             }
         }
 

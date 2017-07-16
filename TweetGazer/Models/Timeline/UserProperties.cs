@@ -188,7 +188,7 @@ namespace TweetGazer.Models.Timeline
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
@@ -204,7 +204,7 @@ namespace TweetGazer.Models.Timeline
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 

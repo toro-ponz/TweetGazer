@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TweetGazer.Common;
 
 namespace TweetGazer.Behaviors
 {
@@ -55,7 +56,7 @@ namespace TweetGazer.Behaviors
                 }
                 catch (Exception ex)
                 {
-                    Debug.Write(ex);
+                    DebugConsole.Write(ex);
                 }
                 finally
                 {
@@ -84,7 +85,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         });
 
@@ -97,7 +98,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
     }

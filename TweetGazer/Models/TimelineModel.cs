@@ -246,7 +246,7 @@ namespace TweetGazer.Models
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
 
                 this.IsLoading = false;
                 this.IsInitializing = false;
@@ -491,7 +491,7 @@ namespace TweetGazer.Models
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
@@ -687,9 +687,9 @@ namespace TweetGazer.Models
                                 .Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
                                 .Repeat()
                                 .Subscribe(
-                                    (StreamingMessage m) => Debug.WriteLine(m),
-                                    (Exception ex) => Debug.WriteLine(ex),
-                                    () => Debug.WriteLine("Streaming Ended.")
+                                    (StreamingMessage m) => DebugConsole.WriteLine(m),
+                                    (Exception ex) => DebugConsole.WriteLine(ex),
+                                    () => DebugConsole.WriteLine("Streaming Ended.")
                                 );
                             stream.OfType<EventMessage>().Subscribe(x => ProcessEventMessage(x));
                             stream.OfType<DisconnectMessage>().Subscribe(x => ProcessDisconnectMessage(x));
@@ -719,9 +719,9 @@ namespace TweetGazer.Models
                                     .Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
                                     .Repeat()
                                     .Subscribe(
-                                        (StreamingMessage m) => Debug.WriteLine(m),
-                                        (Exception ex) => Debug.WriteLine(ex),
-                                        () => Debug.WriteLine("Streaming Ended.")
+                                        (StreamingMessage m) => DebugConsole.WriteLine(m),
+                                        (Exception ex) => DebugConsole.WriteLine(ex),
+                                        () => DebugConsole.WriteLine("Streaming Ended.")
                                     );
                                 // 検索ワードに引っかかる新規ツイートが流れてきたとき
                                 stream.OfType<StatusMessage>().Subscribe(x =>
@@ -889,7 +889,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Debug.Write(ex);
+                DebugConsole.Write(ex);
             }
         }
 
@@ -929,7 +929,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Debug.Write(ex);
+                DebugConsole.Write(ex);
             }
         }
 
@@ -953,7 +953,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Debug.Write(ex);
+                DebugConsole.Write(ex);
             }
         }
 
@@ -978,7 +978,7 @@ namespace TweetGazer.Models
             }
             catch (Exception ex)
             {
-                Debug.Write(ex);
+                DebugConsole.Write(ex);
                 return;
             }
         }

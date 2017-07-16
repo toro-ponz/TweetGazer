@@ -184,7 +184,7 @@ namespace TweetGazer.Models.MainWindow
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return false;
             }
             finally
@@ -251,7 +251,7 @@ namespace TweetGazer.Models.MainWindow
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return false;
             }
             finally

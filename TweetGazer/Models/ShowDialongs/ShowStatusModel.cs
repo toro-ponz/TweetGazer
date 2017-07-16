@@ -71,7 +71,7 @@ namespace TweetGazer.Models.ShowDialongs
                 }
                 catch (Exception e)
                 {
-                    Debug.Write(e);
+                    DebugConsole.Write(e);
                     this.Statuses.First().LoadingProperties.Visibility = Visibility.Collapsed;
                     break;
                 }

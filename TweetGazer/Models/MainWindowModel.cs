@@ -25,6 +25,8 @@ namespace TweetGazer.Models
         {
             this.MainWindowViewModel = mainWindowViewModel;
 
+            this.DebugConsoleWindow = new Views.DebugConsoleWindow();
+
             //tempフォルダを削除
             CommonMethods.DeleteDirectory(SecretParameters.TemporaryDirectoryPath);
 
@@ -52,7 +54,7 @@ namespace TweetGazer.Models
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
@@ -98,9 +100,9 @@ namespace TweetGazer.Models
                             .Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
                             .Repeat()
                             .Subscribe(
-                                (StreamingMessage m) => Debug.WriteLine(m),
-                                (Exception ex) => Debug.WriteLine(ex),
-                                () => Debug.WriteLine("Streaming Ended.")
+                                (StreamingMessage m) => DebugConsole.WriteLine(m),
+                                (Exception ex) => DebugConsole.WriteLine(ex),
+                                () => DebugConsole.WriteLine("Streaming Ended.")
                             );
                         //ツイートが流れてきたとき
                         stream.OfType<StatusMessage>().Subscribe(x =>
@@ -148,7 +150,7 @@ namespace TweetGazer.Models
                         //切断されたとき
                         stream.OfType<DisconnectMessage>().Subscribe(x =>
                         {
-                            Debug.Write(x);
+                            DebugConsole.Write(x);
                         });
 
                         this.Disposables.Add(stream.Connect());
@@ -157,9 +159,17 @@ namespace TweetGazer.Models
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return;
             }
+        }
+
+        /// <summary>
+        /// デバッグコンソールを開く
+        /// </summary>
+        public void DebugConsoleOpen()
+        {
+            this.DebugConsoleWindow.Show();
         }
 
         /// <summary>
@@ -180,7 +190,7 @@ namespace TweetGazer.Models
                 catch (Exception e)
                 {
                     this.Notify("アクセントカラー・テーマカラーの変更中にエラーが発生しました．", NotificationType.Error);
-                    Debug.Write(e);
+                    DebugConsole.Write(e);
                 }
             }
         }
@@ -210,6 +220,8 @@ namespace TweetGazer.Models
                 foreach (var timer in this.Timers)
                     timer.Dispose();
             }
+
+            this.DebugConsoleWindow.Close();
 
             Properties.Settings.Default.Save();
         }
@@ -347,6 +359,7 @@ namespace TweetGazer.Models
         private List<IDisposable> Disposables;
         private List<Timer> Timers;
 
+        private Views.DebugConsoleWindow DebugConsoleWindow;
         private MainWindowViewModel MainWindowViewModel;
     }
 }
