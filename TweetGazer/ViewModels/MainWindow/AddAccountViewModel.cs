@@ -10,9 +10,9 @@ namespace TweetGazer.ViewModels.MainWindow
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public AddAccountViewModel()
+        public AddAccountViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            this.AddAccount = new AddAccount();
+            this.AddAccount = new AddAccount(mainWindowViewModel);
             this._Visibility = this.AddAccount.Visibility;
             this._IsPinTextBoxEnabled = false;
             this.CompositeDisposable.Add(

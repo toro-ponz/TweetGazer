@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using TweetGazer.Common;
+using TweetGazer.ViewModels;
 
 namespace TweetGazer.Models.MainWindow
 {
@@ -13,8 +14,10 @@ namespace TweetGazer.Models.MainWindow
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public AddAccount()
+        public AddAccount(MainWindowViewModel mainWindowViewModel)
         {
+            this.MainWindowViewModel = mainWindowViewModel;
+
             this._Pin = "";
             this._Message = "";
             this._Session = null;
@@ -52,6 +55,7 @@ namespace TweetGazer.Models.MainWindow
         {
             if (await AccountTokens.AutheticationAsync(this._Session, this.Pin))
             {
+                this.MainWindowViewModel.StartStreaming();
                 this.Close();
             }
             else
@@ -185,5 +189,7 @@ namespace TweetGazer.Models.MainWindow
         #endregion
 
         private Uri AuthenticationUrl;
+
+        private MainWindowViewModel MainWindowViewModel;
     }
 }

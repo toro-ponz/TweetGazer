@@ -31,14 +31,13 @@ namespace TweetGazer.ViewModels
             this.CreateStatus = new CreateStatusViewModel();
             this.MovableCreateStatus = new MovableCreateStatusViewModel();
             this.AddTimeline = new AddTimelineViewModel(this);
-            this.AddAccount = new AddAccountViewModel();
+            this.AddAccount = new AddAccountViewModel(this);
             this.Mentions = new MentionsViewModel();
             this.Notifications = new NotificationsViewModel();
             this.DirectMessages = new DirectMessagesViewModel();
             this.AccountSettings = new AccountSettingsViewModel();
             this.Search = new SearchViewModel();
             this.ApplicationSettings = new ApplicationSettingsViewModel();
-            this.AddAccount = new AddAccountViewModel();
             this.NetworkState = new NetworkStateViewModel();
             this.Instructions = new InstructionsViewModel();
             this.Timelines = new TimelinesGridViewModel();
@@ -305,6 +304,14 @@ namespace TweetGazer.ViewModels
         }
 
         /// <summary>
+        /// ストリーミングを開始する
+        /// </summary>
+        public void StartStreaming()
+        {
+            this.MainWindowModel.StartStreaming();
+        }
+
+        /// <summary>
         /// 起動時のログイン
         /// </summary>
         private async void Login()
@@ -347,7 +354,7 @@ namespace TweetGazer.ViewModels
                 return;
             }
 
-            this.MainWindowModel.StartStreaming();
+            this.StartStreaming();
         }
 
         /// <summary>
