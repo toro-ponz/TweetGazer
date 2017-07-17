@@ -9,6 +9,11 @@ namespace TweetGazer.ViewModels.ShowDialogs
 {
     public class ShowAddToListViewModel : ViewModel
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="tokenSuffix">アカウント番号</param>
+        /// <param name="user">操作対象のユーザー</param>
         public ShowAddToListViewModel(int tokenSuffix, UserProperties user)
         {
             this.ShowAddToList = new ShowAddToList(tokenSuffix, user);
@@ -18,6 +23,9 @@ namespace TweetGazer.ViewModels.ShowDialogs
             this.ApplyCommand = new RelayCommand(this.Apply);
         }
 
+        /// <summary>
+        /// 変更を適用する
+        /// </summary>
         private void Apply()
         {
             this.ShowAddToList.Apply();
