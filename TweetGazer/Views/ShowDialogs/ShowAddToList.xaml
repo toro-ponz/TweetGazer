@@ -35,7 +35,7 @@
                             <Grid DataContext="{Binding Path=User}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <Grid
                                     Width="50"
