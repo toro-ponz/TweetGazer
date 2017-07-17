@@ -1,5 +1,6 @@
 ﻿using CoreTweet;
 using MahApps.Metro.Controls.Dialogs;
+using SourceChord.Lighty;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -64,6 +65,11 @@ namespace TweetGazer.Models.Timeline
 
             this.FollowCommand = new RelayCommand(this.Follow);
             this.UrlCommand = new RelayCommand<Uri>(this.SelectUrl);
+            this.SendMessageCommand = new RelayCommand(this.SendMessage);
+            this.ShowListCommand = new RelayCommand(this.ShowList);
+            this.AddToListCommand = new RelayCommand(this.AddToList);
+            this.BlockCommand = new RelayCommand(this.Block);
+            this.MuteCommand = new RelayCommand(this.Mute);
 
             this.LoadRelationship(user);
         }
@@ -205,6 +211,65 @@ namespace TweetGazer.Models.Timeline
             catch (Exception e)
             {
                 DebugConsole.Write(e);
+            }
+        }
+
+        /// <summary>
+        /// ユーザーにダイレクトメッセージを送る
+        /// </summary>
+        private void SendMessage()
+        {
+
+        }
+
+        /// <summary>
+        /// ユーザーのリストを表示する
+        /// </summary>
+        private void ShowList()
+        {
+
+        }
+
+        /// <summary>
+        /// ユーザーをリストに追加する
+        /// </summary>
+        private void AddToList()
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+            {
+                using (var showAddToList = new Views.ShowDialogs.ShowAddToList(this.TimelineModel.TokenSuffix, this))
+                    LightBox.ShowDialog(mainWindow, showAddToList);
+            }
+        }
+
+        /// <summary>
+        /// ユーザーをブロックする
+        /// </summary>
+        private async void Block()
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+            {
+                if (await mainWindow.ShowMessageAsync("確認", "ユーザー名：" + this.Name + "をブロックしますか？", MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
+                {
+                    await AccountTokens.CreateBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ユーザーをミュートする
+        /// </summary>
+        private async void Mute()
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+            {
+                if (await mainWindow.ShowMessageAsync("確認", "ユーザー名：" + this.Name + "をミュートしますか？", MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
+                {
+                    await AccountTokens.CreateMuteAsync(this.TimelineModel.TokenSuffix, this.Id);
+                }
             }
         }
 
@@ -376,6 +441,11 @@ namespace TweetGazer.Models.Timeline
 
         public ICommand FollowCommand { get; }
         public ICommand UrlCommand { get; }
+        public ICommand SendMessageCommand { get; }
+        public ICommand ShowListCommand { get; }
+        public ICommand AddToListCommand { get; }
+        public ICommand BlockCommand { get; }
+        public ICommand MuteCommand { get; }
 
         public DateTimeOffset CreatedAt { get; }
 

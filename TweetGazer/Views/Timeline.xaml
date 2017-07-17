@@ -10,7 +10,7 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     FontFamily="Segoe UI Emoji"
-    MinWidth="200"
+    MinWidth="100"
     Foreground="{DynamicResource TextBrush}"
     mc:Ignorable="d">
 

@@ -734,12 +734,105 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-                    <!--<Button
-                        Width="50"
-                        Height="35"
+                    <Button
+                        x:Name="SettingsButton"
+                        Width="25"
+                        Height="25"
                         Margin="5"
-                        Content="リスト"
-                        Style="{StaticResource SquareButtonStyle}" />-->
+                        Style="{StaticResource UwpLikeButtonStyle2}">
+                        <ContentControl ContentTemplate="{StaticResource FrontColorSettingsIcon}" />
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:ChangePropertyAction
+                                    PropertyName="IsOpen"
+                                    TargetObject="{Binding Path=ContextMenu, ElementName=SettingsButton}"
+                                    Value="True" />
+                                <ei:ChangePropertyAction
+                                    PropertyName="HorizontalOffset"
+                                    TargetObject="{Binding Path=ContextMenu, ElementName=SettingsButton}"
+                                    Value="100" />
+                                <ei:ChangePropertyAction
+                                    PropertyName="Placement"
+                                    TargetObject="{Binding Path=ContextMenu, ElementName=SettingsButton}"
+                                    Value="Mouse" />
+                                <ei:ChangePropertyAction
+                                    PropertyName="PlacementTarget"
+                                    TargetObject="{Binding Path=ContextMenu, ElementName=SettingsButton}"
+                                    Value="{Binding ElementName=SettingsButton, Mode=OneWay}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="MouseRightButtonDown">
+                                <ei:ChangePropertyAction
+                                    PropertyName="HorizontalOffset"
+                                    TargetObject="{Binding Path=ContextMenu, ElementName=SettingsButton}"
+                                    Value="100" />
+                                <ei:ChangePropertyAction
+                                    PropertyName="Placement"
+                                    TargetObject="{Binding Path=ContextMenu, ElementName=SettingsButton}"
+                                    Value="MousePoint" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Button.ContextMenu>
+                            <ContextMenu Width="200">
+                                <MenuItem
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Command="{Binding Path=SendMessageCommand, Mode=OneTime}"
+                                    Visibility="{Binding Path=IsOwn, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}">
+                                    <MenuItem.Header>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            Text="メッセージを送信"
+                                            TextAlignment="Center" />
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding Path=ShowListCommand, Mode=OneTime}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                    <MenuItem.Header>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            Text="リストを表示"
+                                            TextAlignment="Center" />
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Command="{Binding Path=AddToListCommand, Mode=OneTime}"
+                                    Visibility="{Binding Path=IsOwn, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}">
+                                    <MenuItem.Header>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            Text="リストに追加"
+                                            TextAlignment="Center" />
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Command="{Binding Path=BlockCommand, Mode=OneTime}"
+                                    Visibility="{Binding Path=IsOwn, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}">
+                                    <MenuItem.Header>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            Text="ブロック"
+                                            TextAlignment="Center" />
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Command="{Binding Path=MuteCommand, Mode=OneTime}"
+                                    Visibility="{Binding Path=IsOwn, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}">
+                                    <MenuItem.Header>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            Text="ミュート"
+                                            TextAlignment="Center" />
+                                    </MenuItem.Header>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
                     <Button
                         Width="120"
                         Height="35"

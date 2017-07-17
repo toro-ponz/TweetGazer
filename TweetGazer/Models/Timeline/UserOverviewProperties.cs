@@ -1,6 +1,5 @@
 ﻿using CoreTweet;
 using Livet;
-using System.Windows;
 using TweetGazer.Behaviors;
 
 namespace TweetGazer.Models.Timeline

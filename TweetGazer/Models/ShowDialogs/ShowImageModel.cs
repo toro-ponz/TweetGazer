@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TweetGazer.Behaviors;
 
-namespace TweetGazer.Models.ShowDialongs
+namespace TweetGazer.Models.ShowDialogs
 {
     public class ShowImageModel : NotificationObject
     {

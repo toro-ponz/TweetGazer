@@ -4,7 +4,6 @@ using CoreTweet.Streaming;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -168,6 +167,54 @@ namespace TweetGazer.Common
             try
             {
                 return await Tokens[suffix].Lists.ListAsync(user_id => userId);
+            }
+            catch (Exception e)
+            {
+                DebugConsole.Write(e);
+                return null;
+            }
+        }
+
+        public static async Task<Cursored<List>> LoadListMembershipAsync(int suffix, long? userId, bool filterToOwnedLists = false)
+        {
+            if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+                return null;
+
+            try
+            {
+                return await Tokens[suffix].Lists.MembershipsAsync(user_id => userId, filter_to_owned_lists => filterToOwnedLists);
+            }
+            catch (Exception e)
+            {
+                DebugConsole.Write(e);
+                return null;
+            }
+        }
+
+        public static async Task<ListResponse> CreateListMemberAsync(int suffix, long listId, long? userId)
+        {
+            if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+                return null;
+
+            try
+            {
+                return await Tokens[suffix].Lists.Members.CreateAsync(list_id => listId, user_id => userId);
+            }
+            catch (Exception e)
+            {
+                DebugConsole.Write(e);
+                return null;
+            }
+        }
+
+        public static async Task<ListResponse> DestroyListMemberAsync(int suffix, long listId, long? userId)
+        {
+            if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+                return null;
+
+            try
+            {
+                return await Tokens[suffix].Lists.Members.DestroyAsync(list_id => listId, user_id => userId);
             }
             catch (Exception e)
             {

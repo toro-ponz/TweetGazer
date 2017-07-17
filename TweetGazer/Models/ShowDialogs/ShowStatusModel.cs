@@ -9,7 +9,7 @@ using System.Windows.Data;
 using TweetGazer.Common;
 using TweetGazer.Models.Timeline;
 
-namespace TweetGazer.Models.ShowDialongs
+namespace TweetGazer.Models.ShowDialogs
 {
     public class ShowStatusModel
     {

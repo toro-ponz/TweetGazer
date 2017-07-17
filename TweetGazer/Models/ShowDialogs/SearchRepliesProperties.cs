@@ -1,4 +1,4 @@
-﻿namespace TweetGazer.Models.ShowDialongs
+﻿namespace TweetGazer.Models.ShowDialogs
 {
     public class SearchRepliesProperties
     {

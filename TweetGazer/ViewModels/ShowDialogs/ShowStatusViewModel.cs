@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TweetGazer.Common;
 using TweetGazer.Models;
-using TweetGazer.Models.ShowDialongs;
+using TweetGazer.Models.ShowDialogs;
 using TweetGazer.Models.Timeline;
 
 namespace TweetGazer.ViewModels.ShowDialogs
