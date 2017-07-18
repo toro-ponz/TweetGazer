@@ -68,28 +68,24 @@ namespace TweetGazer.Models.ShowDialogs
             // 操作対象のユーザーの関わるリストの内、自分が作成したものを取得
             var userAddedLists = await AccountTokens.LoadListMembershipAsync(this.TokenSuffix, this.User.Id, true);
             // 自分のリストを取得
-            var lists = await AccountTokens.LoadListsAsync(this.TokenSuffix);
+            var lists = await AccountTokens.LoadListOwnershipsAsync(this.TokenSuffix);
 
             if (userAddedLists == null || lists == null)
                 return;
 
             foreach (var list in lists)
             {
-                // 自分の作成したリスト以外を弾く
-                if (list.User.Id == AccountTokens.Users[this.TokenSuffix].Id)
+                var isAdded = false;
+                foreach (var l in userAddedLists.Result)
                 {
-                    var isAdded = false;
-                    foreach (var l in userAddedLists.Result)
+                    // 既に追加されているか判定
+                    if (list.Id == l.Id)
                     {
-                        // 既に追加されているか判定
-                        if (list.Id == l.Id)
-                        {
-                            isAdded = true;
-                            break;
-                        }
+                        isAdded = true;
+                        break;
                     }
-                    this.Lists.Add(new ListProperties(list, isAdded));
                 }
+                this.Lists.Add(new ListProperties(list, isAdded));
             }
         }
         

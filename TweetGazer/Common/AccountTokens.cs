@@ -175,6 +175,22 @@ namespace TweetGazer.Common
             }
         }
 
+        public static async Task<Cursored<List>> LoadListOwnershipsAsync(int suffix, long? userId = null)
+        {
+            if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+                return null;
+
+            try
+            {
+                return await Tokens[suffix].Lists.OwnershipsAsync(count => LoadListsCount, user_id => userId);
+            }
+            catch (Exception e)
+            {
+                DebugConsole.Write(e);
+                return null;
+            }
+        }
+
         public static async Task<Cursored<List>> LoadListMembershipAsync(int suffix, long? userId, bool filterToOwnedLists = false)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
@@ -182,7 +198,7 @@ namespace TweetGazer.Common
 
             try
             {
-                return await Tokens[suffix].Lists.MembershipsAsync(user_id => userId, filter_to_owned_lists => filterToOwnedLists);
+                return await Tokens[suffix].Lists.MembershipsAsync(count => LoadListsCount, user_id => userId, filter_to_owned_lists => filterToOwnedLists);
             }
             catch (Exception e)
             {
@@ -1017,6 +1033,7 @@ namespace TweetGazer.Common
         public static readonly int LoadStatusCount = 100;
         public static readonly int LoadMessageCount = 100;
         public static readonly int LoadUsersCount = 100;
+        public static readonly int LoadListsCount = 100;
         public static int TokensCount
         {
             get
