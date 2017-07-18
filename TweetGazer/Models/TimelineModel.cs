@@ -719,7 +719,7 @@ namespace TweetGazer.Models
                                     .Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
                                     .Repeat()
                                     .Subscribe(
-                                        (StreamingMessage m) => DebugConsole.WriteLine(m),
+                                        (StreamingMessage m) => { },
                                         (Exception ex) => DebugConsole.WriteLine(ex),
                                         () => DebugConsole.WriteLine("Streaming Ended.")
                                     );

@@ -10,7 +10,6 @@ using System.Collections.ObjectModel;
 using TweetGazer.Models.MainWindow;
 using System.Windows.Data;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using MahApps.Metro;
 using TweetGazer.ViewModels;
 
@@ -91,18 +90,20 @@ namespace TweetGazer.Models
                 var users = AccountTokens.Users;
                 for (int i = 0; i < users.Count; i++)
                 {
+                    DebugConsole.WriteLine("ストリーミングを開始します……(" + (i + 1) + "/" + AccountTokens.TokensCount + ")");
                     var stream = AccountTokens.StartStreaming(i, StreamingMode.User);
                     if (stream != null)
                     {
+                        DebugConsole.WriteLine("ストリーミング作成成功(" + (i + 1) + "/" + AccountTokens.TokensCount + ")");
                         var j = i;
                         //再接続
                         stream
                             .Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
                             .Repeat()
                             .Subscribe(
-                                (StreamingMessage m) => DebugConsole.WriteLine(m),
+                                (StreamingMessage m) => { },
                                 (Exception ex) => DebugConsole.WriteLine(ex),
-                                () => DebugConsole.WriteLine("Streaming Ended.")
+                                () => DebugConsole.WriteLine("ストリーミングが予期せず終了しました")
                             );
                         //ツイートが流れてきたとき
                         stream.OfType<StatusMessage>().Subscribe(x =>
@@ -147,14 +148,22 @@ namespace TweetGazer.Models
                         });
                         //ダイレクトメッセージを受け取ったとき
                         stream.OfType<CoreTweet.DirectMessage>().Subscribe(ReceiveDirectMessage);
+                        //フォローユーザー情報が流れてきたとき
+                        stream.OfType<FriendsMessage>().Subscribe(x =>
+                        {
+                            DebugConsole.WriteLine("@" + AccountTokens.Users[j].ScreenName + "さん：" + x.Count() + "人フォロー中");
+                        });
                         //切断されたとき
                         stream.OfType<DisconnectMessage>().Subscribe(x =>
                         {
-                            DebugConsole.Write(x);
+                            DebugConsole.WriteLine("ストリーミングが切断されました");
                         });
 
+                        DebugConsole.WriteLine("ストリーミング接続……(" + (i + 1) + "/" + AccountTokens.TokensCount + ")");
                         this.Disposables.Add(stream.Connect());
                     }
+                    else
+                        DebugConsole.WriteLine("ストリーミング作成失敗(" + (i + 1) + "/" + AccountTokens.TokensCount + ")");
                 }
             }
             catch (Exception e)
