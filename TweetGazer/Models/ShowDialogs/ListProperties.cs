@@ -15,6 +15,7 @@ namespace TweetGazer.Models.ShowDialogs
             this.Id = list.Id;
             this.Name = list.Name;
             this.Owner = new UserOverviewProperties(list.User);
+            this.MemberCount = list.MemberCount;
             this.IsAdded = isAdded;
             this._IsAdded = isAdded;
         }
@@ -23,6 +24,7 @@ namespace TweetGazer.Models.ShowDialogs
 
         public long Id;
         public string Name { get; }
+        public int MemberCount { get; }
         public bool IsAdded { get; set; }
         public bool _IsAdded;
         public bool IsChanged

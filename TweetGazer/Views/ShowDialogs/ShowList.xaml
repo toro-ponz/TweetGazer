@@ -121,9 +121,44 @@
                                 ItemsSource="{Binding Path=Lists, Mode=OneWay}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Path=IsAdded, Mode=TwoWay}">
-                                            <TextBlock FontSize="20" Text="{Binding Path=Name, Mode=OneTime}" />
-                                        </CheckBox>
+                                        <Button Style="{StaticResource UwpLikeButtonStyle1}">
+                                            <Grid Margin="0,0,0,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="73" />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <Image
+                                                    Width="48"
+                                                    Height="48"
+                                                    Margin="0,5,5,5"
+                                                    Behaviors:ImageBehavior.Source="{Binding Path=Owner.ProfileImageBigger, Mode=OneTime}" />
+                                                <Grid Grid.Column="1" VerticalAlignment="Center">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock
+                                                        Margin="0,5,0,0"
+                                                        FontSize="16"
+                                                        Foreground="{DynamicResource TextBrush}"
+                                                        Text="{Binding Path=Name, Mode=OneTime}" />
+                                                    <TextBlock
+                                                        Grid.Column="1"
+                                                        VerticalAlignment="Bottom"
+                                                        Foreground="{DynamicResource GrayBrush2}"
+                                                        Text="{Binding Path=Owner.Name, Mode=OneTime, StringFormat={}{0}さんが作成}" />
+                                                    <TextBlock
+                                                        Grid.Row="1"
+                                                        Grid.ColumnSpan="2"
+                                                        Foreground="{DynamicResource GrayBrush2}"
+                                                        Text="{Binding Path=MemberCount, Mode=OneTime, StringFormat={}{0:N0}人が追加されています}" />
+                                                </Grid>
+                                            </Grid>
+                                        </Button>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                                 <ItemsControl.Template>
