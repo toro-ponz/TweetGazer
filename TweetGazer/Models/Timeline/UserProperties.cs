@@ -219,7 +219,9 @@ namespace TweetGazer.Models.Timeline
         /// </summary>
         private void SendMessage()
         {
-
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+                (mainWindow.DataContext as ViewModels.MainWindowViewModel).Notify("未実装", MainWindow.NotificationType.Alert);
         }
 
         /// <summary>
@@ -227,7 +229,12 @@ namespace TweetGazer.Models.Timeline
         /// </summary>
         private void ShowList()
         {
-
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+            {
+                using (var showList = new Views.ShowDialogs.ShowList(this.TimelineModel.TokenSuffix, this))
+                    LightBox.ShowDialog(mainWindow, showList);
+            }
         }
 
         /// <summary>

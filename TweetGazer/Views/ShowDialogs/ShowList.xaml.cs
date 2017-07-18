@@ -8,21 +8,21 @@ using TweetGazer.ViewModels.ShowDialogs;
 namespace TweetGazer.Views.ShowDialogs
 {
     /// <summary>
-    /// ShowAddToList.xaml の相互作用ロジック
+    /// ShowList.xaml の相互作用ロジック
     /// </summary>
-    public partial class ShowAddToList : UserControl, IDisposable
+    public partial class ShowList : UserControl, IDisposable
     {
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="tokenSuffix">アカウント番号</param>
-        /// <param name="user">操作対象のユーザー</param>
-        public ShowAddToList(int tokenSuffix, UserProperties user)
+        /// <param name="user">表示対象のユーザー</param>
+        public ShowList(int tokenSuffix, UserProperties user)
         {
             InitializeComponent();
 
-            this.ShowAddToListViewModel = new ShowAddToListViewModel(tokenSuffix, user);
-            this.DataContext = this.ShowAddToListViewModel;
+            this.ShowListViewModel = new ShowListViewModel(tokenSuffix, user);
+            this.DataContext = this.ShowListViewModel;
         }
 
         /// <summary>
@@ -46,6 +46,7 @@ namespace TweetGazer.Views.ShowDialogs
             }
 
             this.Close();
+            this.ShowListViewModel.Dispose();
         }
 
         /// <summary>
@@ -70,6 +71,6 @@ namespace TweetGazer.Views.ShowDialogs
             e.Handled = true;
         }
 
-        private ShowAddToListViewModel ShowAddToListViewModel;
+        private ShowListViewModel ShowListViewModel;
     }
 }

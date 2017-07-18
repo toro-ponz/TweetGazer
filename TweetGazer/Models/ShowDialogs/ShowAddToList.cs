@@ -88,7 +88,7 @@ namespace TweetGazer.Models.ShowDialogs
                             break;
                         }
                     }
-                    this.Lists.Add(new ListProperties(list.Id, list.Name, isAdded));
+                    this.Lists.Add(new ListProperties(list, isAdded));
                 }
             }
         }
@@ -98,34 +98,5 @@ namespace TweetGazer.Models.ShowDialogs
         public ObservableCollection<ListProperties> Lists { get; }
 
         private int TokenSuffix;
-    }
-
-    public class ListProperties
-    {
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        /// <param name="id">リストのID</param>
-        /// <param name="name">リストの名前</param>
-        /// <param name="isAdded">リストに操作対象のユーザーが既に追加されているか否か</param>
-        public ListProperties(long id, string name, bool isAdded)
-        {
-            this.Id = id;
-            this.Name = name;
-            this.IsAdded = isAdded;
-            this._IsAdded = isAdded;
-        }
-
-        public long Id;
-        public string Name { get; }
-        public bool IsAdded { get; set; }
-        public bool _IsAdded;
-        public bool IsChanged
-        {
-            get
-            {
-                return this.IsAdded != this._IsAdded;
-            }
-        }
     }
 }

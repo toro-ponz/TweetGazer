@@ -196,9 +196,11 @@
     <Compile Include="Models\MainWindow\StatusMedia.cs" />
     <Compile Include="Models\MainWindow\TimelinesGrid.cs" />
     <Compile Include="Models\MainWindow\TrayNotification.cs" />
+    <Compile Include="Models\ShowDialogs\ListProperties.cs" />
     <Compile Include="Models\ShowDialogs\SearchRepliesProperties.cs" />
     <Compile Include="Models\ShowDialogs\ShowAddToList.cs" />
     <Compile Include="Models\ShowDialogs\ShowImageModel.cs" />
+    <Compile Include="Models\ShowDialogs\ShowListModel.cs" />
     <Compile Include="Models\ShowDialogs\ShowStatusModel.cs" />
     <Compile Include="Models\Timeline\LoadingProperties.cs" />
     <Compile Include="Models\MainWindow\AccountSettings.cs" />
@@ -247,6 +249,7 @@
     <Compile Include="ViewModels\MainWindow\TimelinesGridViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowAddToListViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowImageViewModel.cs" />
+    <Compile Include="ViewModels\ShowDialogs\ShowListViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowStatusViewModel.cs" />
     <Compile Include="ViewModels\TimelineViewModel.cs" />
     <Compile Include="Selectors\CreatingStatusMediaTemplateSelector.cs" />
@@ -270,6 +273,9 @@
     </Compile>
     <Compile Include="Views\ShowDialogs\ShowImage.xaml.cs">
       <DependentUpon>ShowImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShowDialogs\ShowList.xaml.cs">
+      <DependentUpon>ShowList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShowDialogs\ShowMovie.xaml.cs">
       <DependentUpon>ShowMovie.xaml</DependentUpon>
@@ -347,6 +353,10 @@
     <Page Include="Views\ShowDialogs\ShowImage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ShowDialogs\ShowList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ShowDialogs\ShowMovie.xaml">
       <Generator>MSBuild:Compile</Generator>
