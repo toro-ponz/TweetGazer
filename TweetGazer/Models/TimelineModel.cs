@@ -124,10 +124,23 @@ namespace TweetGazer.Models
             if (this.IsLoading)
                 return false;
 
-            if (maxId == null &&
-                this.Data.CurrentPage.TimelineType != TimelineType.User &&
-                this.Data.CurrentPage.TimelineType != TimelineType.Search)
-                this.TimelineItems.Clear();
+            if (maxId == null)
+            {
+                if (this.Data.CurrentPage.TimelineType == TimelineType.User)
+                {
+                    while (this.TimelineItems.Count > 2)
+                        this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+                }
+                else if (this.Data.CurrentPage.TimelineType == TimelineType.Search)
+                {
+                    while (this.TimelineItems.Count > 1)
+                        this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+                }
+                else
+                {
+                    this.TimelineItems.Clear();
+                }
+            }
 
             this.Message = "";
             this.VerticalOffset = 0;
