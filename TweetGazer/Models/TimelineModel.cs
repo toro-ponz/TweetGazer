@@ -215,6 +215,7 @@ namespace TweetGazer.Models
                         break;
                     case TimelineType.MentionsStack:
                         this.TokenSuffix = 0;
+                        this.TimelineItems.Clear();
                         foreach (var me in MentionsStack.Mentions)
                             this.TimelineItems.Add(new TimelineItemProperties(this, me.Status));
                         break;
@@ -252,6 +253,7 @@ namespace TweetGazer.Models
                         break;
                     case TimelineType.NotificationsStack:
                         this.TokenSuffix = 0;
+                        this.TimelineItems.Clear();
                         foreach (var no in NotificationsStack.Notifications)
                             this.TimelineItems.Add(new TimelineItemProperties(this, no.SentUser, no.ReceiveUser, no.NotificationPropertiesType, no.Text, no.Id));
                         break;
