@@ -402,8 +402,11 @@ namespace TweetGazer.Common
                 webreq = (HttpWebRequest)WebRequest.Create("http://www.twitter.com");
                 webreq.Method = "HEAD";
                 webres = (HttpWebResponse)webreq.GetResponse();
-                Console.WriteLine(webres.StatusCode);
-                return true;
+                if (webres.StatusCode == HttpStatusCode.OK)
+                    return true;
+
+                Console.WriteLine("Twitter - HttpStatusCode : " + webres.StatusCode.ToString());
+                return false;
             }
             catch (Exception e)
             {
