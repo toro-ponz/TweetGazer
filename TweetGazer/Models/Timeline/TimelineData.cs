@@ -1,5 +1,6 @@
 ﻿using Livet;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 
@@ -17,6 +18,18 @@ namespace TweetGazer.Models.Timeline
         }
         #endregion
 
+        #region CurrentTimelineItems 変更通知プロパティ
+        public ObservableCollection<TimelineItemProperties> CurrentTimelineItems
+        {
+            get
+            {
+                if (this.Pages == null || this.Pages.Count <= this.PageSuffix)
+                    return new ObservableCollection<TimelineItemProperties>();
+                return this.CurrentPage.TimelineItems;
+            }
+        }
+        #endregion
+
         #region PageSuffix 変更通知プロパティ
         public int PageSuffix
         {
@@ -29,6 +42,7 @@ namespace TweetGazer.Models.Timeline
                 this._PageSuffix = value;
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(nameof(this.CurrentPage));
+                this.RaisePropertyChanged(nameof(this.CurrentTimelineItems));
                 this.RaisePropertyChanged(nameof(this.IsVisibleBackButton));
             }
         }

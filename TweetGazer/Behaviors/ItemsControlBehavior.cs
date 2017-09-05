@@ -32,7 +32,7 @@ namespace TweetGazer.Behaviors
                 switch (eventArgs.Action)
                 {
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-                        await Add(itemsControl, eventArgs);
+                        Add(itemsControl, eventArgs);
                         break;
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                         break;
@@ -40,13 +40,13 @@ namespace TweetGazer.Behaviors
             };
         }
 
-        public static async Task Add(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e)
+        public static async void Add(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e)
         {
             var itemsControl = sender as ItemsControl;
             if (itemsControl == null)
                 return;
 
-            //最上位への追加でない場合リターン
+            // 最上位への追加でない場合リターン
             if (e.Position.Index > 0)
                 return;
 
@@ -60,23 +60,23 @@ namespace TweetGazer.Behaviors
                 var height = scrollViewer.ExtentHeight;
                 var verticalOffset = ScrollViewerBehavior.GetVerticalOffset(scrollViewer);
                 var type = GetAddingScroll(itemsControl);
-                //少しでもスクロールされている場合、その表示内容が同じ位置に来るように再計算
+                // 少しでもスクロールされている場合、その表示内容が同じ位置に来るように再計算
                 if (type == Types.Timeline && verticalOffset != 0 || type == Types.Statuses)
                 {
                     await Task.Run(() =>
                     {
                         for (int i = 0; i < 3000; i++)
                         {
-                            //描画されるまで最大3秒待つ
+                            // 描画されるまで最大3秒待つ
                             if (height != scrollViewer.ExtentHeight)
                                 break;
                             System.Threading.Thread.Sleep(1);
                         }
                     });
 
-                    //追加後の高さ
+                    // 追加後の高さ
                     var newHeight = scrollViewer.ExtentHeight;
-                    //増えた高さ分だけスクロール位置を下げる
+                    // 増えた高さ分だけスクロール位置を下げる
                     ScrollViewerBehavior.SetVerticalOffset(scrollViewer, ScrollViewerBehavior.GetVerticalOffset(scrollViewer) + (newHeight - height));
                 }
             }
