@@ -92,7 +92,7 @@ namespace TweetGazer.Models.MainWindow
         {
             var page = new TimelinePageData()
             {
-                TimelineType = TimelineType.Mentions
+                TimelineType = TimelineType.Mention
             };
 
             this.CreateTimeline(page);

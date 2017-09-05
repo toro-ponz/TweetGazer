@@ -93,7 +93,7 @@
             Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
             ItemsSource="{Binding Path=TimelineItems, Mode=OneWay}"
             ScrollViewer.CanContentScroll="True"
-            VirtualizingPanel.CacheLength="0"
+            VirtualizingPanel.CacheLength="3"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingStackPanel.IsVirtualizing="True">
             <ItemsControl.ItemTemplateSelector>

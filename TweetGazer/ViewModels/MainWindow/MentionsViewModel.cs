@@ -90,6 +90,17 @@ namespace TweetGazer.ViewModels.MainWindow
                         }
                     })
                 );
+                this.CompositeDisposable.Add(
+                    new PropertyChangedEventListener(this.Timeline, (_, __) =>
+                    {
+                        switch (__.PropertyName)
+                        {
+                            case nameof(this.Timeline.Message):
+                                this.Message = this.Timeline.Message;
+                                break;
+                        }
+                    })
+                );
                 this.CompositeDisposable.Add(this.Timeline);
             }
         }
@@ -116,6 +127,22 @@ namespace TweetGazer.ViewModels.MainWindow
             }
         }
         private IEnumerable<TimelineItemProperties> _TimelineItems;
+        #endregion
+
+        #region Message 変更通知プロパティ
+        public string Message
+        {
+            get
+            {
+                return this._Message;
+            }
+            set
+            {
+                this._Message = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private string _Message;
         #endregion
 
         #region IsOpen 変更通知プロパティ

@@ -12,6 +12,7 @@
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/TimelineResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!-- アプリケーション設定Flyout -->
     <Controls:Flyout
         x:Key="ApplicationSettingsFlyout"
         Margin="-50,0,0,0"
@@ -301,6 +302,7 @@
         </Grid>
     </Controls:Flyout>
 
+    <!-- メンションFlyout -->
     <Controls:Flyout
         x:Key="MentionsFlyout"
         Width="335"
@@ -369,6 +371,17 @@
                     <ContentControl ContentTemplate="{StaticResource AccentColorCloseIcon}" />
                 </Button>
             </Grid>
+
+            <!--  メッセージ  -->
+            <TextBlock
+                Grid.Row="2"
+                Margin="10"
+                VerticalAlignment="Center"
+                FontSize="25"
+                Foreground="{DynamicResource TextBrush}"
+                Text="{Binding Path=Message, Mode=OneWay}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
             <ItemsControl
                 Grid.Row="2"
                 Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
@@ -396,6 +409,7 @@
         </Grid>
     </Controls:Flyout>
 
+    <!-- 通知Flyout -->
     <Controls:Flyout
         x:Key="NoticeFlyout"
         Width="335"
@@ -464,6 +478,17 @@
                     <ContentControl ContentTemplate="{StaticResource AccentColorCloseIcon}" />
                 </Button>
             </Grid>
+
+            <!--  メッセージ  -->
+            <TextBlock
+                Grid.Row="2"
+                Margin="10"
+                VerticalAlignment="Center"
+                FontSize="25"
+                Foreground="{DynamicResource TextBrush}"
+                Text="{Binding Path=Message, Mode=OneWay}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
             <ItemsControl
                 Grid.Row="2"
                 Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
@@ -491,6 +516,7 @@
         </Grid>
     </Controls:Flyout>
 
+    <!-- ダイレクトメッセージFlyout -->
     <Controls:Flyout
         x:Key="DirectMessagesFlyout"
         Width="335"
@@ -512,6 +538,7 @@
         </Grid>
     </Controls:Flyout>
 
+    <!-- アカウント設定Flyout -->
     <Controls:Flyout
         x:Key="AccountSettingsFlyout"
         Width="335"
@@ -677,6 +704,7 @@
         </Grid>
     </Controls:Flyout>
 
+    <!-- タイムライン追加Flyout -->
     <Controls:Flyout
         x:Key="AddTimelineFlyout"
         Width="335"
@@ -891,6 +919,7 @@
         </Grid>
     </Controls:Flyout>
 
+    <!-- 検索Flyout -->
     <Controls:Flyout
         x:Key="SearchFlyout"
         Width="335"
@@ -992,6 +1021,7 @@
         </Grid>
     </Controls:Flyout>
 
+    <!-- ツイートFlyout -->
     <Controls:Flyout
         x:Key="CreateStatusFlyout"
         Width="335"
