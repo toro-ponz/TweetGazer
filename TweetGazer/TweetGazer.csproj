@@ -271,6 +271,12 @@
     <Compile Include="Views\ShowDialogs\ShowCopiableText.xaml.cs">
       <DependentUpon>ShowCopiableText.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ShowDialogs\ShowFollowers.xaml.cs">
+      <DependentUpon>ShowFollowers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShowDialogs\ShowFollows.xaml.cs">
+      <DependentUpon>ShowFollows.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ShowDialogs\ShowImage.xaml.cs">
       <DependentUpon>ShowImage.xaml</DependentUpon>
     </Compile>
@@ -282,6 +288,9 @@
     </Compile>
     <Compile Include="Views\ShowDialogs\ShowStatus.xaml.cs">
       <DependentUpon>ShowStatus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShowDialogs\ShowUser.xaml.cs">
+      <DependentUpon>ShowUser.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Timeline.xaml.cs">
       <DependentUpon>Timeline.xaml</DependentUpon>
@@ -350,6 +359,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ShowDialogs\ShowFollowers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShowDialogs\ShowFollows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ShowDialogs\ShowImage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -365,6 +382,10 @@
     <Page Include="Views\ShowDialogs\ShowStatus.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ShowDialogs\ShowUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Timeline.xaml">
       <Generator>MSBuild:Compile</Generator>
