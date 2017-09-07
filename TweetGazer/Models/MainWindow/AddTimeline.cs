@@ -195,7 +195,7 @@ namespace TweetGazer.Models.MainWindow
 
             var contentControl = new ContentControl()
             {
-                Content = Application.Current.FindResource("AddTimelineExtreGridLists") as Grid,
+                Content = Application.Current.FindResource("AddTimelineExtraGridLists") as Grid,
                 DataContext = itemsSource
             };
 
@@ -231,7 +231,7 @@ namespace TweetGazer.Models.MainWindow
 
             var contentControl = new ContentControl()
             {
-                Content = Application.Current.FindResource("AddTimelineExtreGridUsers") as Grid,
+                Content = Application.Current.FindResource("AddTimelineExtraGridUsers") as Grid,
                 DataContext = new UsersModel(this, itemsSource, this.TokenSuffix)
             };
             this.ExtraGrid.First().Children.Add(contentControl);
@@ -271,7 +271,7 @@ namespace TweetGazer.Models.MainWindow
 
             var contentControl = new ContentControl()
             {
-                Content = Application.Current.FindResource("AddTimelineExtreGridTrends") as Grid,
+                Content = Application.Current.FindResource("AddTimelineExtraGridTrends") as Grid,
                 DataContext = new TrendsModel(this, itemsSource)
             };
             this.ExtraGrid.First().Children.Add(contentControl);

@@ -1,0 +1,18 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Behaviors="clr-namespace:TweetGazer.Behaviors"
+    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
+
+    <DataTemplate x:Key="ReadMoreReplies">
+        <Controls:ProgressRing
+            Width="50"
+            Height="50"
+            Margin="10"
+            Behaviors:ReadMoreBehavior.Command="{Binding Path=LoadCommand, Mode=OneTime}"
+            Behaviors:ReadMoreBehavior.CommandParameter="{Binding Path=DataContext.ReadMoreRepliesCommand, Mode=OneTime, RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl}}"
+            DataContext="{Binding Path=LoadingProperties}"
+            IsActive="False"
+            Visibility="{Binding Path=Visibility}" />
+    </DataTemplate>
+</ResourceDictionary>

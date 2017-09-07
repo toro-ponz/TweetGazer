@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-    xmlns:Lighty="clr-namespace:SourceChord.Lighty;assembly=Lighty"
     xmlns:Properties="clr-namespace:TweetGazer.Properties"
     xmlns:Selectors="clr-namespace:TweetGazer.Selectors"
     xmlns:ViewModels="clr-namespace:TweetGazer.ViewModels"
@@ -29,25 +28,8 @@
     <Controls:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindowResources.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/MainWindowResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="{x:Type Lighty:LightBox}">
-                <Setter Property="Panel.ZIndex" Value="999" />
-                <Setter Property="ItemsPanel">
-                    <Setter.Value>
-                        <ItemsPanelTemplate>
-                            <Grid Margin="0" />
-                        </ItemsPanelTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="ItemContainerStyle">
-                    <Setter.Value>
-                        <Style TargetType="ContentControl">
-                            <Setter Property="Margin" Value="0" />
-                        </Style>
-                    </Setter.Value>
-                </Setter>
-            </Style>
         </ResourceDictionary>
     </Controls:MetroWindow.Resources>
 
@@ -75,7 +57,7 @@
             <StaticResource ResourceKey="CreateStatusFlyout" />
             <StaticResource ResourceKey="AddTimelineFlyout" />
             <StaticResource ResourceKey="MentionsFlyout" />
-            <StaticResource ResourceKey="NoticeFlyout" />
+            <StaticResource ResourceKey="NotificationsFlyout" />
             <StaticResource ResourceKey="DirectMessagesFlyout" />
             <StaticResource ResourceKey="AccountSettingsFlyout" />
             <StaticResource ResourceKey="SearchFlyout" />
@@ -411,14 +393,14 @@
                     </Grid>
                     <TextBlock
                         FontSize="16"
-                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Foreground="{DynamicResource TextBrush}"
-                        Text="インターネット接続済み" />
+                        Text="インターネット接続済み"
+                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <TextBlock
                         FontSize="16"
-                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}"
                         Foreground="{DynamicResource TextBrush}"
-                        Text="インターネット未接続" />
+                        Text="インターネット未接続"
+                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Grid>
@@ -454,14 +436,14 @@
                     </Grid>
                     <TextBlock
                         FontSize="16"
-                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Foreground="{DynamicResource TextBrush}"
-                        Text="Twitter接続可能" />
+                        Text="Twitter接続可能"
+                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <TextBlock
                         FontSize="16"
-                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}"
                         Foreground="{DynamicResource TextBrush}"
-                        Text="Twitter接続不能" />
+                        Text="Twitter接続不能"
+                        Visibility="{Binding Path=IsInternetOnline, Mode=OneWay, Converter={StaticResource BooleanInvertAndToVisibilityConverter}}" />
                 </StackPanel>
             </StackPanel>
             <Border
@@ -510,8 +492,8 @@
         <ContentControl
             Grid.RowSpan="2"
             Grid.ColumnSpan="2"
-            Visibility="Collapsed"
             ContentTemplate="{StaticResource Instructions}"
-            DataContext="{Binding}" />
+            DataContext="{Binding}"
+            Visibility="Collapsed" />
     </Grid>
 </Controls:MetroWindow>

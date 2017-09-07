@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <ResourceDictionary.MergedDictionaries>
+        <!--  Style  -->
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/Styles/Styles.xaml" />
+
+        <!--  Converter  -->
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/Convertors/Convertors.xaml" />
+        
+        <!--  Icons  -->
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/Icons/VectorImages.xaml" />
+
+        <!--  MahApps.Metro  -->
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatSlider.xaml" />
+        
+        <!--  AddTimelineExtraGrid  -->
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/AddTimelineExtraGrid/Lists.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/AddTimelineExtraGrid/Users.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/AddTimelineExtraGrid/Trends.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

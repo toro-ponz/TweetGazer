@@ -1,0 +1,62 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+
+    <DataTemplate x:Key="Instructions">
+        <Grid
+            Background="#77FFFFFF"
+            DataContext="{Binding Path=DataContext.Instructions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}"
+            Visibility="{Binding Path=Visibility, Mode=OneWay}">
+            <Grid Margin="20" Background="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Frame
+                        Padding="50"
+                        FontSize="20"
+                        NavigationUIVisibility="Hidden"
+                        Source="{Binding Path=Page, Mode=OneWay}" />
+                </Grid>
+                <Button
+                    Grid.Row="1"
+                    Width="210"
+                    HorizontalAlignment="Left"
+                    Content="PREVIOUS"
+                    FontSize="20"
+                    Style="{StaticResource AccentedSquareButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Previous" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <TextBlock
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    FontSize="24"
+                    Foreground="Black">
+                    <Run Text="{Binding Path=PageNumber, Mode=OneWay}" />
+                    <Run Text="/" />
+                    <Run Text="{Binding Path=PagesCount, Mode=OneTime}" />
+                </TextBlock>
+                <Button
+                    Grid.Row="1"
+                    Width="210"
+                    HorizontalAlignment="Right"
+                    Content="NEXT"
+                    FontSize="20"
+                    Style="{StaticResource AccentedSquareButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction MethodName="Next" TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

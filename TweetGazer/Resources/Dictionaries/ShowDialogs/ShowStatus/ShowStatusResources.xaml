@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/ShowDialogs/ShowStatus/Templates/MainStatus.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/ShowDialogs/ShowStatus/Templates/ReplyStatus.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/ShowDialogs/ShowStatus/Templates/ReadMoreReplies.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/ShowDialogs/ShowStatus/Templates/ReadMoreRepliesButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/ShowDialogs/ShowStatus/Templates/ReadMoreRepliesToMainStatus.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Status/Media.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>
