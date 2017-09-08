@@ -180,6 +180,7 @@
     <Compile Include="Common\Notification.cs" />
     <Compile Include="Common\NotificationsStack.cs" />
     <Compile Include="Common\SecretParameters.cs" />
+    <Compile Include="Converters\BooleanInvertConverter.cs" />
     <Compile Include="Converters\BooleanToOrientationConverter.cs" />
     <Compile Include="Converters\BooleanInvertAndToVisibilityConverter.cs" />
     <Compile Include="Converters\NullImageConverter.cs" />

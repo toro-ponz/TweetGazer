@@ -4,6 +4,7 @@
     xmlns:Converters="clr-namespace:TweetGazer.Converters">
     
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <Converters:BooleanInvertConverter x:Key="BooleanInvertConverter" />
     <Converters:BooleanToOrientationConverter x:Key="BooleanToOrientationConverter" />
     <Converters:BooleanInvertAndToVisibilityConverter x:Key="BooleanInvertAndToVisibilityConverter" />
     <Converters:NullImageConverter x:Key="NullImageConverter" />

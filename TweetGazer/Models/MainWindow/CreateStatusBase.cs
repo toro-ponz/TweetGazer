@@ -1,8 +1,10 @@
-﻿using Microsoft.Win32;
+﻿using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using TweetGazer.Behaviors;
 using TweetGazer.Common;
@@ -42,18 +44,27 @@ namespace TweetGazer.Models.MainWindow
             {
                 if (user.IsCreate)
                 {
-                    if (this.IsDeleteButtonVisible && !user.Media.IsUploaded)
+                    var text = user.User.Name + "(@" + user.User.ScreenName + ")でツイートしますか？\n" + this.StatusText;
+                    if (!Properties.Settings.Default.IsConfirmOfCreateStatus || await this.Confirm(text) == MessageDialogResult.Affirmative)
                     {
-                        if (!(await user.Upload(this.Type, this.FileNames.ToList())))
+                        if (this.IsDeleteButtonVisible && !user.Media.IsUploaded)
+                        {
+                            if (!(await user.Upload(this.Type, this.FileNames.ToList())))
+                            {
+                                this.IsProgressRingVisible = false;
+                                return;
+                            }
+                        }
+
+                        if (await AccountTokens.CreateStatusAsync(user.TokenSuffix, this.StatusText, this.ReplyId, user.Media.Ids))
+                        {
+                            user.Media.Clear();
+                        }
+                        else
                         {
                             this.IsProgressRingVisible = false;
                             return;
                         }
-                    }
-
-                    if (await AccountTokens.CreateStatusAsync(user.TokenSuffix, this.StatusText, this.ReplyId, user.Media.Ids))
-                    {
-                        user.Media.Clear();
                     }
                     else
                     {
@@ -219,6 +230,20 @@ namespace TweetGazer.Models.MainWindow
                     user.IsCreate = true;
                 i++;
             }
+        }
+
+        /// <summary>
+        /// 確認ダイアログを表示する
+        /// </summary>
+        /// <param name="text">表示するテキスト</param>
+        /// <returns>Task<MessageDialogResult></returns>
+        private async Task<MessageDialogResult> Confirm(string text)
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow == null)
+                return MessageDialogResult.Negative;
+
+            return await mainWindow.ShowMessageAsync("確認", text, MessageDialogStyle.AffirmativeAndNegative);
         }
 
         #region CaretPosition 変更通知プロパティ

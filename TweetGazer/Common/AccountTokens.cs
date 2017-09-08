@@ -662,42 +662,36 @@ namespace TweetGazer.Common
             }
         }
 
-        public static async Task<bool> CreateMuteAsync(int suffix, long? userId)
+        public static async Task<UserResponse> CreateMuteAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
-                return false;
+                return null;
 
             try
             {
-                await Tokens[suffix].Mutes.Users.CreateAsync(user_id => userId);
+                return await Tokens[suffix].Mutes.Users.CreateAsync(user_id => userId);
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("ミュート失敗．", NotificationType.Error);
                 DebugConsole.Write(e);
-                return false;
+                return null;
             }
-            CommonMethods.Notify("ミュート成功．", NotificationType.Normal);
-            return true;
         }
 
-        public static async Task<bool> DestroyMuteAsync(int suffix, long? userId)
+        public static async Task<UserResponse> DestroyMuteAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
-                return false;
+                return null;
 
             try
             {
-                await Tokens[suffix].Mutes.Users.DestroyAsync(user_id => userId);
+                return await Tokens[suffix].Mutes.Users.DestroyAsync(user_id => userId);
             }
             catch (Exception e)
             {
-                CommonMethods.Notify("ミュート解除失敗．", NotificationType.Error);
                 DebugConsole.Write(e);
-                return false;
+                return null;
             }
-            CommonMethods.Notify("ミュート解除成功．", NotificationType.Normal);
-            return true;
         }
 
         public static async Task<bool> DeleteStatusAsync(int suffix, long statusId)

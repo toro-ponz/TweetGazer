@@ -41,6 +41,7 @@
             </Grid>
             <ScrollViewer Grid.Row="1">
                 <WrapPanel HorizontalAlignment="Stretch">
+                    <!--  一般  -->
                     <StackPanel Margin="20,20,0,0" HorizontalAlignment="Stretch">
                         <TextBlock
                             Margin="30,10"
@@ -151,6 +152,8 @@
                             </CheckBox>
                         </StackPanel>
                     </StackPanel>
+
+                    <!--  タイムライン  -->
                     <StackPanel Margin="20,20,0,0" HorizontalAlignment="Stretch">
                         <TextBlock
                             Margin="30,10"
@@ -203,6 +206,8 @@
                             </CheckBox>
                         </StackPanel>
                     </StackPanel>
+
+                    <!--  通知  -->
                     <StackPanel
                         Margin="20,20,0,0"
                         HorizontalAlignment="Stretch"
@@ -275,6 +280,94 @@
                                     TextWrapping="Wrap" />
                             </CheckBox>
                         </StackPanel>
+                    </StackPanel>
+
+                    <!--  確認  -->
+                    <StackPanel Margin="20,20,0,0" HorizontalAlignment="Stretch">
+                        <TextBlock
+                            Margin="30,10"
+                            FontSize="28"
+                            Text="確認"
+                            TextWrapping="Wrap" />
+                        <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
+                        <WrapPanel Margin="30">
+                            <StackPanel Margin="30,0">
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfCreateStatus, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ツイート"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDeleteStatus, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ツイート削除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfFavorite, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="いいね"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDestroyFavorite, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="いいね解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfRetweet, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="リツイート"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfUnretweet, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="リツイート解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfFollow, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="フォロー"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDestroyFollow, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="フォロー解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                            </StackPanel>
+                            <StackPanel Margin="30,0">
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfBlock, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ブロック"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDestroyBlock, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ブロック解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfMute, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ミュート"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDestroyMute, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ミュート解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                            </StackPanel>
+                        </WrapPanel>
                     </StackPanel>
                 </WrapPanel>
             </ScrollViewer>

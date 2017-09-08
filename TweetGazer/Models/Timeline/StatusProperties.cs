@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TweetGazer.Behaviors;
@@ -228,23 +229,29 @@ namespace TweetGazer.Models.Timeline
         {
             if (!this.CanRetweet)
                 return;
-
+            
             //RT済みでなければRT
             if (this.IsRetweeted == false)
             {
-                if (await AccountTokens.RetweetStatusAsync(this.TimelineModel.TokenSuffix, this.Id))
+                if (!Properties.Settings.Default.IsConfirmOfRetweet || await this.Confirm("このツイートをリツイートしますか？") == MessageDialogResult.Affirmative)
                 {
-                    this.IsRetweeted = true;
-                    this.RetweetCount++;
+                    if (await AccountTokens.RetweetStatusAsync(this.TimelineModel.TokenSuffix, this.Id))
+                    {
+                        this.IsRetweeted = true;
+                        this.RetweetCount++;
+                    }
                 }
             }
             //RT済みならばRT解除
             else if (this.IsRetweeted == true)
             {
-                if (await AccountTokens.UnretweetStatusAsync(this.TimelineModel.TokenSuffix, this.Id))
+                if (!Properties.Settings.Default.IsConfirmOfUnretweet || await this.Confirm("このツイートのリツイートを解除しますか？") == MessageDialogResult.Affirmative)
                 {
-                    this.IsRetweeted = false;
-                    this.RetweetCount--;
+                    if (await AccountTokens.UnretweetStatusAsync(this.TimelineModel.TokenSuffix, this.Id))
+                    {
+                        this.IsRetweeted = false;
+                        this.RetweetCount--;
+                    }
                 }
             }
         }
@@ -289,19 +296,25 @@ namespace TweetGazer.Models.Timeline
             //お気に入り済みでなければお気に入り
             if (this.IsFavorited == false)
             {
-                if (await AccountTokens.CreateFavoriteStatusAsync(this.TimelineModel.TokenSuffix, this.Id))
+                if (!Properties.Settings.Default.IsConfirmOfFavorite || await this.Confirm("このツイートをいいねしますか？") == MessageDialogResult.Affirmative)
                 {
-                    this.IsFavorited = true;
-                    this.FavoriteCount++;
+                    if (await AccountTokens.CreateFavoriteStatusAsync(this.TimelineModel.TokenSuffix, this.Id))
+                    {
+                        this.IsFavorited = true;
+                        this.FavoriteCount++;
+                    }
                 }
             }
             //お気に入り済みならばお気に入り解除
             else if (this.IsFavorited == true)
             {
-                if (await AccountTokens.DestroyFavoriteStatusAsync(this.TimelineModel.TokenSuffix, this.Id))
+                if (!Properties.Settings.Default.IsConfirmOfDestroyFavorite || await this.Confirm("このツイートのいいねを解除しますか？") == MessageDialogResult.Affirmative)
                 {
-                    this.IsFavorited = false;
-                    this.FavoriteCount--;
+                    if (await AccountTokens.DestroyFavoriteStatusAsync(this.TimelineModel.TokenSuffix, this.Id))
+                    {
+                        this.IsFavorited = false;
+                        this.FavoriteCount--;
+                    }
                 }
             }
         }
@@ -309,30 +322,32 @@ namespace TweetGazer.Models.Timeline
         /// <summary>
         /// ブロックボタンを押したとき
         /// </summary>
-        public async void Block()
+        private async void Block()
         {
-            var mainWindow = CommonMethods.MainWindow;
-            if (mainWindow != null)
+            var text = this.User.Name + "(@" + this.User.ScreenName + ")をブロックしますか？";
+            if (!Properties.Settings.Default.IsConfirmOfBlock || await this.Confirm(text) == MessageDialogResult.Affirmative)
             {
-                if (await mainWindow.ShowMessageAsync("確認", "ユーザー名：" + this.User.Name + "をブロックしますか？", MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
-                {
-                    await AccountTokens.CreateBlockAsync(this.TimelineModel.TokenSuffix, this.User.Id);
-                }
+                var user = await AccountTokens.CreateBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
+                if (user != null)
+                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")をブロックしました．", MainWindow.NotificationType.Success);
+                else
+                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")のブロックが正常に完了しませんでした．", MainWindow.NotificationType.Error);
             }
         }
 
         /// <summary>
         /// ミュートボタンを押したとき
         /// </summary>
-        public async void Mute()
+        private async void Mute()
         {
-            var mainWindow = CommonMethods.MainWindow;
-            if (mainWindow != null)
+            var text = this.User.Name + "(@" + this.User.ScreenName + ")をミュートしますか？";
+            if (!Properties.Settings.Default.IsConfirmOfMute || await this.Confirm(text) == MessageDialogResult.Affirmative)
             {
-                if (await mainWindow.ShowMessageAsync("確認", "ユーザー名：" + this.User.Name + "をミュートしますか？", MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
-                {
-                    await AccountTokens.CreateMuteAsync(this.TimelineModel.TokenSuffix, this.User.Id);
-                }
+                var user = await AccountTokens.CreateMuteAsync(this.TimelineModel.TokenSuffix, this.Id);
+                if (user != null)
+                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")をミュートしました．", MainWindow.NotificationType.Success);
+                else
+                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")のミュートが正常に完了しませんでした．", MainWindow.NotificationType.Error);
             }
         }
 
@@ -399,14 +414,8 @@ namespace TweetGazer.Models.Timeline
         /// </summary>
         public async void Delete()
         {
-            var mainWindow = CommonMethods.MainWindow;
-            if (mainWindow != null)
-            {
-                if (await mainWindow.ShowMessageAsync("確認", "このツイートを削除しますか？", MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
-                {
-                    await AccountTokens.DeleteStatusAsync(this.TimelineModel.TokenSuffix, this.Id);
-                }
-            }
+            if (!Properties.Settings.Default.IsConfirmOfDeleteStatus || await this.Confirm("このツイートを削除しますか？") == MessageDialogResult.Affirmative)
+                await AccountTokens.DeleteStatusAsync(this.TimelineModel.TokenSuffix, this.Id);
         }
 
         /// <summary>
@@ -511,6 +520,20 @@ namespace TweetGazer.Models.Timeline
         {
             Regex re = new Regex(@"<.*?>", RegexOptions.Singleline);
             return re.Replace(text, "");
+        }
+
+        /// <summary>
+        /// 確認ダイアログを表示する
+        /// </summary>
+        /// <param name="text">表示するテキスト</param>
+        /// <returns>Task<MessageDialogResult></returns>
+        private async Task<MessageDialogResult> Confirm(string text)
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow == null)
+                return MessageDialogResult.Negative;
+
+            return await mainWindow.ShowMessageAsync("確認", text, MessageDialogStyle.AffirmativeAndNegative);
         }
 
         #region RetweetIcon 変更通知プロパティ
