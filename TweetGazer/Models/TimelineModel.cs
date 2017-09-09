@@ -45,7 +45,7 @@ namespace TweetGazer.Models
             if (this.Data == null)
                 this.Data = new TimelineData();
 
-            this.Data.SinceId = null;
+            this.Data.CurrentPage.SinceId = null;
             this.Data.PageSuffix = this.Data.PageSuffix;
 
             this.Initialize(this.Data.CurrentPage);
@@ -237,7 +237,7 @@ namespace TweetGazer.Models
             while (this.TimelineItems.Count > 2)
                 this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
 
-            this.Data.SinceId = null;
+            this.Data.CurrentPage.SinceId = null;
             this.Initialize(this.Data.CurrentPage);
         }
 
@@ -252,7 +252,7 @@ namespace TweetGazer.Models
             while (this.TimelineItems.Count > 1)
                 this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
 
-            this.Data.SinceId = null;
+            this.Data.CurrentPage.SinceId = null;
             this.Initialize(this.Data.CurrentPage);
         }
 
@@ -283,6 +283,7 @@ namespace TweetGazer.Models
             
             this.Data.Pages.RemoveAt(this.Data.PageSuffix);
             this.Data.PageSuffix--;
+            this.RaisePropertyChanged(nameof(this.VerticalOffset));
             this.SetTitle();
             this.StartStreaming();
         }
@@ -298,9 +299,12 @@ namespace TweetGazer.Models
             if (collectionView == null)
                 return;
 
-            while(collectionView.Count > 100)
+            while (collectionView.Count > 100)
             {
-                this.TimelineItems.RemoveAt(this.TimelineItems.Count - 2);
+                if (this.TimelineItems.Last().LoadingProperties != null)
+                    this.TimelineItems.RemoveAt(this.TimelineItems.Count - 2);
+                else
+                    this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
             }
 
             if (this.TimelineItems.Count != 0)
@@ -615,7 +619,7 @@ namespace TweetGazer.Models
             {
                 throw new Exception();
             }
-            // 読み込めたが、読み込み件数が0のとき{
+            // 読み込めたが、読み込み件数が0のとき
             else
             {
                 this.ReGenerateBottomLoadingProgressRing(loadingId);
@@ -639,7 +643,7 @@ namespace TweetGazer.Models
                 this.TimelineItems.Last().LoadingProperties.Parameter = statuses.Last().Id - 1;
             // そうでない場合最初のID + 1をSinceIdとして控える
             else
-                this.Data.SinceId = statuses.First().Id + 1;
+                this.Data.CurrentPage.SinceId = statuses.First().Id + 1;
 
             int i = 0;
             int insertPosition = 0;
@@ -727,7 +731,7 @@ namespace TweetGazer.Models
 
             try
             {
-                var loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, null, this.Data.SinceId);
+                var loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, null, this.Data.CurrentPage.SinceId);
                 if (loadedTimeline != null && loadedTimeline.Count != 0)
                     this.InsertStatus(loadedTimeline);
             }
@@ -757,16 +761,16 @@ namespace TweetGazer.Models
 
                 //いいねタブの時
                 if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Favorites)
-                    loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, null, this.Data.SinceId);
+                    loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, null, this.Data.CurrentPage.SinceId);
                 //メディアタブの時
                 else if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Media)
                 {
-                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.SinceId, false);
+                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.CurrentPage.SinceId, false);
                     if (loadedTimeline != null)
                         loadedTimeline = loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null);
                 }
                 else
-                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.SinceId);
+                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.CurrentPage.SinceId);
 
                 if (loadedTimeline != null && loadedTimeline.Count() != 0)
                     this.InsertStatus(loadedTimeline);
@@ -995,6 +999,10 @@ namespace TweetGazer.Models
                         {
                             var loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, false, maxId, null, false);
 
+                            long sinceId = 0;
+                            if (maxId == null)
+                                sinceId = loadedTimeline.First().Id + 1;
+
                             // 最初以外は1件以上見つかるまで読み込む
                             while (maxId != null && loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).Count() == 0)
                             {
@@ -1003,9 +1011,16 @@ namespace TweetGazer.Models
 
                             this.Insert(loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).ToList(), maxId, loadedTimeline.Last().Id - 1);
 
-                            // 最初かつ0件の場合はローディングプログレスリングを追加する
-                            if (maxId == null && loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).Count() == 0)
-                                this.TimelineItems.Add(new TimelineItemProperties(this, LoadingType.ReadMore, loadedTimeline.Last().Id - 1));
+                            if (maxId == null)
+                            {
+                                if (this.Data.CurrentPage.SinceId < sinceId)
+                                    this.Data.CurrentPage.SinceId = sinceId;
+
+                                // 最初かつ0件の場合はローディングプログレスリングを追加する
+                                if (loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).Count() == 0)
+                                    this.TimelineItems.Add(new TimelineItemProperties(this, LoadingType.ReadMore, loadedTimeline.Last().Id - 1));
+                            }
+
                         }
                         break;
                     case UserTimelineTab.Favorites:

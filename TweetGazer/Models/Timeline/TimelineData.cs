@@ -134,6 +134,5 @@ namespace TweetGazer.Models.Timeline
         public int ColumnIndex { get; set; }
 
         public long? UserId { get; set; }
-        public long? SinceId { get; set; }
     }
 }

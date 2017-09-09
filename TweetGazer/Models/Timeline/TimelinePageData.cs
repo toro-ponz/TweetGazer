@@ -180,5 +180,6 @@ namespace TweetGazer.Models.Timeline
         public string TargetUserScreenName { get; set; }
         public string SearchText { get; set; }
         public long? DirectMessageId { get; set; }
+        public long? SinceId { get; set; }
     }
 }
