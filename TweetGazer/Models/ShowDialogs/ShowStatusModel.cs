@@ -152,7 +152,7 @@ namespace TweetGazer.Models.ShowDialogs
 
             for (int i = 1; i < this.Statuses.Count; i++)
             {
-                if (this.Statuses[i].Type == TimelineItemType.Button && this.Statuses[i].LoadingProperties != null)
+                if (this.Statuses[i].TimelineItemType == TimelineItemType.Button && this.Statuses[i].LoadingProperties != null)
                     this.Statuses.RemoveAt(i);
             }
             this.IsLoadingRepliesToMainStatus = false;
@@ -192,7 +192,7 @@ namespace TweetGazer.Models.ShowDialogs
         {
             for (int i = 1; i < this.Statuses.Count; i++)
             {
-                if (this.Statuses[i].Type == TimelineItemType.Button && this.Statuses[i].LoadingProperties != null)
+                if (this.Statuses[i].TimelineItemType == TimelineItemType.Button && this.Statuses[i].LoadingProperties != null)
                 {
                     return i;
                 }

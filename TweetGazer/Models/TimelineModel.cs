@@ -173,8 +173,7 @@ namespace TweetGazer.Models
                 if (maxId == null)
                     this.Message = "読み込み中にエラーが発生しました。タイムライン左下のリロードボタンで再度読み込み試行をしてください。";
                 else if (this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties != null)
-                    this.ReGenerateBottomLoadingProgressRing();
-                    //this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+                    this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
             }
 
             this.IsLoading = false;
@@ -966,10 +965,7 @@ namespace TweetGazer.Models
         private async Task UpdateUserTimeline(long? maxId = null)
         {
             if (maxId == null)
-            {
-                while (this.TimelineItems.Count > 2)
-                    this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
-            }
+                this.TimelineItems.Clear();
 
             try
             {
@@ -996,8 +992,21 @@ namespace TweetGazer.Models
                         this.Insert(await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, false, maxId), maxId);
                         break;
                     case UserTimelineTab.Media:
-                        var loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, false, maxId, null, false);
-                        this.Insert(loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).ToList(), maxId, loadedTimeline.Last().Id - 1);
+                        {
+                            var loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, false, maxId, null, false);
+
+                            // 最初以外は1件以上見つかるまで読み込む
+                            while (maxId != null && loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).Count() == 0)
+                            {
+                                loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, false, loadedTimeline.Last().Id - 1, null, false);
+                            }
+
+                            this.Insert(loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).ToList(), maxId, loadedTimeline.Last().Id - 1);
+
+                            // 最初かつ0件の場合はローディングプログレスリングを追加する
+                            if (maxId == null && loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).Count() == 0)
+                                this.TimelineItems.Add(new TimelineItemProperties(this, LoadingType.ReadMore, loadedTimeline.Last().Id - 1));
+                        }
                         break;
                     case UserTimelineTab.Favorites:
                         this.Insert(await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, maxId), maxId);
@@ -1110,10 +1119,7 @@ namespace TweetGazer.Models
         private async Task UpdateSearchTimeline(long? maxId = null)
         {
             if (maxId == null)
-            {
-                while (this.TimelineItems.Count > 1)
-                    this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
-            }
+                this.TimelineItems.Clear();
 
             try
             {

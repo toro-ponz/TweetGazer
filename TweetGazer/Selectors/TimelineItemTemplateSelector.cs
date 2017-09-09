@@ -15,7 +15,7 @@ namespace TweetGazer.Selectors
             if (timeline == null || data == null)
                 return null;
 
-            switch (data.Type)
+            switch (data.TimelineItemType)
             {
                 case TimelineItemType.Status:
                     result = timeline.FindResource("Status") as DataTemplate;
