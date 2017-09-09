@@ -48,12 +48,12 @@ namespace TweetGazer.Models.ShowDialogs
                         if (listResponse == null)
                         {
                             list.IsAdded = list._IsAdded;
-                            (mainWindow.DataContext as MainWindowViewModel).Notify("リストの編集に失敗しました．", MainWindow.NotificationType.Error);
+                            (mainWindow.DataContext as MainWindowViewModel).Notify("リストの編集に失敗しました", MainWindow.NotificationType.Error);
                         }
                         else
                         {
                             list._IsAdded = list.IsAdded;
-                            (mainWindow.DataContext as MainWindowViewModel).Notify("リストの編集に成功しました．", MainWindow.NotificationType.Success);
+                            (mainWindow.DataContext as MainWindowViewModel).Notify("リストの編集に成功しました", MainWindow.NotificationType.Success);
                         }
                     }
                 }

@@ -224,7 +224,7 @@ namespace TweetGazer.ViewModels
         {
             if (AccountTokens.TokensCount == 0 || AccountTokens.Users.Count == 0)
             {
-                this.MainWindowModel.Notify("トークン再認証開始．", NotificationType.Normal);
+                this.MainWindowModel.Notify("トークン再認証開始", NotificationType.Normal);
                 await AccountTokens.LoadTokensAsync();
                 return;
             }
@@ -350,7 +350,7 @@ namespace TweetGazer.ViewModels
             }
             catch (Exception e) when (e is HttpRequestException || e is WebException)
             {
-                this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした．\n左下の更新ボタンを押して再認証してください．", NotificationType.Error);
+                this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした\n左下の更新ボタンを押して再認証してください", NotificationType.Error);
                 DebugConsole.Write(e);
                 return;
             }

@@ -153,60 +153,6 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <!--  タイムライン  -->
-                    <StackPanel Margin="20,20,0,0" HorizontalAlignment="Stretch">
-                        <TextBlock
-                            Margin="30,10"
-                            FontSize="28"
-                            Text="タイムライン"
-                            TextWrapping="Wrap" />
-                        <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
-                        <StackPanel Margin="60,30">
-                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsGifAutoPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
-                                <TextBlock
-                                    FontSize="26"
-                                    Text="アニメーションGIFを自動再生する"
-                                    TextWrapping="Wrap" />
-                            </CheckBox>
-                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsGifLoopPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
-                                <TextBlock
-                                    FontSize="26"
-                                    Text="アニメーションGIFをループ再生させる"
-                                    TextWrapping="Wrap" />
-                            </CheckBox>
-                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVideoLoopPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
-                                <TextBlock
-                                    FontSize="26"
-                                    Text="動画をループ再生させる"
-                                    TextWrapping="Wrap" />
-                            </CheckBox>
-                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsDisplayReplyStatus, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
-                                <TextBlock
-                                    FontSize="26"
-                                    Text="リプライ先をTL上に表示する"
-                                    TextWrapping="Wrap" />
-                            </CheckBox>
-                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVisibleViaInformation, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
-                                <TextBlock
-                                    FontSize="26"
-                                    Text="Via情報を表示する"
-                                    TextWrapping="Wrap" />
-                            </CheckBox>
-                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsThumbnailing, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
-                                <TextBlock
-                                    FontSize="26"
-                                    Text="ツイートの画像をトリミング(Crop)して表示する"
-                                    TextWrapping="Wrap" />
-                            </CheckBox>
-                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsUseFavoriteStar, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
-                                <TextBlock
-                                    FontSize="26"
-                                    Text="いいねアイコンを星にする"
-                                    TextWrapping="Wrap" />
-                            </CheckBox>
-                        </StackPanel>
-                    </StackPanel>
-
                     <!--  通知  -->
                     <StackPanel
                         Margin="20,20,0,0"
@@ -277,6 +223,60 @@
                                 <TextBlock
                                     FontSize="26"
                                     Text="フォロー"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!--  タイムライン  -->
+                    <StackPanel Margin="20,20,0,0" HorizontalAlignment="Stretch">
+                        <TextBlock
+                            Margin="30,10"
+                            FontSize="28"
+                            Text="タイムライン"
+                            TextWrapping="Wrap" />
+                        <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
+                        <StackPanel Margin="60,30">
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsGifAutoPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="アニメーションGIFを自動再生する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsGifLoopPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="アニメーションGIFをループ再生させる"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVideoLoopPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="動画をループ再生させる"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsDisplayReplyStatus, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="リプライ先をTL上に表示する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVisibleViaInformation, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="Via情報を表示する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsThumbnailing, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="ツイートの画像をトリミング(Crop)して表示する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsUseFavoriteStar, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="いいねアイコンを星にする"
                                     TextWrapping="Wrap" />
                             </CheckBox>
                         </StackPanel>

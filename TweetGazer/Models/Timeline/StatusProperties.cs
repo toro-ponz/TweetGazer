@@ -329,9 +329,9 @@ namespace TweetGazer.Models.Timeline
             {
                 var user = await AccountTokens.CreateBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
-                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")をブロックしました．", MainWindow.NotificationType.Success);
+                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")をブロックしました", MainWindow.NotificationType.Success);
                 else
-                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")のブロックが正常に完了しませんでした．", MainWindow.NotificationType.Error);
+                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")のブロックが正常に完了しませんでした", MainWindow.NotificationType.Error);
             }
         }
 
@@ -345,9 +345,9 @@ namespace TweetGazer.Models.Timeline
             {
                 var user = await AccountTokens.CreateMuteAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
-                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")をミュートしました．", MainWindow.NotificationType.Success);
+                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")をミュートしました", MainWindow.NotificationType.Success);
                 else
-                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")のミュートが正常に完了しませんでした．", MainWindow.NotificationType.Error);
+                    CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")のミュートが正常に完了しませんでした", MainWindow.NotificationType.Error);
             }
         }
 

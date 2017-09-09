@@ -115,13 +115,13 @@ namespace TweetGazer.Models.Timeline
                 if (user != null)
                 {
                     if (this.IsProtected)
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")にフォローリクエストを送信しました．", MainWindow.NotificationType.Success);
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")にフォローリクエストを送信しました", MainWindow.NotificationType.Success);
                     else
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をフォローしました．", MainWindow.NotificationType.Success);
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をフォローしました", MainWindow.NotificationType.Success);
                     this.LoadRelationship(user);
                 }
                 else
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローが正常に完了しませんでした．", MainWindow.NotificationType.Error);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローが正常に完了しませんでした", MainWindow.NotificationType.Error);
             }
         }
 
@@ -136,11 +136,11 @@ namespace TweetGazer.Models.Timeline
                 var user = await AccountTokens.DestroyFriendshipAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
                 {
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローを解除しました．", MainWindow.NotificationType.Success);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローを解除しました", MainWindow.NotificationType.Success);
                     this.LoadRelationship(user);
                 }
                 else
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォロー解除が正常に完了しませんでした．", MainWindow.NotificationType.Error);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォロー解除が正常に完了しませんでした", MainWindow.NotificationType.Error);
             }
         }
 
@@ -155,11 +155,11 @@ namespace TweetGazer.Models.Timeline
                 var user = await AccountTokens.CreateBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
                 {
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をブロックしました．", MainWindow.NotificationType.Success);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をブロックしました", MainWindow.NotificationType.Success);
                     this.LoadRelationship(user);
                 }
                 else
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックが正常に完了しませんでした．", MainWindow.NotificationType.Error);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックが正常に完了しませんでした", MainWindow.NotificationType.Error);
             }
         }
 
@@ -174,11 +174,11 @@ namespace TweetGazer.Models.Timeline
                 var user = await AccountTokens.DestroyBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
                 {
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックを解除しました．", MainWindow.NotificationType.Success);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックを解除しました", MainWindow.NotificationType.Success);
                     this.LoadRelationship(user);
                 }
                 else
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロック解除が正常に完了しませんでした．", MainWindow.NotificationType.Error);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロック解除が正常に完了しませんでした", MainWindow.NotificationType.Error);
             }
         }
 
@@ -193,12 +193,12 @@ namespace TweetGazer.Models.Timeline
                 var user = await AccountTokens.CreateMuteAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
                 {
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をミュートしました．", MainWindow.NotificationType.Success);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をミュートしました", MainWindow.NotificationType.Success);
                     this.IsMuting = true;
                     this.LoadRelationship(user);
                 }
                 else
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュートが正常に完了しませんでした．", MainWindow.NotificationType.Error);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュートが正常に完了しませんでした", MainWindow.NotificationType.Error);
             }
         }
 
@@ -213,12 +213,12 @@ namespace TweetGazer.Models.Timeline
                 var user = await AccountTokens.DestroyMuteAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
                 {
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュートを解除しました．", MainWindow.NotificationType.Success);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュートを解除しました", MainWindow.NotificationType.Success);
                     this.IsMuting = false;
                     this.LoadRelationship(user);
                 }
                 else
-                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュート解除が正常に完了しませんでした．", MainWindow.NotificationType.Error);
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュート解除が正常に完了しませんでした", MainWindow.NotificationType.Error);
             }
         }
 

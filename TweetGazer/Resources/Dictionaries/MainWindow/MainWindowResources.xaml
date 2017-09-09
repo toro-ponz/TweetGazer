@@ -28,6 +28,13 @@
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/SearchFlyout.xaml" />
 
         <!--  Timeline  -->
-        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/TimelineResources.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Status.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Status/Media.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/User.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/UserTimelineTab.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Loading.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Notification.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/SearchTimelineTab.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Trend.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

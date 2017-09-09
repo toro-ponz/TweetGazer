@@ -201,7 +201,7 @@ namespace TweetGazer.Models
                 }
                 catch (Exception e)
                 {
-                    this.Notify("アクセントカラー・テーマカラーの変更中にエラーが発生しました．", NotificationType.Error);
+                    this.Notify("アクセントカラー・テーマカラーの変更中にエラーが発生しました", NotificationType.Error);
                     DebugConsole.Write(e);
                 }
             }

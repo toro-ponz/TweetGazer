@@ -61,7 +61,7 @@ namespace TweetGazer.Models.MainWindow
             else
             {
                 this.Pin = "";
-                this.Message = "認証に失敗しました．\nURLクリックからやり直してください．";
+                this.Message = "認証に失敗しました\nURLクリックからやり直してください";
                 this.Session = null;
                 this.AuthenticationUrl = null;
             }
