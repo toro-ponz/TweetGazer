@@ -82,9 +82,9 @@ namespace TweetGazer.Behaviors
             //画像サイズを元にロード中の仮画像を生成
             if (imageProperties.Height != 0 && imageProperties.Width != 0)
             {
-                element.ImageSource = CommonMethods.CreateTemporaryImageAsync(imageProperties.Width, imageProperties.Height);
-            }
 
+            }
+            
             //画像のロード
             if (imageProperties.IsLoad)
             {
