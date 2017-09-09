@@ -11,11 +11,7 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/ShowDialogs/ShowStatus/ShowStatusResources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/ShowDialogs/ShowStatus/ShowStatusResources.xaml" />
     </UserControl.Resources>
 
     <Button

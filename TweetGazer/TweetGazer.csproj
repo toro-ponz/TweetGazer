@@ -304,7 +304,7 @@
     <Compile Include="Common\AccountTokens.cs" />
     <Compile Include="Common\CommonMethods.cs" />
     <Compile Include="Common\RelayCommand.cs" />
-    <Resource Include="Themes\DodgerBlue.xaml">
+    <Resource Include="Resources\Dictionaries\Application\AccentColors\DodgerBlue.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>

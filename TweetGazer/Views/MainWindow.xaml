@@ -26,11 +26,7 @@
     </Controls:MetroWindow.DataContext>
 
     <Controls:MetroWindow.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/MainWindowResources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/MainWindowResources.xaml" />
     </Controls:MetroWindow.Resources>
 
     <Controls:MetroWindow.RightWindowCommands>
