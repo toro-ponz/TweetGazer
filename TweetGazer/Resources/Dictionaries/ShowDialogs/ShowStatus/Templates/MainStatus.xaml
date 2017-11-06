@@ -305,7 +305,7 @@
                                     <ei:ChangePropertyAction
                                         PropertyName="HorizontalOffset"
                                         TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
-                                        Value="100" />
+                                        Value="-100" />
                                     <ei:ChangePropertyAction
                                         PropertyName="Placement"
                                         TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
@@ -319,7 +319,7 @@
                                     <ei:ChangePropertyAction
                                         PropertyName="HorizontalOffset"
                                         TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
-                                        Value="100" />
+                                        Value="-100" />
                                     <ei:ChangePropertyAction
                                         PropertyName="Placement"
                                         TargetObject="{Binding Path=ContextMenu, ElementName=RetweetButton}"
@@ -402,7 +402,7 @@
                                     <ei:ChangePropertyAction
                                         PropertyName="HorizontalOffset"
                                         TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
-                                        Value="100" />
+                                        Value="-150" />
                                     <ei:ChangePropertyAction
                                         PropertyName="Placement"
                                         TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
@@ -416,7 +416,7 @@
                                     <ei:ChangePropertyAction
                                         PropertyName="HorizontalOffset"
                                         TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
-                                        Value="100" />
+                                        Value="-150" />
                                     <ei:ChangePropertyAction
                                         PropertyName="Placement"
                                         TargetObject="{Binding Path=ContextMenu, ElementName=OthersButton}"
