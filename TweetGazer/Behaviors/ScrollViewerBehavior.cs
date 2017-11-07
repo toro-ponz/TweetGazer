@@ -85,14 +85,12 @@ namespace TweetGazer.Behaviors
 
         private static void OffsetMediator_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue == e.OldValue)
-                return;
-
             var element = sender as ScrollViewer;
             if (element == null)
                 return;
 
             element.ScrollToVerticalOffset((double)e.NewValue);
+            SetOffsetMediator(element, (double)e.NewValue);
             SetVerticalOffset(element, (double)e.NewValue);
         }
 
