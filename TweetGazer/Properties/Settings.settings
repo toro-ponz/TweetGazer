@@ -12,7 +12,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="BaseColorIndex" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="IsUpdateCheck" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
