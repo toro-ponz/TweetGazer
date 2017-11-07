@@ -35,6 +35,8 @@ namespace TweetGazer.Models
             this._ProgressRingVisibility = Visibility.Collapsed;
             this._IsVisibleSettings = false;
             
+            this.TimelineItems = new ObservableCollection<TimelineItemProperties>();
+            BindingOperations.EnableCollectionSynchronization(this.TimelineItems, new object());
             this.TimelineNotice = new ObservableCollection<TimelineNotice>();
             BindingOperations.EnableCollectionSynchronization(this.TimelineNotice, new object());
 
@@ -45,7 +47,7 @@ namespace TweetGazer.Models
             if (this.Data == null)
                 this.Data = new TimelineData();
 
-            this.Data.CurrentPage.SinceId = null;
+            this.Data.SinceId = null;
             this.Data.PageSuffix = this.Data.PageSuffix;
 
             this.Initialize(this.Data.CurrentPage);
@@ -69,8 +71,23 @@ namespace TweetGazer.Models
         {
             this.IsInitializing = true;
 
-            this.ClearDisposables();
-            this.ClearTimers();
+            //ストリームを切断
+            if (this.Disposables != null)
+            {
+                foreach (var disposable in this.Disposables)
+                {
+                    disposable.Dispose();
+                }
+            }
+
+            //タイマーを削除
+            if (this.Timers != null)
+            {
+                foreach (var timer in this.Timers)
+                {
+                    timer.Stop();
+                }
+            }
 
             this.SetTitle();
             this.StartStreaming();
@@ -88,16 +105,13 @@ namespace TweetGazer.Models
             if (this.Data.PageSuffix == 0 || this.Data.Pages.Count < 2)
                 return;
 
-            this.ClearDisposables();
-            this.ClearTimers();
-
             while (this.Data.Pages.Count > 1)
                 this.Data.Pages.RemoveAt(1);
 
             this.Data.PageSuffix = 0;
+            this.TimelineItems.Clear();
+            this.Initialize(this.Data.CurrentPage);
             this.VerticalOffset = 0;
-            this.SetTitle();
-            this.StartStreaming();
         }
 
         /// <summary>
@@ -232,12 +246,13 @@ namespace TweetGazer.Models
         /// <param name="tab">変更後のタブ</param>
         public void ChangeUserTimelineTab(UserTimelineTab tab)
         {
+            System.Windows.Input.Keyboard.ClearFocus();
             this.Data.CurrentPage.UserTimelineTab = tab;
 
             while (this.TimelineItems.Count > 2)
                 this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
 
-            this.Data.CurrentPage.SinceId = null;
+            this.Data.SinceId = null;
             this.Initialize(this.Data.CurrentPage);
         }
 
@@ -247,12 +262,13 @@ namespace TweetGazer.Models
         /// <param name="tab">変更後のタブ</param>
         public void ChangeSearchTimelineTab(SearchTimelineTab tab)
         {
+            System.Windows.Input.Keyboard.ClearFocus();
             this.Data.CurrentPage.SearchTimelineTab = tab;
 
             while (this.TimelineItems.Count > 1)
                 this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
 
-            this.Data.CurrentPage.SinceId = null;
+            this.Data.SinceId = null;
             this.Initialize(this.Data.CurrentPage);
         }
 
@@ -273,19 +289,17 @@ namespace TweetGazer.Models
         /// <summary>
         /// 1つ前のページへ戻る
         /// </summary>
-        public void Back()
+        public async void Back()
         {
             if (this.Data.PageSuffix == 0)
                 return;
 
-            this.ClearDisposables();
-            this.ClearTimers();
-            
+            this.TimelineItems.Clear();
             this.Data.Pages.RemoveAt(this.Data.PageSuffix);
             this.Data.PageSuffix--;
-            this.RaisePropertyChanged(nameof(this.VerticalOffset));
-            this.SetTitle();
-            this.StartStreaming();
+            var verticalOffset = this.VerticalOffset;
+            await this.InitializeAsync(this.Data.CurrentPage);
+            this.VerticalOffset = verticalOffset;
         }
 
         /// <summary>
@@ -299,12 +313,9 @@ namespace TweetGazer.Models
             if (collectionView == null)
                 return;
 
-            while (collectionView.Count > 100)
+            while(collectionView.Count > 100)
             {
-                if (this.TimelineItems.Last().LoadingProperties != null)
-                    this.TimelineItems.RemoveAt(this.TimelineItems.Count - 2);
-                else
-                    this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+                this.TimelineItems.RemoveAt(this.TimelineItems.Count - 2);
             }
 
             if (this.TimelineItems.Count != 0)
@@ -446,41 +457,30 @@ namespace TweetGazer.Models
 
             }
 
-            this.ClearDisposables();
-            this.ClearTimers();
+            //ストリームを切断
+            if (this.Disposables != null)
+            {
+                foreach (var disposable in this.Disposables)
+                {
+                    disposable.Dispose();
+                }
+            }
 
-            // ウィンドウから自分を削除
+            //タイマーを削除
+            if (this.Timers != null)
+            {
+                foreach (var timer in this.Timers)
+                {
+                    timer.Stop();
+                }
+            }
+
+            //ウィンドウから自分を削除
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow != null && this.ColumnIndex >= 0)
                 (mainWindow.DataContext as MainWindowViewModel).Timelines.RemoveTimeline(this.ColumnIndex);
         }
 
-        /// <summary>
-        /// Disposableを破棄する
-        /// </summary>
-        private void ClearDisposables()
-        {
-            if (this.Disposables != null)
-            {
-                foreach (var disposable in this.Disposables)
-                    disposable.Dispose();
-                this.Disposables.Clear();
-            }
-        }
-
-        /// <summary>
-        /// タイマーを破棄する
-        /// </summary>
-        private void ClearTimers()
-        {
-            if (this.Timers != null)
-            {
-                foreach (var timer in this.Timers)
-                    timer.Stop();
-                this.Timers.Clear();
-            }
-        }
-        
         /// <summary>
         /// タイトルを(再)設定する
         /// </summary>
@@ -543,7 +543,7 @@ namespace TweetGazer.Models
                     {
                         // 5秒間隔でリストを更新するタイマー
                         var timer = new Timer();
-                        timer.Elapsed += new ElapsedEventHandler(this.LoadListTimeline);
+                        timer.Elapsed += new ElapsedEventHandler(this.LoadListTimelineAsync);
                         timer.Interval = 5000;
                         timer.AutoReset = true;
                         timer.Enabled = true;
@@ -554,7 +554,7 @@ namespace TweetGazer.Models
                     {
                         // 30秒間隔でユーザータイムラインを更新するタイマー
                         var timer = new Timer();
-                        timer.Elapsed += new ElapsedEventHandler(this.LoadUserTimeline);
+                        timer.Elapsed += new ElapsedEventHandler(this.LoadUserTimelineAsync);
                         timer.Interval = 30000;
                         timer.AutoReset = true;
                         timer.Enabled = true;
@@ -565,7 +565,7 @@ namespace TweetGazer.Models
                     {
                         // 15秒間隔でトレンドを更新するタイマー
                         var timer = new Timer();
-                        timer.Elapsed += new ElapsedEventHandler(this.LoadTrends);
+                        timer.Elapsed += new ElapsedEventHandler(this.LoadTrendsAsync);
                         timer.Interval = 15000;
                         timer.AutoReset = true;
                         timer.Enabled = true;
@@ -619,7 +619,7 @@ namespace TweetGazer.Models
             {
                 throw new Exception();
             }
-            // 読み込めたが、読み込み件数が0のとき
+            // 読み込めたが、読み込み件数が0のとき{
             else
             {
                 this.ReGenerateBottomLoadingProgressRing(loadingId);
@@ -643,7 +643,7 @@ namespace TweetGazer.Models
                 this.TimelineItems.Last().LoadingProperties.Parameter = statuses.Last().Id - 1;
             // そうでない場合最初のID + 1をSinceIdとして控える
             else
-                this.Data.CurrentPage.SinceId = statuses.First().Id + 1;
+                this.Data.SinceId = statuses.First().Id + 1;
 
             int i = 0;
             int insertPosition = 0;
@@ -724,14 +724,14 @@ namespace TweetGazer.Models
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void LoadListTimeline(object sender, EventArgs e)
+        private async void LoadListTimelineAsync(object sender, EventArgs e)
         {
             if (this.IsLoading)
                 return;
 
             try
             {
-                var loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, null, this.Data.CurrentPage.SinceId);
+                var loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, null, this.Data.SinceId);
                 if (loadedTimeline != null && loadedTimeline.Count != 0)
                     this.InsertStatus(loadedTimeline);
             }
@@ -746,7 +746,7 @@ namespace TweetGazer.Models
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void LoadUserTimeline(object sender, EventArgs e)
+        private async void LoadUserTimelineAsync(object sender, EventArgs e)
         {
             if (this.IsLoading)
                 return;
@@ -761,16 +761,16 @@ namespace TweetGazer.Models
 
                 //いいねタブの時
                 if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Favorites)
-                    loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, null, this.Data.CurrentPage.SinceId);
+                    loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, null, this.Data.SinceId);
                 //メディアタブの時
                 else if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Media)
                 {
-                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.CurrentPage.SinceId, false);
+                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.SinceId, false);
                     if (loadedTimeline != null)
                         loadedTimeline = loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null);
                 }
                 else
-                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.CurrentPage.SinceId);
+                    loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.SinceId);
 
                 if (loadedTimeline != null && loadedTimeline.Count() != 0)
                     this.InsertStatus(loadedTimeline);
@@ -786,7 +786,7 @@ namespace TweetGazer.Models
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void LoadTrends(object sender, EventArgs e)
+        private async void LoadTrendsAsync(object sender, EventArgs e)
         {
             if (this.IsLoading)
                 return;
@@ -999,10 +999,6 @@ namespace TweetGazer.Models
                         {
                             var loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, false, maxId, null, false);
 
-                            long sinceId = 0;
-                            if (maxId == null)
-                                sinceId = loadedTimeline.First().Id + 1;
-
                             // 最初以外は1件以上見つかるまで読み込む
                             while (maxId != null && loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).Count() == 0)
                             {
@@ -1011,16 +1007,9 @@ namespace TweetGazer.Models
 
                             this.Insert(loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).ToList(), maxId, loadedTimeline.Last().Id - 1);
 
-                            if (maxId == null)
-                            {
-                                if (this.Data.CurrentPage.SinceId < sinceId)
-                                    this.Data.CurrentPage.SinceId = sinceId;
-
-                                // 最初かつ0件の場合はローディングプログレスリングを追加する
-                                if (loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).Count() == 0)
-                                    this.TimelineItems.Add(new TimelineItemProperties(this, LoadingType.ReadMore, loadedTimeline.Last().Id - 1));
-                            }
-
+                            // 最初かつ0件の場合はローディングプログレスリングを追加する
+                            if (maxId == null && loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).Count() == 0)
+                                this.TimelineItems.Add(new TimelineItemProperties(this, LoadingType.ReadMore, loadedTimeline.Last().Id - 1));
                         }
                         break;
                     case UserTimelineTab.Favorites:
@@ -1463,13 +1452,7 @@ namespace TweetGazer.Models
         }
         #endregion
 
-        public ObservableCollection<TimelineItemProperties> TimelineItems
-        {
-            get
-            {
-                return this.Data.CurrentTimelineItems;
-            }
-        }
+        public ObservableCollection<TimelineItemProperties> TimelineItems { get; }
         public ObservableCollection<TimelineNotice> TimelineNotice { get; }
 
         public TimelineData Data { get; }

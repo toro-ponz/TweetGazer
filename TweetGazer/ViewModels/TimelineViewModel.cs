@@ -1,6 +1,7 @@
 ﻿using CoreTweet.Streaming;
 using Livet;
 using Livet.EventListeners;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,7 +21,6 @@ namespace TweetGazer.ViewModels
         {
             this.Timeline = new TimelineModel(data);
 
-            this.TimelineItems = this.Timeline.Data.CurrentTimelineItems;
             this.TimelineNotice = this.Timeline.TimelineNotice;
             this._Message = this.Timeline.Message;
             this._Title = this.Timeline.Data.CurrentPage.Title;
@@ -97,7 +97,6 @@ namespace TweetGazer.ViewModels
                             this.RaisePropertyChanged(() => this.IsVisibleIncludeVideoStatus);
                             this.RaisePropertyChanged(() => this.IsVisibleIncludeLinkStatus);
                             this.RaisePropertyChanged(() => this.IsVisibleOtherStatus);
-                            this.TimelineItems = this.Timeline.Data.CurrentTimelineItems;
                             break;
                         case nameof(this.Timeline.Data.GridWidth):
                             this.RaisePropertyChanged(() => this.GridWidth);
@@ -216,22 +215,6 @@ namespace TweetGazer.ViewModels
         {
             this.Timeline.Clear();
         }
-
-        #region TimelineItems 変更通知プロパティ
-        public ObservableCollection<TimelineItemProperties> TimelineItems
-        {
-            get
-            {
-                return this._TimelineItems;
-            }
-            set
-            {
-                this._TimelineItems = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        private ObservableCollection<TimelineItemProperties> _TimelineItems;
-        #endregion
 
         #region UpButtonVisibility 変更通知プロパティ
         public Visibility UpButtonVisibility
@@ -487,6 +470,14 @@ namespace TweetGazer.ViewModels
         #endregion
 
         public ICommand UpdateCommand { get; }
+
+        public IEnumerable<TimelineItemProperties> TimelineItems
+        {
+            get
+            {
+                return this.Timeline.TimelineItems;
+            }
+        }
 
         public ObservableCollection<TimelineNotice> TimelineNotice { get; }
 

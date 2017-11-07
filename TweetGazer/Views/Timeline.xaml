@@ -103,7 +103,6 @@
             <ItemsControl.Template>
                 <ControlTemplate TargetType="{x:Type ItemsControl}">
                     <ScrollViewer
-                        x:Name="ScrollViewer"
                         Behaviors:ScrollViewerBehavior.AnimationScrolling="True"
                         Behaviors:ScrollViewerBehavior.VerticalOffset="{Binding Path=VerticalOffset, Mode=TwoWay}"
                         VerticalScrollBarVisibility="Visible">

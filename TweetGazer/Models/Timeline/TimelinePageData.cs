@@ -1,6 +1,4 @@
 ﻿using Livet;
-using System.Collections.ObjectModel;
-using System.Windows.Data;
 
 namespace TweetGazer.Models.Timeline
 {
@@ -18,9 +16,6 @@ namespace TweetGazer.Models.Timeline
             this._IsVisibleIncludeVideoStatus = true;
             this._IsVisibleIncludeLinkStatus = true;
             this._IsVisibleOtherStatus = true;
-
-            this.TimelineItems = new ObservableCollection<TimelineItemProperties>();
-            BindingOperations.EnableCollectionSynchronization(this.TimelineItems, new object());
         }
 
         #region Title 変更通知プロパティ
@@ -171,8 +166,6 @@ namespace TweetGazer.Models.Timeline
         public UserTimelineTab UserTimelineTab { get; set; }
         public SearchTimelineTab SearchTimelineTab { get; set; }
 
-        public ObservableCollection<TimelineItemProperties> TimelineItems { get; }
-
         public string ListName { get; set; }
         public long? ListNumber { get; set; }
         public string TargetUserName { get; set; }
@@ -180,6 +173,5 @@ namespace TweetGazer.Models.Timeline
         public string TargetUserScreenName { get; set; }
         public string SearchText { get; set; }
         public long? DirectMessageId { get; set; }
-        public long? SinceId { get; set; }
     }
 }
