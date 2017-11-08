@@ -14,7 +14,9 @@ namespace TweetGazer.Selectors
             var creatingStatus = container as FrameworkElement;
             var data = item as Uri;
             if (creatingStatus == null || data == null)
+            {
                 return null;
+            }
 
             var imageRegex = new Regex(@"^.+\.(jpe?g|png)$", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             var imageRegexMatch = imageRegex.Match(data.ToString());
@@ -25,7 +27,9 @@ namespace TweetGazer.Selectors
 
             //画像ファイルの時
             if (imageRegexMatch.Success)
+            {
                 result = creatingStatus.FindResource("ImageTemplate") as DataTemplate;
+            }
             //GIFファイルの時
             else if (gifRegexMatch.Success)
             {
@@ -33,14 +37,20 @@ namespace TweetGazer.Selectors
                 {
                     //アニメーションGIFの場合
                     if (System.Drawing.ImageAnimator.CanAnimate(bitmap))
+                    {
                         result = creatingStatus.FindResource("GifTemplate") as DataTemplate;
+                    }
                     else
+                    {
                         result = creatingStatus.FindResource("ImageTemplate") as DataTemplate;
+                    }
                 }
             }
             //動画ファイルの場合
             else if (videoRegexMatch.Success)
+            {
                 result = creatingStatus.FindResource("VideoTemplate") as DataTemplate;
+            }
 
             return result;
         }

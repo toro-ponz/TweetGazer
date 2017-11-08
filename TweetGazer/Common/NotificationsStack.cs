@@ -41,7 +41,9 @@ namespace TweetGazer.Common
         public static void Clear()
         {
             if (Notifications != null)
+            {
                 Notifications.Clear();
+            }
         }
         
         public static ObservableCollection<Notification> Notifications { get; private set; }

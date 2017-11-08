@@ -72,4 +72,4 @@ namespace TweetGazer.Views.ShowDialogs
         
         private ShowStatusViewModel ShowStatusViewModel;
     }
-}
+} 

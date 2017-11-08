@@ -222,7 +222,10 @@ namespace TweetGazer.ViewModels
             get
             {
                 if (this.VerticalOffset > 0.0d)
+                {
                     return Visibility.Visible;
+                }
+
                 return Visibility.Collapsed;
             }
         }

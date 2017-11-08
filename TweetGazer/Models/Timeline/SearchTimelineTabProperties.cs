@@ -72,7 +72,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.Tab == SearchTimelineTab.Top)
+                {
                     return true;
+                }
+
                 return false;
             }
         }
@@ -84,7 +87,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.Tab == SearchTimelineTab.Latest)
+                {
                     return true;
+                }
+
                 return false;
             }
         }
@@ -96,7 +102,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.Tab == SearchTimelineTab.Streaming)
+                {
                     return true;
+                }
+
                 return false;
             }
         }

@@ -13,14 +13,20 @@ namespace TweetGazer.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
+            {
                 return DependencyProperty.UnsetValue;
+            }
             else
             {
                 var url = value as Uri;
-                if (url == null || String.IsNullOrEmpty(url.OriginalString))
+                if (url == null || string.IsNullOrEmpty(url.OriginalString))
+                {
                     return DependencyProperty.UnsetValue;
+                }
                 else
+                {
                     return value;
+                }
             }
         }
 

@@ -13,7 +13,10 @@ namespace TweetGazer.Selectors
             var showStatus = container as FrameworkElement;
             var data = item as TimelineItemProperties;
             if (showStatus == null || data == null)
+            {
                 return null;
+            }
+
             switch (data.TimelineItemType)
             {
                 case TimelineItemType.Status:

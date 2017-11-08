@@ -40,7 +40,9 @@ namespace TweetGazer.Models.MainWindow
             await Task.Run(() =>
             {
                 while (AccountTokens.Users.Count == 0)
+                {
                     System.Threading.Thread.Sleep(100);
+                }
             });
 
             this.MainProfileImage = new Uri(AccountTokens.Users[0].ProfileImageUrlHttps.Replace("_normal.", "_bigger."));

@@ -20,7 +20,10 @@ namespace TweetGazer.Behaviors
         public static HyperlinkTextProperties GetSource(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(SourceProperty) as HyperlinkTextProperties;
         }
 
@@ -28,7 +31,10 @@ namespace TweetGazer.Behaviors
         public static void SetSource(DependencyObject element, HyperlinkTextProperties value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(SourceProperty, value);
         }
 
@@ -41,9 +47,11 @@ namespace TweetGazer.Behaviors
             var element = sender as TextBlock;
             var source = e.NewValue as HyperlinkTextProperties;
             if (element == null)
+            {
                 return;
+            }
 
-            if (source == null || source.Text == null || String.IsNullOrEmpty(Escape(source.Text, source.Media)))
+            if (source == null || source.Text == null || string.IsNullOrEmpty(Escape(source.Text, source.Media)))
             {
                 element.Visibility = Visibility.Collapsed;
                 return;
@@ -72,11 +80,19 @@ namespace TweetGazer.Behaviors
             int urlSuffix = 0;
 
             if (links.Hashtags == null)
+            {
                 links.Hashtags = new List<HashtagEntity>();
+            }
+
             if (links.Mentions == null)
+            {
                 links.Mentions = new List<UserMentionEntity>();
+            }
+
             if (links.Urls == null)
+            {
                 links.Urls = new List<UrlEntity>();
+            }
 
             int index;
             int treatedIndex = -1;
@@ -88,14 +104,24 @@ namespace TweetGazer.Behaviors
                 index = 99999;
 
                 if (untreatedHashtagExist)
+                {
                     index = Math.Min(index, links.Hashtags[hashtagSuffix].Indices[0]);
+                }
+
                 if (untreatedMentionExist)
+                {
                     index = Math.Min(index, links.Mentions[mentionSuffix].Indices[0]);
+                }
+
                 if (untreatedUrlExist)
+                {
                     index = Math.Min(index, links.Urls[urlSuffix].Indices[0]);
+                }
 
                 if (index == 99999)
+                {
                     break;
+                }
 
                 // サロゲートペアを2文字とした場合のindexの数値を計算
                 int surrogateIndex = CalculateSurrogateIndex(links.Text, index);
@@ -203,10 +229,14 @@ namespace TweetGazer.Behaviors
             while (true)
             {
                 if (i > 99999)
+                {
                     return -1;
+                }
 
                 if (text.Length < i)
+                {
                     return text.Length;
+                }
 
                 // LengthInTextElementsで正しくカウントできない結合文字をカウントする
                 var combiningCharacterCount = 0;
@@ -219,7 +249,9 @@ namespace TweetGazer.Behaviors
 
                 // サロゲートペア前半で切らせない為に超えた段階で抜ける
                 if (LengthInTextElements(text.Substring(0, i)) + combiningCharacterCount > index)
+                {
                     break;
+                }
 
                 i++;
             }
@@ -237,7 +269,9 @@ namespace TweetGazer.Behaviors
         {
             // ツイート画像のURLを削除
             if (media != null && media.Count != 0)
+            {
                 text = text.Replace(media[0].Url, "");
+            }
 
             return text.Replace(@"&lt;", "<")
                        .Replace(@"&gt;", ">")

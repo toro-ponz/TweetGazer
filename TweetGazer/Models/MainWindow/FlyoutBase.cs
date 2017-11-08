@@ -44,9 +44,13 @@ namespace TweetGazer.Models.MainWindow
         public virtual bool OpenConditions()
         {
             if (AccountTokens.TokensCount == 0)
+            {
                 return false;
+            }
             else
+            {
                 return true;
+            }
         }
 
         /// <summary>
@@ -85,7 +89,7 @@ namespace TweetGazer.Models.MainWindow
             {
                 this._TokenSuffix = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(ProfileImageUrl));
+                this.RaisePropertyChanged(nameof(this.ProfileImageUrl));
             }
         }
         protected int _TokenSuffix;
@@ -113,9 +117,13 @@ namespace TweetGazer.Models.MainWindow
             get
             {
                 if (AccountTokens.Users.Count == 0 || this.TokenSuffix < 0)
+                {
                     return new Uri(@"https://abs.twimg.com/sticky/default_profile_images/default_profile_bigger.png");
+                }
                 else
+                {
                     return new Uri(AccountTokens.Users[this.TokenSuffix].ProfileImageUrlHttps.Replace("_normal.", "_bigger."));
+                }
             }
         }
     }

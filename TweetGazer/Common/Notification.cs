@@ -15,10 +15,14 @@ namespace TweetGazer.Common
             this.ReceiveUser = new UserOverviewProperties(receiveUser);
 
             if (parameter is string)
+            {
                 this.Text = parameter as string;
+            }
 
             if (id != null)
+            {
                 this.Id = (long)id;
+            }
         }
 
         public NotificationPropertiesType NotificationPropertiesType { get; }

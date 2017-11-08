@@ -16,11 +16,16 @@ namespace TweetGazer.Models.ShowDialogs
             this._ImageSuffix = suffix;
             this.Images = images;
             if (this.Images == null)
+            {
                 this.Images = new List<ImageProperties>();
+            }
+
             this.ImageCount = this.Images.Count;
 
             if (this.ImageSuffix > this.ImageCount - 1)
+            {
                 return;
+            }
         }
 
         /// <summary>
@@ -32,12 +37,16 @@ namespace TweetGazer.Models.ShowDialogs
             if (!plus)
             {
                 if (this.ImageSuffix != 0)
+                {
                     this.ImageSuffix--;
+                }
             }
             else
             {
                 if (this.ImageSuffix != this.ImageCount - 1)
+                {
                     this.ImageSuffix++;
+                }
             }
 
         }
@@ -98,7 +107,10 @@ namespace TweetGazer.Models.ShowDialogs
             get
             {
                 if (this.ImageSuffix > 0)
+                {
                     return true;
+                }
+
                 return false;
             }
         }
@@ -110,7 +122,10 @@ namespace TweetGazer.Models.ShowDialogs
             get
             {
                 if (this.ImageSuffix < this.ImageCount - 1)
+                {
                     return true;
+                }
+
                 return false;
             }
         }

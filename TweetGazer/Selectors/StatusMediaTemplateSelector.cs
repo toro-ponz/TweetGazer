@@ -13,8 +13,10 @@ namespace TweetGazer.Selectors
             var media = container as FrameworkElement;
             var data = item as MediaProperties;
             if (media == null || data == null)
+            {
                 return null;
-            
+            }
+
             switch (data.Type)
             {
                 case StatusMediaType.Image:

@@ -44,7 +44,9 @@ namespace TweetGazer.Common
         public static void Clear()
         {
             if (DirectMessages != null)
+            {
                 DirectMessages.Clear();
+            }
         }
 
         public static ObservableCollection<DirectMessage> DirectMessages { get; private set; }

@@ -13,7 +13,9 @@ namespace TweetGazer.Selectors
             var timeline = container as FrameworkElement;
             var data = item as TimelineItemProperties;
             if (timeline == null || data == null)
+            {
                 return null;
+            }
 
             switch (data.TimelineItemType)
             {

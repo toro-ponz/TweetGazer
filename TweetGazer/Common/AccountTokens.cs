@@ -20,7 +20,9 @@ namespace TweetGazer.Common
         public static IConnectableObservable<StreamingMessage> StartStreaming(int suffix, StreamingMode mode, string param = null)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -30,7 +32,10 @@ namespace TweetGazer.Common
                         return Tokens[suffix].Streaming.UserAsObservable(tweet_mode => "extended").Publish();
                     case StreamingMode.Filter:
                         if (param == null)
+                        {
                             return null;
+                        }
+
                         return Tokens[suffix].Streaming.FilterAsObservable(replies => "all", track => param).Publish();
                     default:
                         return null;
@@ -46,7 +51,9 @@ namespace TweetGazer.Common
         public static async Task<DictionaryResponse<string, Dictionary<string, RateLimit>>> LoadRateLimitAsync(int suffix)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -62,7 +69,9 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<Status>> LoadHomeTimelineAsync(int suffix, long? maxId = null, long? sinceId = null)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -78,9 +87,14 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<Status>> LoadUserTimelineAsync(int suffix, long? userId, bool excludeReplies = true, long? maxId = null, long? sinceId = null, bool includeRts = true)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
+
             if (userId == null)
+            {
                 return null;
+            }
 
             try
             {
@@ -96,9 +110,14 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<Status>> LoadListTimelineAsync(int suffix, long? listId, long? maxId = null, long? sinceId = null)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
+
             if (listId == null)
+            {
                 return null;
+            }
 
             try
             {
@@ -114,7 +133,9 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<Status>> LoadMentionsTimelineAsync(int suffix, long? maxId = null)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -130,7 +151,9 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<Status>> LoadFavoritesAsync(int suffix, long? userId = null, long? maxId = null, long? sinceId = null)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -146,7 +169,9 @@ namespace TweetGazer.Common
         public static async Task<SearchResult> LoadSearchTimelineAsync(int suffix, string query, long? maxId = null, long? sinceId = null, string includeEntities = "true", string resultType = "recent")
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -162,7 +187,9 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<List>> LoadListsAsync(int suffix, long? userId = null)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -178,7 +205,9 @@ namespace TweetGazer.Common
         public static async Task<Cursored<List>> LoadListOwnershipsAsync(int suffix, long? userId = null)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -194,7 +223,9 @@ namespace TweetGazer.Common
         public static async Task<Cursored<List>> LoadListMembershipAsync(int suffix, long? userId, bool filterToOwnedLists = false)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -210,7 +241,9 @@ namespace TweetGazer.Common
         public static async Task<ListResponse> CreateListMemberAsync(int suffix, long listId, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -226,7 +259,9 @@ namespace TweetGazer.Common
         public static async Task<ListResponse> DestroyListMemberAsync(int suffix, long listId, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -242,9 +277,14 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<User>> LoadSearchedUsersAsync(int suffix, string query)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
+
             if (query == null)
+            {
                 return null;
+            }
 
             try
             {
@@ -260,7 +300,9 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<CoreTweet.DirectMessage>> LoadReceiveDirectMessagesAsync(int suffix)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -276,7 +318,9 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<CoreTweet.DirectMessage>> LoadSentDirectMessagesAsync(int suffix)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -292,7 +336,9 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<TrendsResult>> LoadTrendsAsync(int suffix, long woeid = 23424856)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -308,7 +354,9 @@ namespace TweetGazer.Common
         public static async Task<Cursored<User>> LoadFriendsAsync(int suffix, long? userId = null)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -324,9 +372,14 @@ namespace TweetGazer.Common
         public static async Task<UserResponse> ShowUserAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
+
             if (userId == null)
+            {
                 return null;
+            }
 
             try
             {
@@ -342,9 +395,14 @@ namespace TweetGazer.Common
         public static async Task<UserResponse> ShowUserAsync(int suffix, string screenName)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
+
             if (screenName == null)
+            {
                 return null;
+            }
 
             try
             {
@@ -360,7 +418,9 @@ namespace TweetGazer.Common
         public static async Task<StatusResponse> ShowStatusAsync(int suffix, long statusId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -376,7 +436,9 @@ namespace TweetGazer.Common
         public static async Task<Relationship> ShowRelationshipAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -392,7 +454,9 @@ namespace TweetGazer.Common
         public static async Task<ListedResponse<Status>> LookupStatusAsync(int suffix, IEnumerable<long> statusIds)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -435,7 +499,9 @@ namespace TweetGazer.Common
         public static async Task<bool> TokenVerifyAsync(IList<Tokens> tokens)
         {
             if (tokens == null)
+            {
                 return false;
+            }
 
             try
             {
@@ -469,7 +535,9 @@ namespace TweetGazer.Common
         public static async Task<bool> CreateStatusAsync(int suffix,  string text, long? replyId = null, string mediaId = null )
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             try
             {
@@ -488,11 +556,13 @@ namespace TweetGazer.Common
         public static async Task<MediaUploadResult> ImageUploadAsync(int suffix, string filePath)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
-                FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 byte[] bs = new byte[fs.Length];
                 fs.Read(bs, 0, bs.Length);
                 fs.Close();
@@ -509,11 +579,13 @@ namespace TweetGazer.Common
         public static async Task<MediaUploadResult> VideoUploadAsync(int suffix, string filePath)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
-                FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 return await Tokens[suffix].Media.UploadChunkedAsync(fs, UploadMediaType.Video, media_category: "tweet_video");
             }
             catch (Exception e)
@@ -527,7 +599,9 @@ namespace TweetGazer.Common
         public static async Task<bool> RetweetStatusAsync(int suffix, long statusId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             try
             {
@@ -545,7 +619,9 @@ namespace TweetGazer.Common
         public static async Task<bool> UnretweetStatusAsync(int suffix, long statusId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             try
             {
@@ -563,7 +639,9 @@ namespace TweetGazer.Common
         public static async Task<bool> CreateFavoriteStatusAsync(int suffix, long statusId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             try
             {
@@ -581,7 +659,9 @@ namespace TweetGazer.Common
         public static async Task<bool> DestroyFavoriteStatusAsync(int suffix, long statusId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             try
             {
@@ -599,7 +679,9 @@ namespace TweetGazer.Common
         public static async Task<UserResponse> CreateFriendshipAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -616,7 +698,9 @@ namespace TweetGazer.Common
         public static async Task<UserResponse> DestroyFriendshipAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -633,7 +717,9 @@ namespace TweetGazer.Common
         public static async Task<UserResponse> CreateBlockAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -649,7 +735,9 @@ namespace TweetGazer.Common
         public static async Task<UserResponse> DestroyBlockAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -665,7 +753,9 @@ namespace TweetGazer.Common
         public static async Task<UserResponse> CreateMuteAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -681,7 +771,9 @@ namespace TweetGazer.Common
         public static async Task<UserResponse> DestroyMuteAsync(int suffix, long? userId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return null;
+            }
 
             try
             {
@@ -697,7 +789,9 @@ namespace TweetGazer.Common
         public static async Task<bool> DeleteStatusAsync(int suffix, long statusId)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             try
             {
@@ -716,7 +810,9 @@ namespace TweetGazer.Common
         public static async Task<bool> SetNotificationsAsync(int suffix, long? userId, bool isNotify, bool isIncludeRetweets = true)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             try
             {
@@ -725,23 +821,36 @@ namespace TweetGazer.Common
             catch (Exception e)
             {
                 if (isNotify)
+                {
                     CommonMethods.Notify("指定ユーザーを通知リストに追加することができませんでした", NotificationType.Error);
+                }
                 else
+                {
                     CommonMethods.Notify("指定ユーザーを通知リストから削除することができませんでした", NotificationType.Error);
+                }
+
                 DebugConsole.Write(e);
                 return false;
             }
+
             if (isNotify)
+            {
                 CommonMethods.Notify("指定ユーザーを通知リストに追加しました", NotificationType.Normal);
+            }
             else
+            {
                 CommonMethods.Notify("指定ユーザーを通知リストから削除しました", NotificationType.Normal);
+            }
+
             return true;
         }
 
         public static async Task<bool> UpdateProfileAsync(int suffix, string name, string url, string location, string description)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             UserResponse userResponse = null;
             try
@@ -755,7 +864,9 @@ namespace TweetGazer.Common
             }
 
             if (userResponse == null)
+            {
                 return false;
+            }
 
             Users[suffix] = userResponse;
 
@@ -765,7 +876,9 @@ namespace TweetGazer.Common
         public static async Task<bool> UpdateProfileImageAsync(int suffix, string filePath)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             UserResponse userResponse = null;
             try
@@ -779,7 +892,9 @@ namespace TweetGazer.Common
             }
 
             if (userResponse == null)
+            {
                 return false;
+            }
 
             Users[suffix] = userResponse;
 
@@ -789,7 +904,9 @@ namespace TweetGazer.Common
         public static async Task<bool> UpdateProfileBannerAsync(int suffix, string filePath)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             try
             {
@@ -809,7 +926,9 @@ namespace TweetGazer.Common
         public static async Task<bool> RemoveProfileBannerAsync(int suffix)
         {
             if (Tokens == null || suffix >= Tokens.Count || suffix < 0)
+            {
                 return false;
+            }
 
             try
             {
@@ -829,7 +948,9 @@ namespace TweetGazer.Common
         public static async Task<bool> AutheticationAsync(OAuth.OAuthSession session, string pin)
         {
             if (session == null || pin == null)
+            {
                 return false;
+            }
 
             try
             {
@@ -849,12 +970,16 @@ namespace TweetGazer.Common
         {
             //ファイルの存在確認
             if (!File.Exists(SecretParameters.TokensFilePath))
+            {
                 return false;
+            }
 
             IsVerifying = true;
 
             if (Tokens == null)
+            {
                 Tokens = new List<Tokens>();
+            }
 
             var loadedText = "";
             //ファイルから読み込み
@@ -877,7 +1002,9 @@ namespace TweetGazer.Common
             finally
             {
                 if (fileStream != null)
+                {
                     fileStream.Dispose();
+                }
             }
 
             var regex = new Regex(@"AccessData\[(?<token>.+?), (?<secret>.+?)\]", RegexOptions.IgnoreCase | RegexOptions.Singleline);
@@ -951,7 +1078,9 @@ namespace TweetGazer.Common
             finally
             {
                 if (fileStream != null)
+                {
                     fileStream.Dispose();
+                }
             }
 
             return true;
@@ -984,10 +1113,15 @@ namespace TweetGazer.Common
 
             //ユーザー情報の取得
             if (!await TokenVerifyAsync(new List<Tokens>() { token }))
+            {
                 return;
+            }
 
             if (Tokens == null)
+            {
                 Tokens = new List<Tokens>();
+            }
+
             //トークンの追加
             Tokens.Add(token);
 
@@ -1033,7 +1167,10 @@ namespace TweetGazer.Common
             get
             {
                 if (Tokens == null)
+                {
                     Tokens = new List<Tokens>();
+                }
+
                 return Tokens.Count;
             }
         }

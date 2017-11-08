@@ -36,14 +36,18 @@ namespace TweetGazer.Models.ShowDialogs
             if (userLists != null)
             {
                 foreach (var userList in userLists)
+                {
                     this.UserLists.Add(new ListProperties(userList));
+                }
             }
 
             var addedLists = await AccountTokens.LoadListMembershipAsync(this.TokenSuffix, this.User.Id);
             if (addedLists != null)
             {
                 foreach (var addedList in addedLists)
+                {
                     this.AddedLists.Add(new ListProperties(addedList));
+                }
             }
         }
 
@@ -53,7 +57,9 @@ namespace TweetGazer.Models.ShowDialogs
         public void SwitchUserLists()
         {
             if (!this.IsUserList)
+            {
                 this.IsUserList = true;
+            }
         }
 
         /// <summary>
@@ -62,7 +68,9 @@ namespace TweetGazer.Models.ShowDialogs
         public void SwitchAddedLists()
         {
             if (this.IsUserList)
+            {
                 this.IsUserList = false;
+            }
         }
 
         #region IsUserList 変更通知プロパティ

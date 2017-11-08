@@ -13,7 +13,9 @@ namespace TweetGazer.Models.Timeline
         public UserOverviewProperties(User user)
         {
             if (user == null || user.Id == null)
+            {
                 return;
+            }
 
             this.Id = (long)user.Id;
             this.Name = user.Name;

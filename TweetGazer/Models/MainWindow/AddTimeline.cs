@@ -37,7 +37,9 @@ namespace TweetGazer.Models.MainWindow
             this.ExtraGrid.Add(new Grid());
             this.ScreenNames.Clear();
             foreach (var user in AccountTokens.Users)
+            {
                 this.ScreenNames.Add("@" + user.ScreenName);
+            }
         }
         
         /// <summary>
@@ -245,7 +247,7 @@ namespace TweetGazer.Models.MainWindow
             this.ExtraGrid.Clear();
             this.ExtraGrid.Add(new Grid());
 
-            var trendResult = await AccountTokens.LoadTrendsAsync(TokenSuffix);
+            var trendResult = await AccountTokens.LoadTrendsAsync(this.TokenSuffix);
             var itemsSource = new List<TrendProperties>();
 
             var i = 1;
@@ -343,8 +345,8 @@ namespace TweetGazer.Models.MainWindow
                 var page = new TimelinePageData()
                 {
                     TimelineType = TimelineType.User,
-                    TargetUserId = Id,
-                    TargetUserName = Name
+                    TargetUserId = this.Id,
+                    TargetUserName = this.Name
                 };
                 this.AddTimeline.CreateTimeline(page);
                 this.AddTimeline.ExtraGrid.First().Children.Clear();
@@ -405,8 +407,10 @@ namespace TweetGazer.Models.MainWindow
 
             private async void Search()
             {
-                if (String.IsNullOrEmpty(this.Text))
+                if (string.IsNullOrEmpty(this.Text))
+                {
                     return;
+                }
 
                 this.Users.Clear();
                 foreach (var user in await AccountTokens.LoadSearchedUsersAsync(this.TokenSuffix, this.Text))
@@ -449,8 +453,10 @@ namespace TweetGazer.Models.MainWindow
 
             private void Search()
             {
-                if (String.IsNullOrEmpty(this.Text))
+                if (string.IsNullOrEmpty(this.Text))
+                {
                     return;
+                }
 
                 var page = new TimelinePageData()
                 {

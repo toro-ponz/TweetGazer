@@ -68,7 +68,9 @@ namespace TweetGazer.Models.Timeline
             this.QuotationIds = new List<long>();
 
             if (originStatus == null)
+            {
                 return;
+            }
 
             var currentTime = DateTimeOffset.Now;
             var status = originStatus;
@@ -79,13 +81,21 @@ namespace TweetGazer.Models.Timeline
 
             #region ツイート本文
             if (status.ExtendedTweet != null && status.ExtendedTweet.FullText != null)
+            {
                 this.HyperlinkText.Text = status.ExtendedTweet.FullText;
+            }
             else if (status.Text != null)
+            {
                 this.HyperlinkText.Text = status.Text;
+            }
             else if (status.FullText != null)
+            {
                 this.HyperlinkText.Text = status.FullText;
+            }
             else
+            {
                 this.HyperlinkText.Text = "";
+            }
 
             this.FullText = this.HyperlinkText.Text;
 
@@ -131,13 +141,22 @@ namespace TweetGazer.Models.Timeline
             //メディアが含まれるツイートの場合
             IEnumerable<MediaEntity> media = null;
             if (status.ExtendedTweet?.ExtendedEntities?.Media != null)
+            {
                 media = status.ExtendedTweet.ExtendedEntities.Media;
+            }
             else if (status.ExtendedEntities?.Media != null)
+            {
                 media = status.ExtendedEntities.Media;
+            }
             else if (status.ExtendedTweet?.Entities?.Media != null)
+            {
                 media = status.ExtendedTweet?.Entities.Media;
+            }
             else if (status.Entities?.Media != null)
+            {
                 media = status.Entities.Media;
+            }
+
             if (media != null)
             {
                 var j = 0;
@@ -159,11 +178,17 @@ namespace TweetGazer.Models.Timeline
             
             //リプライの場合
             if (Properties.Settings.Default.IsDisplayReplyStatus && status.InReplyToStatusId != null)
+            {
                 this.ReplyToStatusProperties = new ReplyToStatusProperties(this.TimelineModel, (long)status.InReplyToStatusId);
+            }
             else if (status.InReplyToStatusId != null)
+            {
                 this.ReplyToStatusProperties = new ReplyToStatusProperties(true);
+            }
             else
+            {
                 this.ReplyToStatusProperties = new ReplyToStatusProperties(false);
+            }
         }
 
         /// <summary>
@@ -180,7 +205,9 @@ namespace TweetGazer.Models.Timeline
             this.RetweetedTime = CommonMethods.CalculateTime(currentTime, this.RetweetedAt);
 
             if (oldTime == this.Time && oldRetweetedTime == this.RetweetedTime)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -214,11 +241,11 @@ namespace TweetGazer.Models.Timeline
         public void Reply()
         {
             var text = "@" + this.User.ScreenName + "\n";
-            var replyId = Id;
+            var replyId = this.Id;
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow != null)
             {
-                (mainWindow.DataContext as MainWindowViewModel).Reply(TimelineModel.TokenSuffix, text, "@" + this.User.ScreenName + ":\n" + this.FullText, replyId);
+                (mainWindow.DataContext as MainWindowViewModel).Reply(this.TimelineModel.TokenSuffix, text, "@" + this.User.ScreenName + ":\n" + this.FullText, replyId);
             }
         }
 
@@ -228,8 +255,10 @@ namespace TweetGazer.Models.Timeline
         public async void Retweet()
         {
             if (!this.CanRetweet)
+            {
                 return;
-            
+            }
+
             //RT済みでなければRT
             if (this.IsRetweeted == false)
             {
@@ -262,7 +291,9 @@ namespace TweetGazer.Models.Timeline
         public void QuotationLinkRetweet()
         {
             if (!this.CanRetweet)
+            {
                 return;
+            }
 
             string link = "https://twitter.com/" + this.User.ScreenName + "/status/" + this.Id;
             var mainWindow = CommonMethods.MainWindow;
@@ -278,7 +309,9 @@ namespace TweetGazer.Models.Timeline
         public void QuotationTextRetweet()
         {
             if (!this.CanRetweet)
+            {
                 return;
+            }
 
             string text = "RT:@" + this.User.ScreenName + " " + this.HyperlinkText.Text;
             var mainWindow = CommonMethods.MainWindow;
@@ -329,9 +362,13 @@ namespace TweetGazer.Models.Timeline
             {
                 var user = await AccountTokens.CreateBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
+                {
                     CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")をブロックしました", MainWindow.NotificationType.Success);
+                }
                 else
+                {
                     CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")のブロックが正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
             }
         }
 
@@ -345,9 +382,13 @@ namespace TweetGazer.Models.Timeline
             {
                 var user = await AccountTokens.CreateMuteAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
+                {
                     CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")をミュートしました", MainWindow.NotificationType.Success);
+                }
                 else
+                {
                     CommonMethods.Notify(this.User.Name + "(@" + this.User.ScreenName + ")のミュートが正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
             }
         }
 
@@ -375,9 +416,11 @@ namespace TweetGazer.Models.Timeline
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow != null)
             {
-                string link = "https://twitter.com/" + this.User.ScreenName + "/status/" + Id;
+                string link = "https://twitter.com/" + this.User.ScreenName + "/status/" + this.Id;
                 using (var showCopiableText = new Views.ShowDialogs.ShowCopiableText(link))
+                {
                     LightBox.ShowDialog(mainWindow, showCopiableText);
+                }
             }
         }
 
@@ -390,7 +433,9 @@ namespace TweetGazer.Models.Timeline
             if (mainWindow != null)
             {
                 using (var showCopiableText = new Views.ShowDialogs.ShowCopiableText(this.FullText))
+                {
                     LightBox.ShowDialog(mainWindow, showCopiableText);
+                }
             }
         }
 
@@ -415,7 +460,9 @@ namespace TweetGazer.Models.Timeline
         public async void Delete()
         {
             if (!Properties.Settings.Default.IsConfirmOfDeleteStatus || await this.Confirm("このツイートを削除しますか？") == MessageDialogResult.Affirmative)
+            {
                 await AccountTokens.DeleteStatusAsync(this.TimelineModel.TokenSuffix, this.Id);
+            }
         }
 
         /// <summary>
@@ -425,7 +472,9 @@ namespace TweetGazer.Models.Timeline
         {
             var suffix = 0;
             if (suffix > this.QuotationIds.Count - 1)
+            {
                 return;
+            }
 
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow != null)
@@ -444,7 +493,9 @@ namespace TweetGazer.Models.Timeline
         {
             var suffix = 0;
             if (suffix > this.QuotationStatus.Count - 1)
+            {
                 return;
+            }
 
             this.TimelineModel.ShowUserTimeline(this.QuotationStatus[suffix].User);
         }
@@ -456,7 +507,9 @@ namespace TweetGazer.Models.Timeline
         public void SelectMedia(int suffix)
         {
             if (this.Media.Count <= suffix)
+            {
                 return;
+            }
 
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow != null)
@@ -465,13 +518,17 @@ namespace TweetGazer.Models.Timeline
                 if (this.Media[suffix].Type == StatusMediaType.Video)
                 {
                     using (var showMovie = new Views.ShowDialogs.ShowMovie(this.Media[suffix].Url, false))
+                    {
                         LightBox.ShowDialog(mainWindow, showMovie);
+                    }
                 }
                 //画像を表示
                 else
                 {
                     using (var showStatus = new Views.ShowDialogs.ShowImage(this.Media.Select(x => x.Image).ToList(), suffix))
+                    {
                         LightBox.ShowDialog(mainWindow, showStatus);
+                    }
                 }
             }
         }
@@ -518,7 +575,7 @@ namespace TweetGazer.Models.Timeline
         /// <returns>タグが除去された文字列</returns>
         private string EscapeHtmlTags(string text)
         {
-            Regex re = new Regex(@"<.*?>", RegexOptions.Singleline);
+            var re = new Regex(@"<.*?>", RegexOptions.Singleline);
             return re.Replace(text, "");
         }
 
@@ -531,7 +588,9 @@ namespace TweetGazer.Models.Timeline
         {
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow == null)
+            {
                 return MessageDialogResult.Negative;
+            }
 
             return await mainWindow.ShowMessageAsync("確認", text, MessageDialogStyle.AffirmativeAndNegative);
         }
@@ -542,9 +601,13 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (!this.CanRetweet)
+                {
                     return Application.Current.FindResource("GrayRetweetIcon") as DataTemplate;
+                }
                 else if (this.IsRetweeted == true)
+                {
                     return Application.Current.FindResource("LightGreenRetweetIcon") as DataTemplate;
+                }
                 else if (this.Type == StatusType.Timeline)
                 {
                     return Application.Current.FindResource("FrontColorRetweetIcon") as DataTemplate;
@@ -560,9 +623,14 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.IsFavorited == true)
+                {
                     return Application.Current.FindResource("RedHeartIcon") as DataTemplate;
+                }
                 else if (this.Type == StatusType.Timeline)
+                {
                     return Application.Current.FindResource("FrontColorHeartIcon") as DataTemplate;
+                }
+
                 return Application.Current.FindResource("DarkColorHeartIcon") as DataTemplate;
             }
         }
@@ -574,9 +642,14 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.IsFavorited == true)
+                {
                     return Application.Current.FindResource("OrangeStarIcon") as DataTemplate;
+                }
                 else if (this.Type == StatusType.Timeline)
+                {
                     return Application.Current.FindResource("FrontColorStarIcon") as DataTemplate;
+                }
+
                 return Application.Current.FindResource("DarkColorStarIcon") as DataTemplate;
             }
         }
@@ -620,11 +693,17 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.IsRetweeted == null)
+                {
                     return "リツイート";
+                }
                 else if (!(bool)this.IsRetweeted)
+                {
                     return "リツイート";
+                }
                 else
+                {
                     return "リツイート解除";
+                }
             }
         }
         #endregion
@@ -635,11 +714,17 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.IsFavorited == null)
+                {
                     return "いいね";
+                }
                 else if (!(bool)this.IsFavorited)
+                {
                     return "いいね";
+                }
                 else
+                {
                     return "いいね解除";
+                }
             }
         }
         #endregion
@@ -686,8 +771,11 @@ namespace TweetGazer.Models.Timeline
         {
             get
             {
-                if (this.User.Id == AccountTokens.Users[TimelineModel.TokenSuffix].Id)
+                if (this.User.Id == AccountTokens.Users[this.TimelineModel.TokenSuffix].Id)
+                {
                     return true;
+                }
+
                 return false;
             }
         }

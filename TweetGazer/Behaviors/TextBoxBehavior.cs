@@ -9,7 +9,10 @@ namespace TweetGazer.Behaviors
         public static CaretPosition GetCaretPosition(DependencyObject element)
         {
             if (element == null)
+            {
                 return CaretPosition.Undefined;
+            }
+
             return (CaretPosition)element.GetValue(CaretPositionProperty);
         }
 
@@ -17,7 +20,10 @@ namespace TweetGazer.Behaviors
         public static void SetCaretPosition(DependencyObject element, CaretPosition value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(CaretPositionProperty, value);
         }
 
@@ -28,12 +34,16 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as TextBox;
             if (element == null || !(e.NewValue is CaretPosition))
+            {
                 return;
+            }
 
             var caretPosition = (CaretPosition)e.NewValue;
 
             if (element.Focusable)
+            {
                 element.Focus();
+            }
 
             switch (caretPosition)
             {

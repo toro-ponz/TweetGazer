@@ -38,7 +38,9 @@ namespace TweetGazer.Models.ShowDialogs
         public async void ReadMoreReplies(long? id)
         {
             if (this.IsLoadingReplies)
+            {
                 return;
+            }
 
             this.IsLoadingReplies = true;
 
@@ -52,7 +54,9 @@ namespace TweetGazer.Models.ShowDialogs
                     });
                 }
                 else
+                {
                     break;
+                }
             }
 
             long? replyId = id;
@@ -90,7 +94,9 @@ namespace TweetGazer.Models.ShowDialogs
             this.Statuses.RemoveAt(0);
 
             if (replyId != null)
+            {
                 this.Statuses.Insert(0, new TimelineItemProperties(this.TimelineModel, LoadingType.ReadMoreRepliesButton, replyId));
+            }
 
             this.IsLoadingReplies = false;
         }
@@ -102,7 +108,9 @@ namespace TweetGazer.Models.ShowDialogs
         public async void ReadMoreRepliesToMainStatus(SearchRepliesProperties data)
         {
             if (this.IsLoadingRepliesToMainStatus)
+            {
                 return;
+            }
 
             this.IsLoadingRepliesToMainStatus = true;
 
@@ -115,10 +123,14 @@ namespace TweetGazer.Models.ShowDialogs
                         System.Threading.Thread.Sleep(3000);
                     });
                     if (this.IsLoadingRepliesToMainStatus)
+                    {
                         this.IsLoadingRepliesToMainStatus = false;
+                    }
                 }
                 else
+                {
                     break;
+                }
             }
 
             this.IsLoadingRepliesToMainStatus = true;
@@ -130,7 +142,7 @@ namespace TweetGazer.Models.ShowDialogs
             {
                 if (mentionStatuses != null && mentionStatuses.Count != 0)
                 {
-                    var replyIds = mentionStatuses.Where(x => x.InReplyToStatusId == Id).Select(x => x.Id).ToList();
+                    var replyIds = mentionStatuses.Where(x => x.InReplyToStatusId == this.Id).Select(x => x.Id).ToList();
                     var suffix = this.GetSuffix();
 
                     if (replyIds.Count != 0)
@@ -138,7 +150,9 @@ namespace TweetGazer.Models.ShowDialogs
                         foreach (var mentionStatus in (await AccountTokens.LookupStatusAsync(this.TimelineModel.TokenSuffix, replyIds)).OrderByDescending(x => x.Id))
                         {
                             if (suffix != -1)
+                            {
                                 this.Statuses.Insert(suffix + 1, new TimelineItemProperties(this.TimelineModel, mentionStatus, StatusType.IndividualOther));
+                            }
                         }
                     }
 
@@ -153,7 +167,9 @@ namespace TweetGazer.Models.ShowDialogs
             for (int i = 1; i < this.Statuses.Count; i++)
             {
                 if (this.Statuses[i].TimelineItemType == TimelineItemType.Button && this.Statuses[i].LoadingProperties != null)
+                {
                     this.Statuses.RemoveAt(i);
+                }
             }
             this.IsLoadingRepliesToMainStatus = false;
         }
@@ -166,13 +182,18 @@ namespace TweetGazer.Models.ShowDialogs
             // 元ツイートの取得
             var mainStatus = await AccountTokens.ShowStatusAsync(this.TimelineModel.TokenSuffix, this.Id);
             if (mainStatus == null)
+            {
                 return;
+            }
+
             var mainProperties = new TimelineItemProperties(this.TimelineModel, mainStatus, StatusType.IndividualMain);
             this.Statuses.Add(mainProperties);
 
             // リプライ先がある場合ProgressRingを追加
             if (mainStatus.InReplyToStatusId != null)
+            {
                 this.Statuses.Insert(0, new TimelineItemProperties(this.TimelineModel, LoadingType.ReadMoreReplies, mainStatus.InReplyToStatusId));
+            }
 
             // 返信を取得するProgressRingを追加
             this.Statuses.Add(new TimelineItemProperties(this.TimelineModel, LoadingType.ReadMoreRepliesToMainStatus, new SearchRepliesProperties()

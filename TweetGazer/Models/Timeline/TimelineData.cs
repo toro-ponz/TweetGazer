@@ -42,15 +42,23 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this._GridWidth == GridLength.Auto)
+                {
                     return new GridLength(1000.0, GridUnitType.Star);
+                }
+
                 return this._GridWidth;
             }
             set
             {
                 if (value == GridLength.Auto)
+                {
                     this._GridWidth = new GridLength(1000.0, GridUnitType.Star);
+                }
                 else
+                {
                     this._GridWidth = value;
+                }
+
                 this.RaisePropertyChanged();
             }
         }
@@ -95,7 +103,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.PageSuffix == 0)
+                {
                     return false;
+                }
+
                 return true;
             }
         }

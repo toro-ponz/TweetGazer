@@ -13,7 +13,7 @@ namespace TweetGazer.ViewModels.MainWindow
         /// </summary>
         public DirectMessagesViewModel()
         {
-            DirectMessages = new DirectMessages();
+            this.DirectMessages = new DirectMessages();
 
             this.CompositeDisposable.Add(
                 new PropertyChangedEventListener(this.DirectMessages, (_, __) =>

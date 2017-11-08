@@ -15,7 +15,10 @@ namespace TweetGazer.Behaviors
         public static MediaProperties GetItemsSource(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(SourceProperty) as MediaProperties;
         }
 
@@ -23,7 +26,10 @@ namespace TweetGazer.Behaviors
         public static void SetItemsSource(DependencyObject element, MediaProperties value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(SourceProperty, value);
         }
 
@@ -34,7 +40,9 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as ItemsControl;
             if (element == null)
+            {
                 return;
+            }
         }
     }
 
@@ -47,7 +55,9 @@ namespace TweetGazer.Behaviors
             this.PlayCommand = new RelayCommand<object>(this.PlayCommandEntity);
             this.LoopPlayCommand = new RelayCommand<object>(this.LoopPlayCommandEntity);
             if (media == null)
+            {
                 return;
+            }
 
             this.Image = new ImageProperties(media.MediaUrlHttps, true, media.Sizes.Large.Width, media.Sizes.Large.Height);
 
@@ -59,7 +69,9 @@ namespace TweetGazer.Behaviors
             }
 
             if (media.VideoInfo == null || media.VideoInfo.Variants == null || media.VideoInfo.Variants.Count() == 0)
+            {
                 return;
+            }
 
             var url = media.VideoInfo.Variants.Where(x => x.Bitrate == media.VideoInfo.Variants.Max(y => y.Bitrate)).First().Url;
             this.Url = new Uri(url);
@@ -75,7 +87,10 @@ namespace TweetGazer.Behaviors
             {
                 this.Type = StatusMediaType.Video;
                 if (media.VideoInfo.DurationMillis == null)
+                {
                     return;
+                }
+
                 this.Time = new TimeSpan((int)media.VideoInfo.DurationMillis * TimeSpan.TicksPerMillisecond);
             }
         }

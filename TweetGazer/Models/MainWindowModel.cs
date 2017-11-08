@@ -64,7 +64,9 @@ namespace TweetGazer.Models
         private void RemoveNotice(int noticeNumber = 0)
         {
             if (noticeNumber < this.TrayNotifications.Count)
+            {
                 this.TrayNotifications.RemoveAt(noticeNumber);
+            }
         }
 
         /// <summary>
@@ -75,17 +77,23 @@ namespace TweetGazer.Models
             if (this.Disposables != null)
             {
                 foreach (var disposable in this.Disposables)
+                {
                     disposable.Dispose();
+                }
 
                 while (this.Disposables.Count != 0)
+                {
                     this.Disposables.RemoveAt(0);
+                }
             }
 
             // ストリーミング開始
             try
             {
                 if (this.Disposables == null)
+                {
                     this.Disposables = new List<IDisposable>();
+                }
 
                 var users = AccountTokens.Users;
                 for (int i = 0; i < users.Count; i++)
@@ -114,7 +122,9 @@ namespace TweetGazer.Models
                                 foreach (var mention in x.Status.Entities.UserMentions)
                                 {
                                     if (mention.Id == users[j].Id)
+                                    {
                                         this.ReceiveMention(j, x);
+                                    }
                                 }
                             }
 
@@ -147,7 +157,7 @@ namespace TweetGazer.Models
                             ReceiveEventMessage(j, x);
                         });
                         //ダイレクトメッセージを受け取ったとき
-                        stream.OfType<CoreTweet.DirectMessage>().Subscribe(ReceiveDirectMessage);
+                        stream.OfType<CoreTweet.DirectMessage>().Subscribe(this.ReceiveDirectMessage);
                         //フォローユーザー情報が流れてきたとき
                         stream.OfType<FriendsMessage>().Subscribe(x =>
                         {
@@ -163,7 +173,9 @@ namespace TweetGazer.Models
                         this.Disposables.Add(stream.Connect());
                     }
                     else
+                    {
                         DebugConsole.WriteLine("ストリーミング作成失敗(" + (i + 1) + "/" + AccountTokens.TokensCount + ")");
+                    }
                 }
             }
             catch (Exception e)
@@ -179,9 +191,13 @@ namespace TweetGazer.Models
         public void DebugConsoleOpen()
         {
             if (this.DebugConsoleWindow.Visibility == System.Windows.Visibility.Collapsed)
+            {
                 this.DebugConsoleWindow.Show();
+            }
             else
+            {
                 this.DebugConsoleWindow.Visibility = System.Windows.Visibility.Collapsed;
+            }
         }
 
         /// <summary>
@@ -230,7 +246,9 @@ namespace TweetGazer.Models
             if (this.Timers != null)
             {
                 foreach (var timer in this.Timers)
+                {
                     timer.Dispose();
+                }
             }
 
             this.DebugConsoleWindow.Visibility = System.Windows.Visibility.Collapsed;
@@ -247,31 +265,43 @@ namespace TweetGazer.Models
         private void ReceiveMention(int tokenSuffix, StatusMessage statusMessage)
         {
             if (statusMessage.Status.CurrentUserRetweet != null)
+            {
                 return;
+            }
 
             if (Properties.Settings.Default.IsNotify)
             {
                 var text = "";
-                if (statusMessage.Status.ExtendedTweet != null && !String.IsNullOrEmpty(statusMessage.Status.ExtendedTweet.FullText))
+                if (statusMessage.Status.ExtendedTweet != null && !string.IsNullOrEmpty(statusMessage.Status.ExtendedTweet.FullText))
+                {
                     text = statusMessage.Status.ExtendedTweet.FullText;
-                else if (statusMessage.Status.FullText != null && !String.IsNullOrEmpty(statusMessage.Status.FullText))
+                }
+                else if (statusMessage.Status.FullText != null && !string.IsNullOrEmpty(statusMessage.Status.FullText))
+                {
                     text = statusMessage.Status.FullText;
+                }
                 else
+                {
                     text = statusMessage.Status.Text;
+                }
 
                 CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
                 this.Notify(statusMessage.Status.User.Name + "さんからのメンション\n" + text, NotificationType.Normal);
             }
 
             if (statusMessage.Status.RetweetedStatus != null)
+            {
                 NotificationsStack.StackNotification(
                     statusMessage.Status.User,
                     statusMessage.Status.RetweetedStatus.User,
                     Timeline.NotificationPropertiesType.Retweeted,
                     statusMessage.Status.User.Name + "さんにツイートがリツイートされました。\n" + statusMessage.Status.RetweetedStatus.Text,
                     statusMessage.Status.RetweetedStatus.Id);
+            }
             else
+            {
                 MentionsStack.StackMention(statusMessage.Status);
+            }
         }
 
         /// <summary>
@@ -282,7 +312,9 @@ namespace TweetGazer.Models
         private void ReceiveEventMessage(int tokenSuffix, EventMessage eventMessage)
         {
             if (eventMessage.Source.Id == AccountTokens.Users[tokenSuffix].Id)
+            {
                 return;
+            }
 
             var isNotify = false;
             var isPlaySound = false;
@@ -351,7 +383,9 @@ namespace TweetGazer.Models
             }
 
             if (isPlaySound)
+            {
                 CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
+            }
             if (isNotify)
             {
                 this.Notify(text, NotificationType.Normal);

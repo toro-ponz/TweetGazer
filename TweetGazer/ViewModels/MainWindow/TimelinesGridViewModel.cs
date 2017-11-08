@@ -17,8 +17,8 @@ namespace TweetGazer.ViewModels.MainWindow
         {
             this.TimelinesGrid = new TimelinesGrid();
 
-            this.Grid = TimelinesGrid.Grid;
-            this.Timelines = TimelinesGrid.Timelines;
+            this.Grid = this.TimelinesGrid.Grid;
+            this.Timelines = this.TimelinesGrid.Timelines;
         }
 
         /// <summary>

@@ -28,14 +28,22 @@ namespace TweetGazer.Models.Timeline
             this.SelectMediaCommand = new RelayCommand<int>(this.SelectMedia);
 
             if (status == null)
+            {
                 return;
+            }
 
             if (status.Text != null)
+            {
                 this.Text = status.Text;
+            }
             else if (status.FullText != null)
+            {
                 this.Text = status.FullText;
+            }
             else
+            {
                 this.Text = "";
+            }
 
             this.User = new UserOverviewProperties(status.User);
 
@@ -59,7 +67,9 @@ namespace TweetGazer.Models.Timeline
         private void SelectMedia(int suffix)
         {
             if (this.Media.Count <= suffix)
+            {
                 return;
+            }
 
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow != null)
@@ -68,13 +78,17 @@ namespace TweetGazer.Models.Timeline
                 if (this.Media[suffix].Type == StatusMediaType.Video)
                 {
                     using (var showMovie = new Views.ShowDialogs.ShowMovie(this.Media[suffix].Url, false))
+                    {
                         LightBox.ShowDialog(mainWindow, showMovie);
+                    }
                 }
                 //画像を表示
                 else
                 {
                     using (var showImage = new Views.ShowDialogs.ShowImage(this.Media.Select(x => x.Image).ToList(), suffix))
+                    {
                         LightBox.ShowDialog(mainWindow, showImage);
+                    }
                 }
             }
         }
