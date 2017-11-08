@@ -61,7 +61,10 @@ namespace TweetGazer.ViewModels.ShowDialogs
             get
             {
                 if (this.ShowListModel.IsUserList)
+                {
                     return this.ShowListModel.UserLists;
+                }
+
                 return this.ShowListModel.AddedLists;
             }
         }

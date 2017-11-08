@@ -48,10 +48,14 @@ namespace TweetGazer.Models.MainWindow
         public async Task<bool> ImageUpload(int tokenSuffix, IReadOnlyCollection<string> filePaths)
         {
             if (this.IsUploaded)
+            {
                 this.Clear();
+            }
 
             if (filePaths == null || filePaths.Count() == 0)
+            {
                 return false;
+            }
 
             if (filePaths.Count() > 4 - this.Source.Count)
             {
@@ -64,10 +68,14 @@ namespace TweetGazer.Models.MainWindow
                 var media = await AccountTokens.ImageUploadAsync(tokenSuffix, filePath);
                 if (media != null && media.Size != 0)
                 {
-                    if (Ids == null)
-                        Ids = media.MediaId.ToString();
+                    if (this.Ids == null)
+                    {
+                        this.Ids = media.MediaId.ToString();
+                    }
                     else
-                        Ids += "," + media.MediaId.ToString();
+                    {
+                        this.Ids += "," + media.MediaId.ToString();
+                    }
 
                     this.IsEnabled = true;
                     CommonMethods.Notify("画像アップロード完了", NotificationType.Success);
@@ -94,10 +102,14 @@ namespace TweetGazer.Models.MainWindow
         public async Task<bool> AnimationGifUpload(int tokenSuffix, IReadOnlyCollection<string> filePaths)
         {
             if (this.IsUploaded)
+            {
                 this.Clear();
+            }
 
             if (filePaths == null || filePaths.Count() == 0)
+            {
                 return false;
+            }
 
             if (filePaths.Count() > 1 - this.Source.Count)
             {
@@ -138,10 +150,14 @@ namespace TweetGazer.Models.MainWindow
         public async Task<bool> VideoUpload(int tokenSuffix, IReadOnlyCollection<string> filePaths)
         {
             if (this.IsUploaded)
+            {
                 this.Clear();
+            }
 
             if (filePaths == null || filePaths.Count == 0)
+            {
                 return false;
+            }
 
             if (filePaths.Count > 1 - this.Source.Count)
             {
@@ -168,7 +184,7 @@ namespace TweetGazer.Models.MainWindow
                 break;
             }
 
-            IsUploaded = true;
+            this.IsUploaded = true;
             return true;
         }
 
@@ -199,7 +215,9 @@ namespace TweetGazer.Models.MainWindow
         private void LoopPlayCommandEntity(object sender)
         {
             if (this.IsGif)
+            {
                 this.PlayCommandEntity(sender);
+            }
         }
 
         #region Type 変更通知プロパティ
@@ -225,7 +243,10 @@ namespace TweetGazer.Models.MainWindow
             get
             {
                 if (this.IsEnabled)
+                {
                     return Visibility.Visible;
+                }
+
                 return Visibility.Collapsed;
             }
         }
@@ -242,8 +263,8 @@ namespace TweetGazer.Models.MainWindow
             {
                 this._Source = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(UploadButtonIsEnabled));
-                this.RaisePropertyChanged(nameof(DeleteButtonVisibility));
+                this.RaisePropertyChanged(nameof(this.UploadButtonIsEnabled));
+                this.RaisePropertyChanged(nameof(this.DeleteButtonVisibility));
             }
         }
         private ObservableCollection<Uri> _Source;
@@ -260,7 +281,7 @@ namespace TweetGazer.Models.MainWindow
             {
                 this._IsEnabled = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(DeleteButtonVisibility));
+                this.RaisePropertyChanged(nameof(this.DeleteButtonVisibility));
             }
         }
         private bool _IsEnabled;
@@ -293,7 +314,10 @@ namespace TweetGazer.Models.MainWindow
             get
             {
                 if (this.Type == MediaType.Gif)
+                {
                     return true;
+                }
+
                 return false;
             }
         }

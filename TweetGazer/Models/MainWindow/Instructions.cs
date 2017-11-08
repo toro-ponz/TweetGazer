@@ -21,9 +21,13 @@ namespace TweetGazer.Models.MainWindow
             this.PagesCount = this.Pages.Count;
 
             if (Common.CommonMethods.CheckFirstBoot())
+            {
                 this._Visibility = Visibility.Visible;
+            }
             else
+            {
                 this._Visibility = Visibility.Collapsed;
+            }
         }
 
         /// <summary>
@@ -32,7 +36,9 @@ namespace TweetGazer.Models.MainWindow
         public void Previous()
         {
             if (this.PageNumber >= 1)
+            {
                 this.PageNumber--;
+            }
         }
 
         /// <summary>
@@ -41,9 +47,13 @@ namespace TweetGazer.Models.MainWindow
         public void Next()
         {
             if (this.PageNumber == this.PagesCount - 1)
+            {
                 this.Close();
+            }
             else
+            {
                 this.PageNumber++;
+            }
         }
 
         /// <summary>

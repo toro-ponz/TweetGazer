@@ -28,7 +28,9 @@ namespace TweetGazer.Models.MainWindow
             await Task.Run(() =>
             {
                 while (AccountTokens.Users.Count == 0 || this.IsSaving)
+                {
                     System.Threading.Thread.Sleep(100);
+                }
             });
 
             this.Users.Clear();
@@ -60,7 +62,7 @@ namespace TweetGazer.Models.MainWindow
         {
             this.IsSaving = true;
 
-            foreach (var user in Users)
+            foreach (var user in this.Users)
             {
                 await user.Save();
             }
@@ -74,14 +76,16 @@ namespace TweetGazer.Models.MainWindow
         public void SelectProfileImage()
         {
             //ファイルダイアログを表示
-            OpenFileDialog ofd = new OpenFileDialog()
+            var ofd = new OpenFileDialog()
             {
                 Filter = "画像ファイル(*.bmp;*.jpg;*.jpeg;.*.png;*.gif)|*.bmp;*.jpg;*.jpeg;*.png;*.gif",
                 Multiselect = false,
                 RestoreDirectory = true
             };
             if (ofd.ShowDialog() == false)
+            {
                 return;
+            }
 
             this.User.ProfileImage = new Uri(ofd.FileName);
         }
@@ -92,14 +96,16 @@ namespace TweetGazer.Models.MainWindow
         public void SelectProfileBanner()
         {
             //ファイルダイアログを表示
-            OpenFileDialog ofd = new OpenFileDialog()
+            var ofd = new OpenFileDialog()
             {
                 Filter = "画像ファイル(*.bmp;*.jpg;*.jpeg;.*.png;*.gif)|*.bmp;*.jpg;*.jpeg;*.png;*.gif",
                 Multiselect = false,
                 RestoreDirectory = true
             };
             if (ofd.ShowDialog() == false)
+            {
                 return;
+            }
 
             this.User.ProfileBanner = new Uri(ofd.FileName);
         }
@@ -125,12 +131,15 @@ namespace TweetGazer.Models.MainWindow
             get
             {
                 if (this.TokenSuffix >= this.Users.Count || this.TokenSuffix == -1)
+                {
                     return null;
-                return this.Users[TokenSuffix];
+                }
+
+                return this.Users[this.TokenSuffix];
             }
             set
             {
-                this.Users[TokenSuffix] = value;
+                this.Users[this.TokenSuffix] = value;
                 this.RaisePropertyChanged();
             }
         }

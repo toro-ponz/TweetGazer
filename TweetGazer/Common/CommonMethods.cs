@@ -118,7 +118,7 @@ namespace TweetGazer.Common
         /// <param name="sound">再生するSEの名称</param>
         public static void PlaySoundEffect(SoundEffect sound)
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetExecutingAssembly();
             SoundPlayer player = null;
             switch (sound)
             {
@@ -138,7 +138,7 @@ namespace TweetGazer.Common
         /// </summary>
         public static void UpdateUI()
         {
-            DispatcherFrame frame = new DispatcherFrame();
+            var frame = new DispatcherFrame();
             var callback = new DispatcherOperationCallback(obj =>
             {
                 ((DispatcherFrame)obj).Continue = false;
@@ -180,9 +180,13 @@ namespace TweetGazer.Common
                 {
                     //1分未満
                     if (differenceTime.Minutes == 0)
+                    {
                         return differenceTime.Seconds.ToString(CultureInfo.InvariantCulture) + "秒";
+                    }
                     else
+                    {
                         return differenceTime.Minutes.ToString(CultureInfo.InvariantCulture) + "分";
+                    }
                 }
                 else
                 {
@@ -200,7 +204,9 @@ namespace TweetGazer.Common
                 var localTime = CalculateLocalTime(time.DateTime);
                 //1年以内
                 if (differenceTime.Days < 365)
+                {
                     return localTime.Month.ToString(CultureInfo.InvariantCulture) + "月" + localTime.Day.ToString(CultureInfo.InvariantCulture) + "日";
+                }
 
                 //それ以前の場合は年月日を返す
                 return localTime.Year.ToString(CultureInfo.InvariantCulture) + "年" + localTime.Month.ToString(CultureInfo.InvariantCulture) + "月" + localTime.Day.ToString(CultureInfo.InvariantCulture) + "日";
@@ -257,8 +263,10 @@ namespace TweetGazer.Common
         public static ImageSource CreateTemporaryImageAsync(int width, int height)
         {
             if (width <= 0 || height <= 0)
+            {
                 return null;
-            
+            }
+
             using (var bitmap = new Bitmap(width, height))
             {
                 var handle = bitmap.GetHbitmap();
@@ -285,9 +293,9 @@ namespace TweetGazer.Common
         /// <returns>読み込んだリソースディレクトリ</returns>
         public static ResourceDictionary LoadEmbededResourceDictionary(string path)
         {
-            Uri uri = new Uri(path);
+            var uri = new Uri(path);
             StreamResourceInfo info = Application.GetResourceStream(uri);
-            XamlReader reader = new XamlReader();
+            var reader = new XamlReader();
             //読み込んだファイルをResourceDictionaryとして返す
             return reader.LoadAsync(info.Stream) as ResourceDictionary;
         }
@@ -299,7 +307,9 @@ namespace TweetGazer.Common
         public static void DeleteDirectory(string targetDirectoryPath)
         {
             if (!Directory.Exists(targetDirectoryPath))
+            {
                 return;
+            }
 
             try
             {
@@ -339,15 +349,19 @@ namespace TweetGazer.Common
                 {
                     using (var stream = wc.OpenRead("https://toro-ponz.github.io/tweetgazer/version"))
                     {
-                        StreamReader sr = new StreamReader(stream, Encoding.GetEncoding(51932));
+                        var sr = new StreamReader(stream, Encoding.GetEncoding(51932));
 
                         var asm = Assembly.GetExecutingAssembly();
                         //バージョンの取得
                         var version = asm.GetName().Version;
                         if (version.ToString() == sr.ReadToEnd())
+                        {
                             return false;
+                        }
                         else
+                        {
                             return true;
+                        }
                     }
                 }
             }
@@ -368,10 +382,14 @@ namespace TweetGazer.Common
             {
                 //トークンファイルが存在するなら起動済み
                 if (System.IO.File.Exists(SecretParameters.TokensFilePath))
+                {
                     return false;
+                }
                 //そうでないなら初回起動とする
                 else
+                {
                     return true;
+                }
             }
             catch (Exception e)
             {
@@ -403,7 +421,9 @@ namespace TweetGazer.Common
                 webreq.Method = "HEAD";
                 webres = (HttpWebResponse)webreq.GetResponse();
                 if (webres.StatusCode == HttpStatusCode.OK)
+                {
                     return true;
+                }
 
                 Console.WriteLine("Twitter - HttpStatusCode : " + webres.StatusCode.ToString());
                 return false;
@@ -416,7 +436,9 @@ namespace TweetGazer.Common
             finally
             {
                 if (webres != null)
+                {
                     webres.Close();
+                }
             }
         }
 

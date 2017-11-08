@@ -96,7 +96,7 @@ namespace TweetGazer.ViewModels.MainWindow
             {
                 this._PageNumber = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(Page));
+                this.RaisePropertyChanged(nameof(this.Page));
             }
         }
         private int _PageNumber;

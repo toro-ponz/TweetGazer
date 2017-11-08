@@ -14,10 +14,14 @@ namespace TweetGazer.Models.Timeline
             this.ReceiveUser = receiveUser;
 
             if (parameter is string)
+            {
                 this.Text = parameter as string;
+            }
 
             if (id != null)
+            {
                 this.Id = (long)id;
+            }
 
             this.SelectCommand = new RelayCommand(this.Select);
             this.SelectSentUserCommand = new RelayCommand(this.SelectSentUser);
@@ -63,7 +67,10 @@ namespace TweetGazer.Models.Timeline
             {
                 if (this.NotificationPropertiesType == NotificationPropertiesType.Favorited ||
                     this.NotificationPropertiesType == NotificationPropertiesType.RetweetFavorited)
+                {
                     return true;
+                }
+
                 return false;
             }
         }
@@ -72,7 +79,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.NotificationPropertiesType == NotificationPropertiesType.Retweeted)
+                {
                     return true;
+                }
+
                 return false;
             }
         }
@@ -81,7 +91,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.NotificationPropertiesType == NotificationPropertiesType.Followed)
+                {
                     return true;
+                }
+
                 return false;
             }
         }

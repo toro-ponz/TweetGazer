@@ -42,10 +42,14 @@ namespace TweetGazer.Models
 
             var collectionView = CollectionViewSource.GetDefaultView(this.TimelineItems);
             if (collectionView != null)
+            {
                 collectionView.CollectionChanged += this.CollectionChanged;
+            }
 
             if (this.Data == null)
+            {
                 this.Data = new TimelineData();
+            }
 
             this.Data.SinceId = null;
             this.Data.PageSuffix = this.Data.PageSuffix;
@@ -103,10 +107,14 @@ namespace TweetGazer.Models
         {
             this.Up();
             if (this.Data.PageSuffix == 0 || this.Data.Pages.Count < 2)
+            {
                 return;
+            }
 
             while (this.Data.Pages.Count > 1)
+            {
                 this.Data.Pages.RemoveAt(1);
+            }
 
             this.Data.PageSuffix = 0;
             this.TimelineItems.Clear();
@@ -122,7 +130,9 @@ namespace TweetGazer.Models
         public async Task Update(long? maxId = null)
         {
             if (this.IsLoading)
+            {
                 return;
+            }
 
             this.Message = "";
             this.IsLoading = true;
@@ -185,9 +195,13 @@ namespace TweetGazer.Models
                 this.ProgressRingVisibility = Visibility.Collapsed;
 
                 if (maxId == null)
+                {
                     this.Message = "読み込み中にエラーが発生しました。タイムライン左下のリロードボタンで再度読み込み試行をしてください。";
+                }
                 else if (this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties != null)
+                {
                     this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+                }
             }
 
             this.IsLoading = false;
@@ -205,11 +219,15 @@ namespace TweetGazer.Models
             if (this.Data.CurrentPage.TimelineType == TimelineType.User)
             {
                 if (user != null && this.Data.CurrentPage.TargetUserId == user.Id)
+                {
                     return;
+                }
             }
 
             if (user == null)
+            {
                 return;
+            }
 
             this.Data.Pages.Add(new TimelinePageData()
             {
@@ -221,7 +239,7 @@ namespace TweetGazer.Models
             });
             this.Data.PageSuffix++;
             this.TimelineItems.Clear();
-            this.Initialize(Data.CurrentPage);
+            this.Initialize(this.Data.CurrentPage);
         }
 
         /// <summary>
@@ -237,7 +255,7 @@ namespace TweetGazer.Models
             });
             this.Data.PageSuffix++;
             this.TimelineItems.Clear();
-            this.Initialize(Data.CurrentPage);
+            this.Initialize(this.Data.CurrentPage);
         }
 
         /// <summary>
@@ -250,7 +268,9 @@ namespace TweetGazer.Models
             this.Data.CurrentPage.UserTimelineTab = tab;
 
             while (this.TimelineItems.Count > 2)
+            {
                 this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+            }
 
             this.Data.SinceId = null;
             this.Initialize(this.Data.CurrentPage);
@@ -266,7 +286,9 @@ namespace TweetGazer.Models
             this.Data.CurrentPage.SearchTimelineTab = tab;
 
             while (this.TimelineItems.Count > 1)
+            {
                 this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
+            }
 
             this.Data.SinceId = null;
             this.Initialize(this.Data.CurrentPage);
@@ -278,10 +300,10 @@ namespace TweetGazer.Models
         /// <returns>タイムラインデータ</returns>
         public string Serialize()
         {
-            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(TimelineData));
+            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(TimelineData));
             using (var stringWriter = new StringWriter(CultureInfo.CurrentCulture))
             {
-                serializer.Serialize(stringWriter, Data);
+                serializer.Serialize(stringWriter, this.Data);
                 return stringWriter.ToString();
             }
         }
@@ -292,7 +314,9 @@ namespace TweetGazer.Models
         public async void Back()
         {
             if (this.Data.PageSuffix == 0)
+            {
                 return;
+            }
 
             this.TimelineItems.Clear();
             this.Data.Pages.RemoveAt(this.Data.PageSuffix);
@@ -311,9 +335,11 @@ namespace TweetGazer.Models
 
             var collectionView = CollectionViewSource.GetDefaultView(this.TimelineItems) as CollectionView;
             if (collectionView == null)
+            {
                 return;
+            }
 
-            while(collectionView.Count > 100)
+            while (collectionView.Count > 100)
             {
                 this.TimelineItems.RemoveAt(this.TimelineItems.Count - 2);
             }
@@ -380,7 +406,9 @@ namespace TweetGazer.Models
         public void StreamStatusMessage(StatusMessage statusMessage, long? userId)
         {
             if (userId == null || this.Data.UserId != userId)
+            {
                 return;
+            }
 
             switch (this.Data.CurrentPage.TimelineType)
             {
@@ -388,7 +416,9 @@ namespace TweetGazer.Models
                     // 自分のツイートがRTされたイベントを弾く
                     if (statusMessage.Status.RetweetedStatus != null &&
                         statusMessage.Status.RetweetedStatus.User.Id == this.Data.UserId)
+                    {
                         return;
+                    }
 
                     // メッセージを削除
                     this.Message = "";
@@ -399,7 +429,9 @@ namespace TweetGazer.Models
                 case TimelineType.Mention:
                     // リプライでない場合リターン
                     if (statusMessage.Status.Entities == null || statusMessage.Status.Entities.UserMentions == null)
+                    {
                         return;
+                    }
 
                     foreach (var entity in statusMessage.Status.Entities.UserMentions)
                     {
@@ -426,7 +458,9 @@ namespace TweetGazer.Models
         public void StreamDeleteMessage(DeleteMessage deleteMessage, long? userId)
         {
             if (userId == null || this.Data.UserId != userId)
+            {
                 return;
+            }
 
             switch (this.Data.CurrentPage.TimelineType)
             {
@@ -478,7 +512,9 @@ namespace TweetGazer.Models
             //ウィンドウから自分を削除
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow != null && this.ColumnIndex >= 0)
+            {
                 (mainWindow.DataContext as MainWindowViewModel).Timelines.RemoveTimeline(this.ColumnIndex);
+            }
         }
 
         /// <summary>
@@ -636,30 +672,44 @@ namespace TweetGazer.Models
         private bool InsertStatus(IEnumerable<Status> statuses, bool loadMore = false)
         {
             if (!statuses.Any())
+            {
                 return false;
+            }
 
             // もっと読むの場合最後のID - 1をMaxIdとして控える
             if (loadMore)
+            {
                 this.TimelineItems.Last().LoadingProperties.Parameter = statuses.Last().Id - 1;
+            }
             // そうでない場合最初のID + 1をSinceIdとして控える
             else
+            {
                 this.Data.SinceId = statuses.First().Id + 1;
+            }
 
             int i = 0;
             int insertPosition = 0;
             if (this.Data.CurrentPage.TimelineType == TimelineType.User)
+            {
                 insertPosition = 2;
+            }
             else if (this.Data.CurrentPage.TimelineType == TimelineType.Search)
+            {
                 insertPosition = 1;
+            }
 
             foreach (var status in statuses)
             {
                 var properties = new TimelineItemProperties(this, status);
 
                 if (loadMore)
+                {
                     this.TimelineItems.Insert(this.TimelineItems.Count - 1, properties);
+                }
                 else
+                {
                     this.TimelineItems.Insert(i + insertPosition, properties);
+                }
 
                 i++;
             }
@@ -694,7 +744,9 @@ namespace TweetGazer.Models
         private bool InsertTrends(IEnumerable<TrendsResult> trends)
         {
             if (!trends.Any())
+            {
                 return false;
+            }
 
             int i = 1;
             foreach (var trend in trends)
@@ -704,14 +756,20 @@ namespace TweetGazer.Models
                     var properties = new TimelineItemProperties(this, trendEntity, i);
 
                     if (this.TimelineItems.Count > i - 1)
+                    {
                         this.TimelineItems[i - 1] = properties;
+                    }
                     else
+                    {
                         this.TimelineItems.Add(properties);
+                    }
 
                     i++;
 
                     if (i > 30)
+                    {
                         break;
+                    }
                 }
                 break;
             }
@@ -727,13 +785,17 @@ namespace TweetGazer.Models
         private async void LoadListTimelineAsync(object sender, EventArgs e)
         {
             if (this.IsLoading)
+            {
                 return;
+            }
 
             try
             {
                 var loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, null, this.Data.SinceId);
                 if (loadedTimeline != null && loadedTimeline.Count != 0)
+                {
                     this.InsertStatus(loadedTimeline);
+                }
             }
             catch (Exception ex)
             {
@@ -749,7 +811,9 @@ namespace TweetGazer.Models
         private async void LoadUserTimelineAsync(object sender, EventArgs e)
         {
             if (this.IsLoading)
+            {
                 return;
+            }
 
             try
             {
@@ -757,23 +821,33 @@ namespace TweetGazer.Models
                 var excludeReplies = false;
                 //リプライを省く時
                 if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Tweets)
+                {
                     excludeReplies = true;
+                }
 
                 //いいねタブの時
                 if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Favorites)
+                {
                     loadedTimeline = await AccountTokens.LoadFavoritesAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, null, this.Data.SinceId);
+                }
                 //メディアタブの時
                 else if (this.Data.CurrentPage.UserTimelineTab == UserTimelineTab.Media)
                 {
                     loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.SinceId, false);
                     if (loadedTimeline != null)
+                    {
                         loadedTimeline = loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null);
+                    }
                 }
                 else
+                {
                     loadedTimeline = await AccountTokens.LoadUserTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.TargetUserId, excludeReplies, null, this.Data.SinceId);
+                }
 
                 if (loadedTimeline != null && loadedTimeline.Count() != 0)
+                {
                     this.InsertStatus(loadedTimeline);
+                }
             }
             catch (Exception ex)
             {
@@ -789,7 +863,9 @@ namespace TweetGazer.Models
         private async void LoadTrendsAsync(object sender, EventArgs e)
         {
             if (this.IsLoading)
+            {
                 return;
+            }
 
             try
             {
@@ -820,7 +896,9 @@ namespace TweetGazer.Models
                     if (this.TimelineItems[i].StatusProperties != null)
                     {
                         if (!this.TimelineItems[i].StatusProperties.RecalculateTime(currentTime))
+                        {
                             break;
+                        }
                     }
                 }
             }
@@ -839,7 +917,9 @@ namespace TweetGazer.Models
         {
             //サウンド通知
             if (this.Data.IsNotificationSoundPlay)
+            {
                 CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
+            }
 
             //トレイ通知
             if (this.Data.IsNotification)
@@ -858,7 +938,9 @@ namespace TweetGazer.Models
         private void RemoveNotice(int noticeNumber = 0)
         {
             if (noticeNumber < this.TimelineNotice.Count)
+            {
                 this.TimelineNotice.RemoveAt(noticeNumber);
+            }
         }
 
         /// <summary>
@@ -868,7 +950,9 @@ namespace TweetGazer.Models
         {
             var collectionView = CollectionViewSource.GetDefaultView(this.TimelineItems);
             if (collectionView == null)
+            {
                 return;
+            }
 
             collectionView.Filter = x =>
             {
@@ -899,7 +983,9 @@ namespace TweetGazer.Models
         private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e?.Action == null)
+            {
                 return;
+            }
 
             switch (e.Action)
             {
@@ -933,7 +1019,9 @@ namespace TweetGazer.Models
                 var type = this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties.Type;
                 var parameter = this.TimelineItems[this.TimelineItems.Count - 1].LoadingProperties.Parameter;
                 if (id != null)
+                {
                     parameter = id;
+                }
 
                 this.TimelineItems.RemoveAt(this.TimelineItems.Count - 1);
                 this.TimelineItems.Add(new TimelineItemProperties(this, type, parameter));
@@ -949,7 +1037,9 @@ namespace TweetGazer.Models
         private async Task UpdateHomeTimeline(long? maxId = null)
         {
             if (maxId == null)
+            {
                 this.TimelineItems.Clear();
+            }
 
             try
             {
@@ -969,7 +1059,9 @@ namespace TweetGazer.Models
         private async Task UpdateUserTimeline(long? maxId = null)
         {
             if (maxId == null)
+            {
                 this.TimelineItems.Clear();
+            }
 
             try
             {
@@ -1009,7 +1101,9 @@ namespace TweetGazer.Models
 
                             // 最初かつ0件の場合はローディングプログレスリングを追加する
                             if (maxId == null && loadedTimeline.Where(x => x.Entities != null && x.Entities.Media != null).Count() == 0)
+                            {
                                 this.TimelineItems.Add(new TimelineItemProperties(this, LoadingType.ReadMore, loadedTimeline.Last().Id - 1));
+                            }
                         }
                         break;
                     case UserTimelineTab.Favorites:
@@ -1031,7 +1125,9 @@ namespace TweetGazer.Models
         private async Task UpdateListTimeline(long? maxId = null)
         {
             if (maxId == null)
+            {
                 this.TimelineItems.Clear();
+            }
 
             try
             {
@@ -1051,7 +1147,9 @@ namespace TweetGazer.Models
         private async Task UpdateMentionTimeline(long? maxId = null)
         {
             if (maxId == null)
+            {
                 this.TimelineItems.Clear();
+            }
 
             try
             {
@@ -1073,10 +1171,14 @@ namespace TweetGazer.Models
                 this.TokenSuffix = 0;
                 this.TimelineItems.Clear();
                 foreach (var me in MentionsStack.Mentions)
+                {
                     this.TimelineItems.Add(new TimelineItemProperties(this, me.Status));
+                }
 
                 if (this.TimelineItems.Count == 0)
+                {
                     this.Message = "現在メンションはありません。";
+                }
             }
             catch (Exception e)
             {
@@ -1104,10 +1206,14 @@ namespace TweetGazer.Models
                 this.TokenSuffix = 0;
                 this.TimelineItems.Clear();
                 foreach (var no in NotificationsStack.Notifications)
+                {
                     this.TimelineItems.Add(new TimelineItemProperties(this, no.SentUser, no.ReceiveUser, no.NotificationPropertiesType, no.Text, no.Id));
+                }
 
                 if (this.TimelineItems.Count == 0)
+                {
                     this.Message = "現在通知はありません。";
+                }
             }
             catch (Exception e)
             {
@@ -1123,7 +1229,9 @@ namespace TweetGazer.Models
         private async Task UpdateSearchTimeline(long? maxId = null)
         {
             if (maxId == null)
+            {
                 this.TimelineItems.Clear();
+            }
 
             try
             {
@@ -1137,7 +1245,9 @@ namespace TweetGazer.Models
                 }
 
                 if (this.TimelineItems.Count == 0)
+                {
                     this.TimelineItems.Add(new TimelineItemProperties(this, this.Data.CurrentPage.SearchTimelineTab));
+                }
 
                 switch (this.Data.CurrentPage.SearchTimelineTab)
                 {
@@ -1165,7 +1275,9 @@ namespace TweetGazer.Models
                             {
                                 // RTなら処理しない
                                 if (x.Status.RetweetedStatus != null)
+                                {
                                     return;
+                                }
 
                                 // 流れてきたツイートを挿入
                                 this.InsertStatus(new List<Status>() { x.Status });
@@ -1194,11 +1306,15 @@ namespace TweetGazer.Models
         private async Task UpdateTrend(long? maxId = null)
         {
             if (maxId == null)
+            {
                 this.TimelineItems.Clear();
+            }
 
             var loadedTrends = await AccountTokens.LoadTrendsAsync(this.Data.TokenSuffix);
             if (loadedTrends != null)
+            {
                 this.InsertTrends(loadedTrends);
+            }
         }
 
         /// <summary>
@@ -1212,7 +1328,9 @@ namespace TweetGazer.Models
 
             var loadedTrends = await AccountTokens.LoadTrendsAsync(this.Data.TokenSuffix);
             if (loadedTrends != null)
+            {
                 this.InsertTrends(loadedTrends);
+            }
         }
 
         /// <summary>
@@ -1223,7 +1341,9 @@ namespace TweetGazer.Models
         private async Task UpdateFovariteTimeline(long? maxId = null)
         {
             if (maxId == null)
+            {
                 this.TimelineItems.Clear();
+            }
 
             try
             {

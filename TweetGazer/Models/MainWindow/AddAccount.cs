@@ -23,9 +23,13 @@ namespace TweetGazer.Models.MainWindow
             this._Session = null;
             this.AuthenticationUrl = null;
             if (CommonMethods.CheckFirstBoot())
+            {
                 this._Visibility = Visibility.Visible;
+            }
             else
+            {
                 this._Visibility = Visibility.Collapsed;
+            }
         }
 
         /// <summary>
@@ -73,10 +77,14 @@ namespace TweetGazer.Models.MainWindow
         public async void OpenAuthenticationUrl()
         {
             if (this._Session == null || this.AuthenticationUrl == null)
+            {
                 await this.CreateSession();
+            }
 
             if (this._Session == null || this.AuthenticationUrl == null)
+            {
                 return;
+            }
 
             try
             {
@@ -111,9 +119,13 @@ namespace TweetGazer.Models.MainWindow
         {
             this.Session = await AccountTokens.CreateAuthenticationSessionAsync();
             if (this._Session != null)
+            {
                 this.AuthenticationUrl = this._Session.AuthorizeUri;
+            }
             else
+            {
                 this.Message = "セッションの生成に失敗しました。\n認証ボタンを押し、再度セッションを生成してください。";
+            }
         }
 
         #region Visibility 変更通知プロパティ
@@ -170,7 +182,10 @@ namespace TweetGazer.Models.MainWindow
             get
             {
                 if (this._Session == null)
+                {
                     return false;
+                }
+
                 return true;
             }
         }
@@ -182,7 +197,7 @@ namespace TweetGazer.Models.MainWindow
             set
             {
                 this._Session = value;
-                this.RaisePropertyChanged(nameof(IsPinTextBoxEnabled));
+                this.RaisePropertyChanged(nameof(this.IsPinTextBoxEnabled));
             }
         }
         private OAuth.OAuthSession _Session;

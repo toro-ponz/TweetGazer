@@ -13,7 +13,9 @@ namespace TweetGazer.Selectors
             var itemsControl = container as FrameworkElement;
             var data = item as TrayNotification;
             if (itemsControl == null || data == null)
+            {
                 return null;
+            }
 
             switch (data.Type)
             {

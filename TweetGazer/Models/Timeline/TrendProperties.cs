@@ -23,7 +23,9 @@ namespace TweetGazer.Models.Timeline
                 this._TrendName = trend.Name;
                 this.TrendQuery = trend.Query;
                 if (trend.TweetVolume != null)
+                {
                     this._TrendCount = (int)trend.TweetVolume;
+                }
             }
             this.TrendRank = rank;
 
@@ -44,9 +46,13 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.TrendCount == null)
+                {
                     return Visibility.Collapsed;
+                }
                 else
+                {
                     return Visibility.Visible;
+                }
             }
         }
         #endregion
@@ -73,9 +79,13 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this._TrendCount == null || this._TrendCount == 0)
+                {
                     return null;
+                }
                 else
+                {
                     return ((int)this._TrendCount).ToString("N0", CultureInfo.CurrentCulture) + "件のツイート";
+                }
             }
             set
             {

@@ -69,10 +69,10 @@ namespace TweetGazer.Models.Timeline
             set
             {
                 this._Tab = value;
-                this.RaisePropertyChanged(nameof(TweetsTabSelectedVisibility));
-                this.RaisePropertyChanged(nameof(TweetsAndRepliesTabSelectedVisibility));
-                this.RaisePropertyChanged(nameof(MediaTabSelectedVisibility));
-                this.RaisePropertyChanged(nameof(FavoritesTabSelectedVisibility));
+                this.RaisePropertyChanged(nameof(this.TweetsTabSelectedVisibility));
+                this.RaisePropertyChanged(nameof(this.TweetsAndRepliesTabSelectedVisibility));
+                this.RaisePropertyChanged(nameof(this.MediaTabSelectedVisibility));
+                this.RaisePropertyChanged(nameof(this.FavoritesTabSelectedVisibility));
             }
         }
         private UserTimelineTab _Tab;
@@ -84,7 +84,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.Tab == UserTimelineTab.Tweets)
+                {
                     return Visibility.Visible;
+                }
+
                 return Visibility.Collapsed;
             }
         }
@@ -96,7 +99,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.Tab == UserTimelineTab.TweetsAndReplies)
+                {
                     return Visibility.Visible;
+                }
+
                 return Visibility.Collapsed;
             }
         }
@@ -108,7 +114,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.Tab == UserTimelineTab.Media)
+                {
                     return Visibility.Visible;
+                }
+
                 return Visibility.Collapsed;
             }
         }
@@ -120,7 +129,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.Tab == UserTimelineTab.Favorites)
+                {
                     return Visibility.Visible;
+                }
+
                 return Visibility.Collapsed;
             }
         }

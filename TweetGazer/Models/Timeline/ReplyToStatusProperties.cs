@@ -59,13 +59,21 @@ namespace TweetGazer.Models.Timeline
             this.User = new UserOverviewProperties(status.User);
 
             if (status.ExtendedTweet != null && status.ExtendedTweet.FullText != null)
+            {
                 this.Text = status.ExtendedTweet.FullText;
+            }
             else if (status.Text != null)
+            {
                 this.Text = status.Text;
+            }
             else if (status.FullText != null)
+            {
                 this.Text = status.FullText;
+            }
             else
+            {
                 this.Text = "";
+            }
 
             this.Id = status.Id;
         }
@@ -76,9 +84,13 @@ namespace TweetGazer.Models.Timeline
         private void ToggleOpen()
         {
             if (this.TextVisibility == Visibility.Collapsed)
+            {
                 this.TextVisibility = Visibility.Visible;
+            }
             else
+            {
                 this.TextVisibility = Visibility.Collapsed;
+            }
         }
 
         /// <summary>
@@ -102,7 +114,9 @@ namespace TweetGazer.Models.Timeline
         private void SelectIcon()
         {
             if (this.TimelineModel == null)
+            {
                 return;
+            }
 
             this.TimelineModel.ShowUserTimeline(this.User);
         }
@@ -181,7 +195,10 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this.TextVisibility == Visibility.Collapsed)
+                {
                     return "開く";
+                }
+
                 return "閉じる";
             }
         }

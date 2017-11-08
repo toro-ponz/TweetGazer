@@ -10,7 +10,10 @@ namespace TweetGazer.Behaviors
         public static ICommand GetCommand(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(CommandProperty) as ICommand;
         }
 
@@ -18,7 +21,10 @@ namespace TweetGazer.Behaviors
         public static void SetCommand(DependencyObject element, ICommand value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(CommandProperty, value);
         }
 
@@ -30,7 +36,9 @@ namespace TweetGazer.Behaviors
             var element = sender as ProgressRing;
             var command = e.NewValue as ICommand;
             if (element == null || command == null)
+            {
                 return;
+            }
 
             element.Loaded += (s, eventArgs) =>
             {
@@ -43,7 +51,10 @@ namespace TweetGazer.Behaviors
         public static object GetCommandParameter(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(CommandParameterProperty) as object;
         }
 
@@ -51,7 +62,10 @@ namespace TweetGazer.Behaviors
         public static void SetCommandParameter(DependencyObject element, object value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(CommandParameterProperty, value);
         }
 

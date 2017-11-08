@@ -14,7 +14,10 @@ namespace TweetGazer.Behaviors
         public static Uri GetSource(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(SourceProperty) as Uri;
         }
 
@@ -22,7 +25,10 @@ namespace TweetGazer.Behaviors
         public static void SetSource(DependencyObject element, Uri value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(SourceProperty, value);
         }
 
@@ -34,14 +40,16 @@ namespace TweetGazer.Behaviors
             var element = sender as MediaElement;
             var url = e.NewValue as Uri;
             if (element == null || url == null)
+            {
                 return;
+            }
 
             string fileName = DateTime.Now.Ticks.ToString() + new Random().Next().ToString() + ".mp4";
             var filePath = Directory.GetCurrentDirectory() + Common.SecretParameters.TemporaryDirectoryPath  + fileName;
 
             await Task.Run(() =>
             {
-                System.Net.WebClient wc = new System.Net.WebClient();
+                var wc = new System.Net.WebClient();
 
                 //ディレクトリが存在しない場合作成する
                 if (!Directory.GetParent(filePath).Exists)
@@ -68,12 +76,16 @@ namespace TweetGazer.Behaviors
             element.MediaEnded += (s, eventArgs) =>
             {
                 if (Properties.Settings.Default.IsGifLoopPlay)
+                {
                     Play(element);
+                }
             };
             element.Source = new Uri(filePath);
 
             if (Properties.Settings.Default.IsGifAutoPlay)
+            {
                 Play(element);
+            }
         }
 
         public static ICommand PlayCommand { get; set; } = new Common.RelayCommand<MediaElement>((mediaElement) =>

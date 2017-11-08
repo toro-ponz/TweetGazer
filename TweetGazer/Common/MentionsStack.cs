@@ -39,7 +39,9 @@ namespace TweetGazer.Common
         public static void Clear()
         {
             if (Mentions != null)
+            {
                 Mentions.Clear();
+            }
         }
 
         public static ObservableCollection<Mention> Mentions { get; private set; }

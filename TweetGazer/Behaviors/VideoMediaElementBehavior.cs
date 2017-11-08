@@ -19,7 +19,10 @@ namespace TweetGazer.Behaviors
         public static Uri GetSource(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(SourceProperty) as Uri;
         }
 
@@ -27,7 +30,10 @@ namespace TweetGazer.Behaviors
         public static void SetSource(DependencyObject element, Uri value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(SourceProperty, value);
         }
 
@@ -39,7 +45,9 @@ namespace TweetGazer.Behaviors
             var element = sender as MediaElement;
             var url = e.NewValue as Uri;
             if (element == null)
+            {
                 return;
+            }
 
             if (url == null)
             {
@@ -65,7 +73,7 @@ namespace TweetGazer.Behaviors
 
             await Task.Run(() =>
             {
-                System.Net.WebClient wc = new System.Net.WebClient();
+                var wc = new System.Net.WebClient();
 
                 //ディレクトリが存在しない場合作成する
                 if (!Directory.GetParent(filePath).Exists)
@@ -88,7 +96,9 @@ namespace TweetGazer.Behaviors
             });
 
             if (GetState(element) == States.Finished)
+            {
                 return;
+            }
 
             element.Source = new Uri(filePath);
 
@@ -114,7 +124,10 @@ namespace TweetGazer.Behaviors
         public static long GetPosition(DependencyObject element)
         {
             if (element == null)
+            {
                 return 0;
+            }
+
             return (long)element.GetValue(PositionProperty);
         }
 
@@ -122,7 +135,10 @@ namespace TweetGazer.Behaviors
         public static void SetPosition(DependencyObject element, long value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(PositionProperty, value);
         }
 
@@ -133,7 +149,9 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as MediaElement;
             if (element == null)
+            {
                 return;
+            }
 
             element.Position = TimeSpan.FromTicks((long)e.NewValue);
         }
@@ -142,7 +160,10 @@ namespace TweetGazer.Behaviors
         public static double GetVolume(DependencyObject element)
         {
             if (element == null)
+            {
                 return 0;
+            }
+
             return (double)element.GetValue(VolumeProperty);
         }
 
@@ -150,7 +171,10 @@ namespace TweetGazer.Behaviors
         public static void SetVolume(DependencyObject element, double value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(VolumeProperty, value);
         }
 
@@ -161,7 +185,9 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as MediaElement;
             if (element == null)
+            {
                 return;
+            }
 
             element.Volume = (double)e.NewValue;
         }
@@ -170,7 +196,10 @@ namespace TweetGazer.Behaviors
         public static double GetVolumeTemporary(DependencyObject element)
         {
             if (element == null)
+            {
                 return 0;
+            }
+
             return (double)element.GetValue(VolumeTemporaryProperty);
         }
 
@@ -178,7 +207,10 @@ namespace TweetGazer.Behaviors
         public static void SetVolumeTemporary(DependencyObject element, double value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(VolumeTemporaryProperty, value);
         }
 
@@ -189,7 +221,10 @@ namespace TweetGazer.Behaviors
         public static States GetState(DependencyObject element)
         {
             if (element == null)
+            {
                 return States.Initializing;
+            }
+
             return (States)element.GetValue(StateProperty);
         }
 
@@ -197,7 +232,10 @@ namespace TweetGazer.Behaviors
         public static void SetState(DependencyObject element, States value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(StateProperty, value);
         }
 
@@ -208,7 +246,10 @@ namespace TweetGazer.Behaviors
         public static bool GetIsAutoPlay(DependencyObject element)
         {
             if (element == null)
+            {
                 return false;
+            }
+
             return (bool)element.GetValue(IsAutoPlayProperty);
         }
 
@@ -216,7 +257,10 @@ namespace TweetGazer.Behaviors
         public static void SetIsAutoPlay(DependencyObject element, bool value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(IsAutoPlayProperty, value);
         }
 
@@ -227,7 +271,10 @@ namespace TweetGazer.Behaviors
         public static bool GetIsMuted(DependencyObject element)
         {
             if (element == null)
+            {
                 return false;
+            }
+
             return (bool)element.GetValue(IsMutedProperty);
         }
 
@@ -235,7 +282,10 @@ namespace TweetGazer.Behaviors
         public static void SetIsMuted(DependencyObject element, bool value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(IsMutedProperty, value);
         }
 
@@ -246,7 +296,9 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as MediaElement;
             if (element == null)
+            {
                 return;
+            }
 
             if ((bool)e.NewValue)
             {
@@ -264,7 +316,10 @@ namespace TweetGazer.Behaviors
         public static bool GetIsLoop(DependencyObject element)
         {
             if (element == null)
+            {
                 return false;
+            }
+
             return (bool)element.GetValue(IsLoopProperty);
         }
 
@@ -272,7 +327,10 @@ namespace TweetGazer.Behaviors
         public static void SetIsLoop(DependencyObject element, bool value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(IsLoopProperty, value);
         }
 
@@ -283,7 +341,10 @@ namespace TweetGazer.Behaviors
         public static MediaElement GetMediaElement(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(MediaElementProperty) as MediaElement;
         }
 
@@ -291,7 +352,10 @@ namespace TweetGazer.Behaviors
         public static void SetMediaElement(DependencyObject element, MediaElement value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(MediaElementProperty, value);
         }
 
@@ -303,7 +367,9 @@ namespace TweetGazer.Behaviors
             var element = sender as Slider;
             var mediaElement = e.NewValue as MediaElement;
             if (element == null || mediaElement == null)
+            {
                 return;
+            }
 
             var value = 0.0d;
 
@@ -314,12 +380,16 @@ namespace TweetGazer.Behaviors
             element.DragLeave += (s, eventArgs) =>
             {
                 if (GetState(mediaElement) == States.Playing)
+                {
                     Play(mediaElement);
+                }
             };
             element.ValueChanged += (s, eventArgs) =>
             {
                 if (!(GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing))
+                {
                     return;
+                }
 
                 if (value != eventArgs.NewValue)
                 {
@@ -327,7 +397,9 @@ namespace TweetGazer.Behaviors
                     Play(mediaElement);
                     System.Threading.Thread.Sleep(1);
                     if (GetState(mediaElement) != States.Playing)
+                    {
                         Pause(mediaElement);
+                    }
                 }
             };
             var timer = new DispatcherTimer()
@@ -351,7 +423,10 @@ namespace TweetGazer.Behaviors
         public static MediaElement GetTime(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(TimeProperty) as MediaElement;
         }
 
@@ -359,7 +434,10 @@ namespace TweetGazer.Behaviors
         public static void SetTime(DependencyObject element, MediaElement value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(TimeProperty, value);
         }
 
@@ -372,8 +450,10 @@ namespace TweetGazer.Behaviors
             var element = sender as TextBlock;
             var mediaElement = e.NewValue as MediaElement;
             if (element == null || mediaElement == null)
+            {
                 return;
-            
+            }
+
             var timer = new DispatcherTimer()
             {
                 Interval = TimeSpan.FromMilliseconds(100)
@@ -454,55 +534,73 @@ namespace TweetGazer.Behaviors
         private static void BackToTop(MediaElement mediaElement)
         {
             if (GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing)
+            {
                 mediaElement.Position = TimeSpan.FromTicks(1);
+            }
         }
 
         private static void BackFiveSeconds(MediaElement mediaElement)
         {
             if (GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing)
+            {
                 MovePosition(mediaElement, new TimeSpan(0, 0, -5));
+            }
         }
 
         private static void BackTenSeconds(MediaElement mediaElement)
         {
             if (GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing)
+            {
                 MovePosition(mediaElement, new TimeSpan(0, 0, -10));
+            }
         }
 
         private static void BackThirtySeconds(MediaElement mediaElement)
         {
             if (GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing)
+            {
                 MovePosition(mediaElement, new TimeSpan(0, 0, -30));
+            }
         }
 
         private static void ForwordFiveSeconds(MediaElement mediaElement)
         {
             if (GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing)
+            {
                 MovePosition(mediaElement, new TimeSpan(0, 0, 5));
+            }
         }
 
         private static void ForwordTenSeconds(MediaElement mediaElement)
         {
             if (GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing)
+            {
                 MovePosition(mediaElement, new TimeSpan(0, 0, 10));
+            }
         }
 
         private static void ForwordThirtySeconds(MediaElement mediaElement)
         {
             if (GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing)
+            {
                 MovePosition(mediaElement, new TimeSpan(0, 0, 30));
+            }
         }
 
         private static void ForwordToEnd(MediaElement mediaElement)
         {
             if (GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing)
+            {
                 mediaElement.Position = mediaElement.NaturalDuration.TimeSpan;
+            }
         }
 
         private static void MovePosition(MediaElement mediaElement, TimeSpan amount)
         {
             if (GetState(mediaElement) == States.Playing || GetState(mediaElement) == States.Pauseing)
+            {
                 mediaElement.Position += amount;
+            }
         }
 
         private static void ToggleRepeat(MediaElement mediaElement)
@@ -519,7 +617,9 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as MediaElement;
             if (element == null)
+            {
                 return;
+            }
 
             if (GetIsAutoPlay(element))
             {
@@ -534,7 +634,9 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as MediaElement;
             if (element == null)
+            {
                 return;
+            }
 
             Stop(element);
         }
@@ -543,7 +645,9 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as MediaElement;
             if (element == null)
+            {
                 return;
+            }
 
             if (GetIsLoop(element))
             {

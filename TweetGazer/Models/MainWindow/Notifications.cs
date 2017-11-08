@@ -41,7 +41,9 @@ namespace TweetGazer.Models.MainWindow
 
             this.ScreenNames.Clear();
             foreach (var user in AccountTokens.Users)
+            {
                 this.ScreenNames.Add("@" + user.ScreenName);
+            }
 
             this.Timeline.TokenSuffix = 0;
             await this.Timeline.Update();
@@ -54,7 +56,10 @@ namespace TweetGazer.Models.MainWindow
         public override bool OpenConditions()
         {
             if (AccountTokens.TokensCount == 0)
+            {
                 return false;
+            }
+
             return true;
         }
 
@@ -76,7 +81,9 @@ namespace TweetGazer.Models.MainWindow
             {
                 this.Timeline.TimelineItems.RemoveAt(0);
                 if (NotificationsStack.Notifications.Count != 0)
+                {
                     NotificationsStack.Notifications.RemoveAt(0);
+                }
             }
         }
 

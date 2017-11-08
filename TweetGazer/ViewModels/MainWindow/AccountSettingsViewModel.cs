@@ -107,7 +107,10 @@ namespace TweetGazer.ViewModels.MainWindow
             get
             {
                 if (this.AccountSettings.User == null)
+                {
                     return "";
+                }
+
                 return this.AccountSettings.User.Name;
             }
             set
@@ -124,7 +127,10 @@ namespace TweetGazer.ViewModels.MainWindow
             get
             {
                 if (this.AccountSettings.User == null)
+                {
                     return "";
+                }
+
                 return this.AccountSettings.User.ScreenName;
             }
             set
@@ -141,7 +147,10 @@ namespace TweetGazer.ViewModels.MainWindow
             get
             {
                 if (this.AccountSettings.User == null)
+                {
                     return "";
+                }
+
                 return this.AccountSettings.User.Description;
             }
             set
@@ -158,7 +167,10 @@ namespace TweetGazer.ViewModels.MainWindow
             get
             {
                 if (this.AccountSettings.User == null)
+                {
                     return "";
+                }
+
                 return this.AccountSettings.User.Location;
             }
             set
@@ -175,7 +187,10 @@ namespace TweetGazer.ViewModels.MainWindow
             get
             {
                 if (this.AccountSettings.User == null)
+                {
                     return "";
+                }
+
                 return this.AccountSettings.User.Url;
             }
             set
@@ -192,7 +207,10 @@ namespace TweetGazer.ViewModels.MainWindow
             get
             {
                 if (this.AccountSettings.User == null)
+                {
                     return new Uri("", UriKind.Relative);
+                }
+
                 return this.AccountSettings.User.ProfileImage;
             }
         }
@@ -204,7 +222,10 @@ namespace TweetGazer.ViewModels.MainWindow
             get
             {
                 if (this.AccountSettings.User == null)
+                {
                     return new Uri("", UriKind.Relative);
+                }
+
                 return this.AccountSettings.User.ProfileBanner;
             }
         }

@@ -37,10 +37,14 @@ namespace TweetGazer.Models.ShowDialogs
 
                     // リストへの追加
                     if (list.IsAdded)
+                    {
                         listResponse = await AccountTokens.CreateListMemberAsync(this.TokenSuffix, list.Id, this.User.Id);
+                    }
                     // リストからの削除
                     else
+                    {
                         listResponse = await AccountTokens.DestroyListMemberAsync(this.TokenSuffix, list.Id, this.User.Id);
+                    }
 
                     var mainWindow = CommonMethods.MainWindow;
                     if (mainWindow != null)
@@ -71,7 +75,9 @@ namespace TweetGazer.Models.ShowDialogs
             var lists = await AccountTokens.LoadListOwnershipsAsync(this.TokenSuffix);
 
             if (userAddedLists == null || lists == null)
+            {
                 return;
+            }
 
             foreach (var list in lists)
             {

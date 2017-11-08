@@ -72,7 +72,9 @@ namespace TweetGazer.Views.ShowDialogs
         private void BlockButton_Click(object sender, RoutedEventArgs e)
         {
             if (!Properties.Settings.Default.IsCloseWhenClickImage)
+            {
                 e.Handled = true;
+            }
         }
 
         /// <summary>
@@ -169,7 +171,9 @@ namespace TweetGazer.Views.ShowDialogs
             if (this.Dragging)
             {
                 if (this.Point == e.GetPosition(this))
+                {
                     return;
+                }
 
                 var p = this.Point - e.GetPosition(this);
                 this.ZoomedImageScrollViewer.ScrollToHorizontalOffset(this.ZoomedImageScrollViewer.HorizontalOffset + p.X);

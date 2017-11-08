@@ -44,7 +44,9 @@ namespace TweetGazer.ViewModels.MainWindow
         public void Close()
         {
             if (this.ApplicationSettings.IsOpen)
+            {
                 this.ApplicationSettings.ToggleOpen();
+            }
         }
 
         #region IsOpen 変更通知プロパティ

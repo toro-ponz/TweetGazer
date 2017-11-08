@@ -171,10 +171,14 @@ namespace TweetGazer.ViewModels
         public void Home()
         {
             if (this.Timelines.Timelines.Count == 0)
+            {
                 return;
+            }
 
             foreach (var timeline in this.Timelines.Timelines)
+            {
                 timeline.TimelineViewModel.Home();
+            }
         }
 
         /// <summary>
@@ -183,21 +187,44 @@ namespace TweetGazer.ViewModels
         public void CloseFlyout()
         {
             if (this.CreateStatus.IsOpen)
+            {
                 this.CreateStatus.ToggleOpen();
+            }
+
             if (this.AddTimeline.IsOpen)
+            {
                 this.AddTimeline.ToggleOpen();
+            }
+
             if (this.Mentions.IsOpen)
+            {
                 this.Mentions.ToggleOpen();
+            }
+
             if (this.Notifications.IsOpen)
+            {
                 this.Notifications.ToggleOpen();
+            }
+
             if (this.DirectMessages.IsOpen)
+            {
                 this.DirectMessages.ToggleOpen();
+            }
+
             if (this.AccountSettings.IsOpen)
+            {
                 this.AccountSettings.ToggleOpen();
+            }
+
             if (this.ApplicationSettings.IsOpen)
+            {
                 this.ApplicationSettings.ToggleOpen();
+            }
+
             if (this.Search.IsOpen)
+            {
                 this.Search.ToggleOpen();
+            }
         }
 
         /// <summary>
@@ -206,13 +233,19 @@ namespace TweetGazer.ViewModels
         public void Close()
         {
             if (AccountTokens.TokensCount > 0)
+            {
                 this.Timelines.SaveColumnData();
+            }
 
             while (this.Timelines.Timelines.Count != 0)
+            {
                 this.Timelines.Timelines.First().TimelineViewModel.Close();
+            }
 
             while (this.Timelines.Grid.First().Children.Count != 0)
+            {
                 this.Timelines.Grid.First().Children.RemoveAt(0);
+            }
 
             this.Dispose();
         }
@@ -230,7 +263,9 @@ namespace TweetGazer.ViewModels
             }
 
             if (this.Timelines.Timelines.Count == 0)
+            {
                 return;
+            }
 
             foreach (var timeline in this.Timelines.Timelines)
             {
@@ -267,7 +302,9 @@ namespace TweetGazer.ViewModels
         public void Reply(int tokenSuffix, string text, string replyText = "リプライ先:なし", long? replyId = null)
         {
             if (!this.CreateStatus.IsOpen)
+            {
                 this.CreateStatus.ToggleOpen();
+            }
 
             this.CreateStatus.StatusText = text;
             this.CreateStatus.ReplyText = replyText;
@@ -285,7 +322,9 @@ namespace TweetGazer.ViewModels
         public void QuotationLinkRetweet(int tokenSuffix, string link)
         {
             if (!this.CreateStatus.IsOpen)
+            {
                 this.CreateStatus.ToggleOpen();
+            }
 
             this.CreateStatus.StatusText = "\n" + link;
             this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Undefined;
@@ -301,7 +340,9 @@ namespace TweetGazer.ViewModels
         public void QuotationTextRetweet(int tokenSuffix, string text)
         {
             if (!this.CreateStatus.IsOpen)
+            {
                 this.CreateStatus.ToggleOpen();
+            }
 
             this.CreateStatus.StatusText = "\n" + text;
             this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Undefined;
@@ -325,7 +366,9 @@ namespace TweetGazer.ViewModels
             await Task.Run(() =>
             {
                 while (this.AddAccount == null)
+                {
                     System.Threading.Thread.Sleep(100);
+                }
             });
 
             //トークンファイルが正常に読み込めなかった場合、ログイン画面を表示する
@@ -377,7 +420,10 @@ namespace TweetGazer.ViewModels
             get
             {
                 if (MentionsStack.Mentions != null && MentionsStack.Mentions.Count != 0)
+                {
                     return Visibility.Visible;
+                }
+
                 return Visibility.Collapsed;
             }
         }
@@ -389,7 +435,10 @@ namespace TweetGazer.ViewModels
             get
             {
                 if (NotificationsStack.Notifications != null && NotificationsStack.Notifications.Count != 0)
+                {
                     return Visibility.Visible;
+                }
+
                 return Visibility.Collapsed;
             }
         }

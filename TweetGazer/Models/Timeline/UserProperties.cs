@@ -32,11 +32,19 @@ namespace TweetGazer.Models.Timeline
             if (user.Entities != null && user.Entities.Description != null)
             {
                 if (user.Entities.Description.HashTags != null)
+                {
                     this.Description.Hashtags = user.Entities.Description.HashTags.ToList();
+                }
+
                 if (user.Entities.Description.UserMentions != null)
+                {
                     this.Description.Mentions = user.Entities.Description.UserMentions.ToList();
+                }
+
                 if (user.Entities.Description.Urls != null)
+                {
                     this.Description.Urls = user.Entities.Description.Urls.ToList();
+                }
             }
 
             this.StatusesCount = user.StatusesCount;
@@ -44,23 +52,36 @@ namespace TweetGazer.Models.Timeline
             this.FollowersCount = user.FollowersCount;
             this.FriendsCount = user.FriendsCount;
             if (user.ProfileBannerUrl != null)
+            {
                 this.ProfileBanner = new ImageProperties(user.ProfileBannerUrl, true);
+            }
+
             if (user.Entities != null && user.Entities.Url != null)
             {
                 if (user.Entities.Url.Urls.First().ExpandedUrl != null)
+                {
                     this.Url = new Uri(user.Entities.Url.Urls.First().ExpandedUrl);
+                }
                 else
+                {
                     this.Url = new Uri(user.Entities.Url.Urls.First().Url);
+                }
 
                 if (user.Entities.Url.Urls.First().DisplayUrl != null)
+                {
                     this.UrlText = user.Entities.Url.Urls.First().DisplayUrl;
+                }
                 else
+                {
                     this.UrlText = user.Entities.Url.Urls.First().Url;
+                }
             }
             this.CreatedAt = user.CreatedAt;
             this.IsProtected = user.IsProtected;
             if (user.IsMuting != null)
+            {
                 this._IsMuting = (bool)user.IsMuting;
+            }
 
             this.ButtonCommand = new RelayCommand(this.Button);
             this.UrlCommand = new RelayCommand<Uri>(this.SelectUrl);
@@ -82,20 +103,28 @@ namespace TweetGazer.Models.Timeline
 
             // ブロック中のときはブロック解除を行う
             if (this.IsBlocking)
+            {
                 this.DestroyBlock();
+            }
             // フォロー中のときはフォロー解除を行う
             else if (this.IsFollowing)
+            {
                 this.DestroyFollow();
+            }
             // フォローリクエスト承認待ちのときは謝罪文を表示する
             else if (this.IsSendingFollowRequest)
             {
                 var mainWindow = CommonMethods.MainWindow;
                 if (mainWindow != null)
+                {
                     await mainWindow.ShowMessageAsync("申し訳ありません。", "フォローリクエストの解除はTwitter社からAPIが提供されていないため、公式のクライアント等から解除を行ってください。", MessageDialogStyle.Affirmative);
+                }
             }
             // その他の場合はフォロー(又はフォローリクエスト)を行う
             else
+            {
                 this.Follow();
+            }
         }
 
         /// <summary>
@@ -105,23 +134,34 @@ namespace TweetGazer.Models.Timeline
         {
             var text = this.Name + "(@" + this.ScreenName + ")";
             if (this.IsProtected)
+            {
                 text += "にフォローリクエストを送信しますか？";
+            }
             else
+            {
                 text += "をフォローしますか？";
-            
+            }
+
             if (!Properties.Settings.Default.IsConfirmOfFollow || await this.Confirm(text) == MessageDialogResult.Affirmative)
             {
                 var user = await AccountTokens.CreateFriendshipAsync(this.TimelineModel.TokenSuffix, this.Id);
                 if (user != null)
                 {
                     if (this.IsProtected)
+                    {
                         CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")にフォローリクエストを送信しました", MainWindow.NotificationType.Success);
+                    }
                     else
+                    {
                         CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をフォローしました", MainWindow.NotificationType.Success);
+                    }
+
                     this.LoadRelationship(user);
                 }
                 else
+                {
                     CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローが正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
             }
         }
 
@@ -140,7 +180,9 @@ namespace TweetGazer.Models.Timeline
                     this.LoadRelationship(user);
                 }
                 else
+                {
                     CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォロー解除が正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
             }
         }
 
@@ -159,7 +201,9 @@ namespace TweetGazer.Models.Timeline
                     this.LoadRelationship(user);
                 }
                 else
+                {
                     CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックが正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
             }
         }
 
@@ -178,7 +222,9 @@ namespace TweetGazer.Models.Timeline
                     this.LoadRelationship(user);
                 }
                 else
+                {
                     CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロック解除が正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
             }
         }
 
@@ -198,7 +244,9 @@ namespace TweetGazer.Models.Timeline
                     this.LoadRelationship(user);
                 }
                 else
+                {
                     CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュートが正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
             }
         }
 
@@ -218,7 +266,9 @@ namespace TweetGazer.Models.Timeline
                     this.LoadRelationship(user);
                 }
                 else
+                {
                     CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュート解除が正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
             }
         }
 
@@ -229,18 +279,28 @@ namespace TweetGazer.Models.Timeline
         private async void LoadRelationship(User user)
         {
             if (user == null)
+            {
                 return;
+            }
 
             var relationship = await AccountTokens.ShowRelationshipAsync(this.TimelineModel.TokenSuffix, user.Id);
             if (relationship != null)
             {
                 if (relationship.Source.Id == relationship.Target.Id)
+                {
                     this.IsOwn = true;
+                }
+
                 if (relationship.Source.IsBlocking != null)
+                {
                     this.IsBlocking = (bool)relationship.Source.IsBlocking;
+                }
+
                 this.IsFollowing = relationship.Source.IsFollowing;
                 if (relationship.Source.IsFollowingRequested != null)
+                {
                     this.IsSendingFollowRequest = (bool)relationship.Source.IsFollowingRequested;
+                }
             }
         }
 
@@ -302,7 +362,9 @@ namespace TweetGazer.Models.Timeline
         {
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow != null)
+            {
                 (mainWindow.DataContext as ViewModels.MainWindowViewModel).Notify("未実装", MainWindow.NotificationType.Alert);
+            }
         }
 
         /// <summary>
@@ -314,7 +376,9 @@ namespace TweetGazer.Models.Timeline
             if (mainWindow != null)
             {
                 using (var showList = new Views.ShowDialogs.ShowList(this.TimelineModel.TokenSuffix, this))
+                {
                     LightBox.ShowDialog(mainWindow, showList);
+                }
             }
         }
 
@@ -327,7 +391,9 @@ namespace TweetGazer.Models.Timeline
             if (mainWindow != null)
             {
                 using (var showAddToList = new Views.ShowDialogs.ShowAddToList(this.TimelineModel.TokenSuffix, this))
+                {
                     LightBox.ShowDialog(mainWindow, showAddToList);
+                }
             }
         }
 
@@ -340,7 +406,9 @@ namespace TweetGazer.Models.Timeline
         {
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow == null)
+            {
                 return MessageDialogResult.Negative;
+            }
 
             return await mainWindow.ShowMessageAsync("確認", text, MessageDialogStyle.AffirmativeAndNegative);
         }
@@ -467,15 +535,25 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this._IsBlocking)
+                {
                     return "ブロック中";
+                }
                 else if (this._IsFollowing)
+                {
                     return "フォロー中";
+                }
                 else if (this._IsSendingFollowRequest)
+                {
                     return "承認待ち";
+                }
                 else if (this._IsProtected)
+                {
                     return "フォローする(鍵)";
+                }
                 else
+                {
                     return "フォローする";
+                }
             }
         }
         #endregion
@@ -486,15 +564,25 @@ namespace TweetGazer.Models.Timeline
             get
             {
                 if (this._IsBlocking)
+                {
                     return "ブロック解除";
+                }
                 else if (this._IsFollowing)
+                {
                     return "フォロー解除";
+                }
                 else if (this._IsSendingFollowRequest)
+                {
                     return "リクエスト解除";
+                }
                 else if (this._IsProtected)
+                {
                     return "フォローする(鍵)";
+                }
                 else
+                {
                     return "フォローする";
+                }
             }
         }
         #endregion

@@ -123,9 +123,13 @@ namespace TweetGazer.Views.ShowDialogs
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
             if (VideoMediaElementBehavior.GetIsLoop(this.MediaElement))
+            {
                 this.NotRepeat.Visibility = Visibility.Visible;
+            }
             else
+            {
                 this.NotRepeat.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

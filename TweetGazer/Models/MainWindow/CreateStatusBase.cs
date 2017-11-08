@@ -40,7 +40,7 @@ namespace TweetGazer.Models.MainWindow
         {
             this.IsProgressRingVisible = true;
 
-            foreach (var user in Users)
+            foreach (var user in this.Users)
             {
                 if (user.IsCreate)
                 {
@@ -92,18 +92,22 @@ namespace TweetGazer.Models.MainWindow
         /// </summary>
         public void SelectMedia()
         {
-            if (!IsSelectButtonEnabled)
+            if (!this.IsSelectButtonEnabled)
+            {
                 return;
+            }
 
             //ファイルダイアログを表示
-            OpenFileDialog ofd = new OpenFileDialog()
+            var ofd = new OpenFileDialog()
             {
                 Filter = "メディアファイル(*.jpg;*.jpeg;.*.png;*.gif;*.mp4)|*.jpg;*.jpeg;*.png;*.gif;*.mp4",
                 Multiselect = true,
                 RestoreDirectory = true
             };
             if (ofd.ShowDialog() == false)
+            {
                 return;
+            }
 
             var mediaTypes = new List<MediaType>();
 
@@ -119,7 +123,9 @@ namespace TweetGazer.Models.MainWindow
 
                 //画像ファイルの時
                 if (imageRegexMatch.Success)
+                {
                     mediaTypes.Add(MediaType.Image);
+                }
                 //GIFファイルの時
                 else if (gifRegexMatch.Success)
                 {
@@ -127,14 +133,20 @@ namespace TweetGazer.Models.MainWindow
                     {
                         //アニメーションGIFの場合
                         if (System.Drawing.ImageAnimator.CanAnimate(bitmap))
+                        {
                             mediaTypes.Add(MediaType.Gif);
+                        }
                         else
+                        {
                             mediaTypes.Add(MediaType.Image);
+                        }
                     }
                 }
                 //動画ファイルの場合
                 else if (videoRegexMatch.Success)
+                {
                     mediaTypes.Add(MediaType.Video);
+                }
                 else
                 {
                     CommonMethods.Notify("ファイルタイプエラー．", NotificationType.Error);
@@ -146,7 +158,7 @@ namespace TweetGazer.Models.MainWindow
             var mediaType = mediaTypes.First();
             foreach (var mt in mediaTypes)
             {
-                if (mediaType != mt || (Type != MediaType.Undefined && Type != mt))
+                if (mediaType != mt || (this.Type != MediaType.Undefined && this.Type != mt))
                 {
                     CommonMethods.Notify("異なるメディアを同時にアップロードすることはできません", NotificationType.Error);
                     return;
@@ -154,7 +166,9 @@ namespace TweetGazer.Models.MainWindow
             }
 
             if (this.Type == MediaType.Undefined)
+            {
                 this.Type = mediaType;
+            }
 
             if (this.FileNames.Count + ofd.FileNames.Count() > 4)
             {
@@ -183,11 +197,13 @@ namespace TweetGazer.Models.MainWindow
         /// </summary>
         public void DeleteMedia()
         {
-            foreach (var user in Users)
+            foreach (var user in this.Users)
+            {
                 user.Media.Clear();
+            }
 
             this.FileNames.Clear();
-            Type = MediaType.Undefined;
+            this.Type = MediaType.Undefined;
 
             this.IsSelectButtonEnabled = true;
             this.IsDeleteButtonVisible = false;
@@ -199,7 +215,9 @@ namespace TweetGazer.Models.MainWindow
         public void PressCtrlEnter()
         {
             if (Properties.Settings.Default.IsCreateStatusWhenPressCtrlEnter)
+            {
                 this.Create();
+            }
         }
 
         /// <summary>
@@ -223,11 +241,14 @@ namespace TweetGazer.Models.MainWindow
         public void SelectUser(int suffix)
         {
             int i = 0;
-            foreach (var user in Users)
+            foreach (var user in this.Users)
             {
                 user.IsCreate = false;
                 if (i == suffix)
+                {
                     user.IsCreate = true;
+                }
+
                 i++;
             }
         }
@@ -241,7 +262,9 @@ namespace TweetGazer.Models.MainWindow
         {
             var mainWindow = CommonMethods.MainWindow;
             if (mainWindow == null)
+            {
                 return MessageDialogResult.Negative;
+            }
 
             return await mainWindow.ShowMessageAsync("確認", text, MessageDialogStyle.AffirmativeAndNegative);
         }

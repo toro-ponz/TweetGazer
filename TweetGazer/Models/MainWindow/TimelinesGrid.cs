@@ -40,7 +40,9 @@ namespace TweetGazer.Models.MainWindow
         public void AddTimeline(TimelineData data)
         {
             if (data == null)
+            {
                 return;
+            }
 
             data.GridWidth = new GridLength(1.0, GridUnitType.Star);
 
@@ -94,7 +96,9 @@ namespace TweetGazer.Models.MainWindow
         public void RemoveTimeline(int columnIndex)
         {
             if (this.Timelines.Count <= columnIndex)
+            {
                 return;
+            }
 
             var index = columnIndex * 2;
             //要素が1つのみの場合
@@ -153,7 +157,9 @@ namespace TweetGazer.Models.MainWindow
         public void SetGridWidth(IList<GridLength> gridWidth)
         {
             if (gridWidth == null || this.Timelines.Count != gridWidth.Count)
+            {
                 return;
+            }
 
             for (int i = 0; i < this.Timelines.Count; i++)
             {
@@ -168,7 +174,9 @@ namespace TweetGazer.Models.MainWindow
         public bool LoadColumnData()
         {
             if (!File.Exists(SecretParameters.TimelineColumnFilePath))
+            {
                 return false;
+            }
 
             var loadedText = "";
             //ファイルから読み込み
@@ -190,7 +198,9 @@ namespace TweetGazer.Models.MainWindow
             finally
             {
                 if (fileStream != null)
+                {
                     fileStream.Dispose();
+                }
             }
 
             var regex = new Regex(@"<TimelineColumn>(?<Data>.+?)</TimelineColumn>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
@@ -199,10 +209,10 @@ namespace TweetGazer.Models.MainWindow
             var gridWidth = new List<GridLength>();
             while (match.Success)
             {
-                System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(TimelineData));
+                var serializer = new System.Xml.Serialization.XmlSerializer(typeof(TimelineData));
                 using (var reader = new StringReader(match.Groups["Data"].Value))
                 {
-                    TimelineData item = (TimelineData)serializer.Deserialize(reader);
+                    var item = (TimelineData)serializer.Deserialize(reader);
                     gridWidth.Add(item.GridWidth);
                     this.AddTimeline(item);
                     match = match.NextMatch();
@@ -211,7 +221,9 @@ namespace TweetGazer.Models.MainWindow
             }
 
             if (this.Timelines.Count == 0)
+            {
                 return false;
+            }
 
             this.SetGridWidth(gridWidth);
             return true;
@@ -257,7 +269,9 @@ namespace TweetGazer.Models.MainWindow
             finally
             {
                 if (fileStream != null)
+                {
                     fileStream.Dispose();
+                }
             }
 
             return true;

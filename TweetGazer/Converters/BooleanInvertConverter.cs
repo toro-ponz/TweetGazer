@@ -12,7 +12,10 @@ namespace TweetGazer.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (!(value is bool))
+            {
                 return false;
+            }
+
             return !(bool)value;
         }
 
