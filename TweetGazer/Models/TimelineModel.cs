@@ -789,6 +789,8 @@ namespace TweetGazer.Models
                 return;
             }
 
+            this.IsLoading = true;
+
             try
             {
                 var loadedTimeline = await AccountTokens.LoadListTimelineAsync(this.Data.TokenSuffix, this.Data.CurrentPage.ListNumber, null, this.Data.SinceId);
@@ -801,6 +803,8 @@ namespace TweetGazer.Models
             {
                 DebugConsole.Write(ex);
             }
+
+            this.IsLoading = false;
         }
 
         /// <summary>
@@ -814,6 +818,8 @@ namespace TweetGazer.Models
             {
                 return;
             }
+
+            this.IsLoading = true;
 
             try
             {
@@ -853,6 +859,8 @@ namespace TweetGazer.Models
             {
                 DebugConsole.Write(ex);
             }
+
+            this.IsLoading = false;
         }
 
         /// <summary>
@@ -867,6 +875,8 @@ namespace TweetGazer.Models
                 return;
             }
 
+            this.IsLoading = true;
+
             try
             {
                 var loadedTrend = await AccountTokens.LoadTrendsAsync(this.Data.TokenSuffix);
@@ -879,6 +889,8 @@ namespace TweetGazer.Models
             {
                 DebugConsole.Write(ex);
             }
+
+            this.IsLoading = false;
         }
 
         /// <summary>
