@@ -140,8 +140,6 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(Properties.Settings.Default.AccentColor):
-                            this.ChangeColors();
-                            break;
                         case nameof(Properties.Settings.Default.BaseColor):
                             this.ChangeColors();
                             break;
