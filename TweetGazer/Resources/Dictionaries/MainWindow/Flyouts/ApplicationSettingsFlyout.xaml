@@ -60,7 +60,7 @@
                                     Margin="30,5"
                                     FontSize="24"
                                     SelectedIndex="{Binding Path=AccentColorIndex, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
-                                    SelectedValue="{Binding Path=AccentColor, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                    SelectedValue="{Binding Path=AccentColor, Source={x:Static Properties:Settings.Default}, Mode=OneWayToSource}"
                                     SelectedValuePath="Content">
                                     <ComboBoxItem>DodgerBlue</ComboBoxItem>
                                     <ComboBoxItem>Red</ComboBoxItem>
@@ -98,7 +98,7 @@
                                     Margin="30,5"
                                     FontSize="24"
                                     SelectedIndex="{Binding Path=BaseColorIndex, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
-                                    SelectedValue="{Binding Path=BaseColor, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                    SelectedValue="{Binding Path=BaseColor, Source={x:Static Properties:Settings.Default}, Mode=OneWayToSource}"
                                     SelectedValuePath="Content">
                                     <ComboBoxItem>BaseLight</ComboBoxItem>
                                     <ComboBoxItem>BaseDark</ComboBoxItem>

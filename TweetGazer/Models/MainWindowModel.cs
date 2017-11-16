@@ -210,10 +210,18 @@ namespace TweetGazer.Models
             {
                 try
                 {
+                    var accentColor = Properties.Settings.Default.AccentColor;
+                    var baseColor = Properties.Settings.Default.BaseColor;
+
+                    if (accentColor == null || baseColor == null)
+                    {
+                        return;
+                    }
+
                     ThemeManager.ChangeAppStyle(
                             mainWindow.Resources,
-                            ThemeManager.GetAccent(Properties.Settings.Default.AccentColor),
-                            ThemeManager.GetAppTheme(Properties.Settings.Default.BaseColor));
+                            ThemeManager.GetAccent(accentColor),
+                            ThemeManager.GetAppTheme(baseColor));
                 }
                 catch (Exception e)
                 {
