@@ -212,8 +212,8 @@ namespace TweetGazer.Models
                 {
                     ThemeManager.ChangeAppStyle(
                             mainWindow.Resources,
-                            ThemeManager.GetAccent(Properties.Settings.Default.AccentColor.Replace("System.Windows.Controls.ComboBoxItem: ", "")),
-                            ThemeManager.GetAppTheme(Properties.Settings.Default.BaseColor.Replace("System.Windows.Controls.ComboBoxItem: ", "")));
+                            ThemeManager.GetAccent(Properties.Settings.Default.AccentColor),
+                            ThemeManager.GetAppTheme(Properties.Settings.Default.BaseColor));
                 }
                 catch (Exception e)
                 {
