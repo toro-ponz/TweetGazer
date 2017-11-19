@@ -23,8 +23,6 @@ namespace TweetGazer.Models.MainWindow
             this.IsUploaded = false;
             this._Source = new ObservableCollection<Uri>();
             this._IsEnabled = false;
-            this.PlayCommand = new RelayCommand<object>(this.PlayCommandEntity);
-            this.LoopPlayCommand = new RelayCommand<object>(this.LoopPlayCommandEntity);
         }
 
         /// <summary>
@@ -188,38 +186,6 @@ namespace TweetGazer.Models.MainWindow
             return true;
         }
 
-        /// <summary>
-        /// アニメーションGIF・動画のプレビュー再生
-        /// </summary>
-        /// <param name="sender">MediaElement</param>
-        private void PlayCommandEntity(object sender)
-        {
-            if (sender is MediaElement mediaElement)
-            {
-                mediaElement.Position = TimeSpan.FromMilliseconds(1);
-                try
-                {
-                    mediaElement.Play();
-                }
-                catch (Exception e)
-                {
-                    DebugConsole.Write(e);
-                }
-            }
-        }
-
-        /// <summary>
-        /// アニメーションGIF・動画のループ再生
-        /// </summary>
-        /// <param name="sender">MediaElement</param>
-        private void LoopPlayCommandEntity(object sender)
-        {
-            if (this.IsGif)
-            {
-                this.PlayCommandEntity(sender);
-            }
-        }
-
         #region Type 変更通知プロパティ
         public MediaType Type
         {
@@ -303,9 +269,6 @@ namespace TweetGazer.Models.MainWindow
             }
         }
         #endregion
-
-        public ICommand PlayCommand { get; }
-        public ICommand LoopPlayCommand { get; }
 
         public string Ids;
         public bool IsUploaded { get; set; }

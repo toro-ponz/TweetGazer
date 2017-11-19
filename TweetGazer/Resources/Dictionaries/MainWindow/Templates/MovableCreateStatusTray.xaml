@@ -4,6 +4,7 @@
     xmlns:Behaviors="clr-namespace:TweetGazer.Behaviors"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:Properties="clr-namespace:TweetGazer.Properties"
+    xmlns:Selectors="clr-namespace:TweetGazer.Selectors"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
@@ -178,14 +179,9 @@
                         ScrollViewer.CanContentScroll="True"
                         VirtualizingPanel.ScrollUnit="Pixel"
                         VirtualizingStackPanel.IsVirtualizing="True">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Image Source="{Binding}" />
-                                    <MediaElement Source="{Binding}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemTemplateSelector>
+                            <Selectors:CreateStatusMediaTemplateSelector />
+                        </ItemsControl.ItemTemplateSelector>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />

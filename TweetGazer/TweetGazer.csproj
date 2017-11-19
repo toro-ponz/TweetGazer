@@ -105,6 +105,9 @@
     <Reference Include="CoreTweet, Version=0.8.0.384, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CoreTweet.0.8.0.384\lib\net45\CoreTweet.dll</HintPath>
     </Reference>
+    <Reference Include="Gu.Wpf.Media, Version=0.5.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gu.Wpf.Media.0.5.0.2\lib\net45\Gu.Wpf.Media.dll</HintPath>
+    </Reference>
     <Reference Include="Lighty, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Lighty.0.3.0.0\lib\net45\Lighty.dll</HintPath>
     </Reference>
@@ -165,12 +168,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\TextBoxBehavior.cs" />
-    <Compile Include="Behaviors\VideoMediaElementBehavior.cs" />
     <Compile Include="Behaviors\GifMediaElementBehavior.cs" />
     <Compile Include="Behaviors\ImageBehavior.cs" />
     <Compile Include="Behaviors\ItemsControlBehavior.cs" />
     <Compile Include="Behaviors\ReadMoreBehavior.cs" />
-    <Compile Include="Behaviors\StatusMediaItemsControlBehavior.cs" />
     <Compile Include="Behaviors\StatausTextBlockBehavior.cs" />
     <Compile Include="Common\DebugConsole.cs" />
     <Compile Include="Common\DirectMessage.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Models\MainWindow\FlyoutBase.cs" />
     <Compile Include="Models\MainWindow\Mentions.cs" />
     <Compile Include="Common\MentionsStack.cs" />
+    <Compile Include="Models\Timeline\MediaProperties.cs" />
     <Compile Include="Models\Timeline\NotificationProperties.cs" />
     <Compile Include="Models\Timeline\QuotationStatusProperties.cs" />
     <Compile Include="Models\Timeline\ReplyToStatusProperties.cs" />
@@ -253,7 +255,7 @@
     <Compile Include="ViewModels\ShowDialogs\ShowListViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowStatusViewModel.cs" />
     <Compile Include="ViewModels\TimelineViewModel.cs" />
-    <Compile Include="Selectors\CreatingStatusMediaTemplateSelector.cs" />
+    <Compile Include="Selectors\CreateStatusMediaTemplateSelector.cs" />
     <Compile Include="Views\DebugConsoleWindow.xaml.cs">
       <DependentUpon>DebugConsoleWindow.xaml</DependentUpon>
     </Compile>
