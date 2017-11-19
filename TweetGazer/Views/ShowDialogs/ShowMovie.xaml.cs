@@ -2,7 +2,10 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using TweetGazer.Behaviors;
+using Gu.Wpf.Media;
+using System.Threading.Tasks;
+using TweetGazer.Common;
+using System.IO;
 
 namespace TweetGazer.Views.ShowDialogs
 {
@@ -20,7 +23,44 @@ namespace TweetGazer.Views.ShowDialogs
         {
             this.InitializeComponent();
 
-            this.DataContext = url;
+            this.Download(url);
+        }
+
+        private async void Download(Uri url)
+        {
+            if (url == null)
+            {
+                return;
+            }
+
+            string fileName = DateTime.Now.Ticks.ToString() + new Random().Next().ToString() + ".mp4";
+            var filePath = Directory.GetCurrentDirectory() + SecretParameters.TemporaryDirectoryPath + fileName;
+
+            await Task.Run(() =>
+            {
+                var wc = new System.Net.WebClient();
+
+                //ディレクトリが存在しない場合作成する
+                if (!Directory.GetParent(filePath).Exists)
+                {
+                    Directory.CreateDirectory(Directory.GetParent(filePath).FullName);
+                }
+
+                try
+                {
+                    wc.DownloadFile(url, SecretParameters.TemporaryDirectoryPath + fileName);
+                }
+                catch (Exception ex)
+                {
+                    DebugConsole.Write(ex);
+                }
+                finally
+                {
+                    wc.Dispose();
+                }
+            });
+
+            this.MediaElement.SetCurrentValue(MediaElementWrapper.SourceProperty, new Uri(filePath));
         }
 
         /// <summary>
@@ -40,7 +80,7 @@ namespace TweetGazer.Views.ShowDialogs
         {
             if (disposing)
             {
-                this.DataContext = null;
+                this.MediaElement.IsPlaying = false;
             }
 
             this.Close();
@@ -65,71 +105,6 @@ namespace TweetGazer.Views.ShowDialogs
         private void BlockButton_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
-        }
-
-        /// <summary>
-        /// 再生ボタンをクリックしたとき
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlayAndPauseButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (VideoMediaElementBehavior.GetState(this.MediaElement) == States.Playing)
-            {
-                this.PlayIcon.Visibility = Visibility.Visible;
-                this.PauseIcon.Visibility = Visibility.Collapsed;
-            }
-            else if (VideoMediaElementBehavior.GetState(this.MediaElement) == States.Pauseing)
-            {
-                this.PlayIcon.Visibility = Visibility.Collapsed;
-                this.PauseIcon.Visibility = Visibility.Visible;
-            }
-        }
-
-        /// <summary>
-        /// 最小化ボタンをクリックしたとき
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        /// <summary>
-        /// ミュートボタンをクリックしたとき
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MuteButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (VideoMediaElementBehavior.GetIsMuted(this.MediaElement))
-            {
-                this.VolumeIcon.Visibility = Visibility.Visible;
-                this.MuteIcon.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                this.VolumeIcon.Visibility = Visibility.Collapsed;
-                this.MuteIcon.Visibility = Visibility.Visible;
-            }
-        }
-
-        /// <summary>
-        /// リピートボタンをクリックしたとき
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RepeatButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (VideoMediaElementBehavior.GetIsLoop(this.MediaElement))
-            {
-                this.NotRepeat.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.NotRepeat.Visibility = Visibility.Collapsed;
-            }
         }
     }
 }
