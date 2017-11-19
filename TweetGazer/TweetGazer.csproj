@@ -168,7 +168,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\TextBoxBehavior.cs" />
-    <Compile Include="Behaviors\VideoMediaElementBehavior.cs" />
     <Compile Include="Behaviors\GifMediaElementBehavior.cs" />
     <Compile Include="Behaviors\ImageBehavior.cs" />
     <Compile Include="Behaviors\ItemsControlBehavior.cs" />
