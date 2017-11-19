@@ -1,51 +1,13 @@
-﻿using CoreTweet;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CoreTweet;
+using TweetGazer.Behaviors;
 using TweetGazer.Common;
 
-namespace TweetGazer.Behaviors
+namespace TweetGazer.Models.Timeline
 {
-    public static class StatusMediaItemsControlBehavior
-    {
-        [AttachedPropertyBrowsableForType(typeof(ItemsControl))]
-        public static MediaProperties GetItemsSource(DependencyObject element)
-        {
-            if (element == null)
-            {
-                return null;
-            }
-
-            return element.GetValue(SourceProperty) as MediaProperties;
-        }
-
-        [AttachedPropertyBrowsableForType(typeof(ItemsControl))]
-        public static void SetItemsSource(DependencyObject element, MediaProperties value)
-        {
-            if (element == null)
-            {
-                return;
-            }
-
-            element.SetValue(SourceProperty, value);
-        }
-
-        public static readonly DependencyProperty SourceProperty =
-            DependencyProperty.RegisterAttached("ItemsSource", typeof(ImageProperties), typeof(StatusMediaItemsControlBehavior), new PropertyMetadata(null, ItemsSource_Changed));
-
-        private static void ItemsSource_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            var element = sender as ItemsControl;
-            if (element == null)
-            {
-                return;
-            }
-        }
-    }
-
     public class MediaProperties
     {
         public MediaProperties(MediaEntity media, int suffix)
@@ -104,7 +66,7 @@ namespace TweetGazer.Behaviors
                 {
                     mediaElement.Play();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     DebugConsole.Write(e);
                 }
@@ -123,7 +85,7 @@ namespace TweetGazer.Behaviors
         public ImageProperties Image { get; }
         public Uri Url { get; }
         public TimeSpan Time { get; }
-        
+
         public int MediaNumber { get; }
     }
 

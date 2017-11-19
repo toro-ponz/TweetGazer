@@ -172,7 +172,6 @@
     <Compile Include="Behaviors\ImageBehavior.cs" />
     <Compile Include="Behaviors\ItemsControlBehavior.cs" />
     <Compile Include="Behaviors\ReadMoreBehavior.cs" />
-    <Compile Include="Behaviors\StatusMediaItemsControlBehavior.cs" />
     <Compile Include="Behaviors\StatausTextBlockBehavior.cs" />
     <Compile Include="Common\DebugConsole.cs" />
     <Compile Include="Common\DirectMessage.cs" />
@@ -213,6 +212,7 @@
     <Compile Include="Models\MainWindow\FlyoutBase.cs" />
     <Compile Include="Models\MainWindow\Mentions.cs" />
     <Compile Include="Common\MentionsStack.cs" />
+    <Compile Include="Models\Timeline\MediaProperties.cs" />
     <Compile Include="Models\Timeline\NotificationProperties.cs" />
     <Compile Include="Models\Timeline\QuotationStatusProperties.cs" />
     <Compile Include="Models\Timeline\ReplyToStatusProperties.cs" />
