@@ -12,18 +12,18 @@ namespace TweetGazer.Selectors
             DataTemplate result = null;
 
             var creatingStatus = container as FrameworkElement;
-            var data = item as Uri;
+            var data = item as string;
             if (creatingStatus == null || data == null)
             {
                 return null;
             }
 
             var imageRegex = new Regex(@"^.+\.(jpe?g|png)$", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            var imageRegexMatch = imageRegex.Match(data.ToString());
+            var imageRegexMatch = imageRegex.Match(data);
             var gifRegex = new Regex(@"^.+\.gif$", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            var gifRegexMatch = gifRegex.Match(data.ToString());
+            var gifRegexMatch = gifRegex.Match(data);
             var videoRegex = new Regex(@"^.+\.mp4$", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            var videoRegexMatch = videoRegex.Match(data.ToString());
+            var videoRegexMatch = videoRegex.Match(data);
 
             //画像ファイルの時
             if (imageRegexMatch.Success)
@@ -33,7 +33,7 @@ namespace TweetGazer.Selectors
             //GIFファイルの時
             else if (gifRegexMatch.Success)
             {
-                using (var bitmap = new System.Drawing.Bitmap(data.OriginalString))
+                using (var bitmap = new System.Drawing.Bitmap(data))
                 {
                     //アニメーションGIFの場合
                     if (System.Drawing.ImageAnimator.CanAnimate(bitmap))

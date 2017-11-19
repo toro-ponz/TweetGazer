@@ -1,25 +1,11 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
-    
+    xmlns:Gif="http://wpfanimatedgif.codeplex.com">
+
     <DataTemplate x:Key="GifTemplate">
         <Grid>
-            <MediaElement
-                x:Name="MediaElement"
-                LoadedBehavior="Manual"
-                Source="{Binding}"
-                UnloadedBehavior="Manual">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:InvokeCommandAction Command="{Binding Path=DataContext.Media.PlayCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:Flyout}}}" CommandParameter="{Binding ElementName=MediaElement}" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="MediaEnded">
-                        <i:InvokeCommandAction Command="{Binding Path=DataContext.Media.LoopPlayCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:Flyout}}}" CommandParameter="{Binding ElementName=MediaElement}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </MediaElement>
+            <Image Gif:ImageBehavior.AnimatedSource="{Binding}" Gif:ImageBehavior.RepeatBehavior="Forever" />
             <Grid
                 Width="40"
                 Height="20"

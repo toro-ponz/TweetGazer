@@ -255,7 +255,7 @@
     <Compile Include="ViewModels\ShowDialogs\ShowListViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowStatusViewModel.cs" />
     <Compile Include="ViewModels\TimelineViewModel.cs" />
-    <Compile Include="Selectors\CreatingStatusMediaTemplateSelector.cs" />
+    <Compile Include="Selectors\CreateStatusMediaTemplateSelector.cs" />
     <Compile Include="Views\DebugConsoleWindow.xaml.cs">
       <DependentUpon>DebugConsoleWindow.xaml</DependentUpon>
     </Compile>
