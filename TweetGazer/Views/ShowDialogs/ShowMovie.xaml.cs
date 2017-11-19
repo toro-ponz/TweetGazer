@@ -23,10 +23,14 @@ namespace TweetGazer.Views.ShowDialogs
         {
             this.InitializeComponent();
 
-            this.Download(url);
+            this.DownloadVideo(url);
         }
 
-        private async void Download(Uri url)
+        /// <summary>
+        /// 動画のダウンロード
+        /// </summary>
+        /// <param name="url">動画のURL</param>
+        private async void DownloadVideo(Uri url)
         {
             if (url == null)
             {
