@@ -14,7 +14,7 @@
         Style="{StaticResource FlatButtonStyle}">
         <Grid Background="#50000000">
             <Grid>
-                <!-- 画像 -->
+                <!--  画像  -->
                 <Button
                     Margin="50,0"
                     HorizontalAlignment="Center"
@@ -26,8 +26,8 @@
                         Behaviors:ImageBehavior.Source="{Binding Path=Image}"
                         MouseWheel="Image_MouseWheel" />
                 </Button>
-                
-                <!-- 拡大画像 -->
+
+                <!--  拡大画像  -->
                 <ScrollViewer
                     x:Name="ZoomedImageScrollViewer"
                     HorizontalScrollBarVisibility="Auto"
@@ -44,7 +44,7 @@
                         MouseWheel="Image_MouseWheel" />
                 </ScrollViewer>
 
-                <!-- Previousボタン -->
+                <!--  Previousボタン  -->
                 <Button
                     Width="50"
                     Height="50"
@@ -57,8 +57,8 @@
                     Visibility="{Binding Path=IsLeftButtonVisible, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                     <ContentControl ContentTemplate="{StaticResource AccentColorLeftIcon}" />
                 </Button>
-                
-                <!-- Nextボタン -->
+
+                <!--  Nextボタン  -->
                 <Button
                     Width="50"
                     Height="50"
@@ -71,8 +71,8 @@
                     Visibility="{Binding Path=IsRightButtonVisible, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                     <ContentControl ContentTemplate="{StaticResource AccentColorRightIcon}" />
                 </Button>
-                
-                <!-- 拡大ボタン -->
+
+                <!--  拡大ボタン  -->
                 <Button
                     Width="30"
                     Height="30"
@@ -83,8 +83,8 @@
                     Style="{StaticResource UwpLikeButtonStyle2}">
                     <ContentControl ContentTemplate="{StaticResource AccentColorSearchIcon}" />
                 </Button>
-                
-                <!-- 閉じるボタン -->
+
+                <!--  閉じるボタン  -->
                 <Button
                     Width="30"
                     Height="30"

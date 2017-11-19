@@ -44,14 +44,14 @@
                                         Text="Ctrl+Cでクリップボードに保存することが出来ます。" />
                                     <Border
                                         Grid.Row="1"
-                                        BorderBrush="DodgerBlue"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
+                                        BorderBrush="DodgerBlue"
                                         BorderThickness="1" />
                                     <TextBox
-                                        Background="White"
                                         x:Name="TextBox"
                                         Grid.Row="1"
+                                        Background="White"
                                         FontSize="22"
                                         Foreground="Black"
                                         TextWrapping="Wrap" />

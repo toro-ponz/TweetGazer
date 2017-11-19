@@ -9,8 +9,8 @@
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    FontFamily="Segoe UI Emoji"
     MinWidth="100"
+    FontFamily="Segoe UI Emoji"
     Foreground="{DynamicResource TextBrush}"
     mc:Ignorable="d">
 
@@ -383,4 +383,4 @@
             <Controls:ProgressRing IsActive="True" />
         </Grid>
     </Grid>
-</UserControl> 
+</UserControl>

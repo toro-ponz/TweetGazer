@@ -6,9 +6,9 @@
     Title="TweetGazerDebugConsole"
     Width="400"
     Height="300"
-    Closing="Window_Closing"
-    Background="Black">
-    
+    Background="Black"
+    Closing="Window_Closing">
+
     <Grid>
         <ItemsControl ItemsSource="{Binding Source={x:Static Common:DebugConsole.Data}, Mode=OneWay}">
             <ItemsControl.ItemTemplate>

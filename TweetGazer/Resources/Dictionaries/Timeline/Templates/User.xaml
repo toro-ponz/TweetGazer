@@ -88,7 +88,9 @@
                                     </MenuItem.Header>
                                 </MenuItem>
                                 <MenuItem
-                                    Command="{Binding Path=ShowListCommand, Mode=OneTime}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Command="{Binding Path=ShowListCommand, Mode=OneTime}">
                                     <MenuItem.Header>
                                         <TextBlock
                                             HorizontalAlignment="Center"

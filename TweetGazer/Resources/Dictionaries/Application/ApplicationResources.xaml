@@ -5,7 +5,7 @@
 
         <!--  Converter  -->
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/Convertors/Convertors.xaml" />
-        
+
         <!--  Icons  -->
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/Icons/VectorImages.xaml" />
 
@@ -15,7 +15,7 @@
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatSlider.xaml" />
-        
+
         <!--  AddTimelineExtraGrid  -->
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/AddTimelineExtraGrid/Lists.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/AddTimelineExtraGrid/Users.xaml" />
