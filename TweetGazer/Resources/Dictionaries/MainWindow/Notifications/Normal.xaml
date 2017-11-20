@@ -2,15 +2,15 @@
     <DataTemplate x:Key="NotificationNormalTray">
         <Grid Margin="10">
             <Rectangle
-                Fill="DodgerBlue"
-                RadiusX="10"
-                RadiusY="10" />
+                Stroke="DodgerBlue"
+                StrokeThickness="2"
+                Fill="{DynamicResource WindowBackgroundBrush}"  />
 
             <TextBlock
                 Margin="10"
                 FontSize="20"
                 FontWeight="Bold"
-                Foreground="White"
+                Foreground="DodgerBlue"
                 Text="{Binding Path=Message, Mode=OneTime}"
                 TextAlignment="Center"
                 TextWrapping="Wrap" />

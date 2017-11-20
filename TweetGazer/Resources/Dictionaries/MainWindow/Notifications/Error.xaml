@@ -2,15 +2,15 @@
     <DataTemplate x:Key="NotificationErrorTray">
         <Grid Margin="10">
             <Rectangle
-                Fill="Red"
-                RadiusX="10"
-                RadiusY="10" />
+                Stroke="Red"
+                StrokeThickness="2"
+                Fill="{DynamicResource WindowBackgroundBrush}" />
 
             <TextBlock
                 Margin="10"
                 FontSize="20"
                 FontWeight="Bold"
-                Foreground="White"
+                Foreground="Red"
                 Text="{Binding Path=Message, Mode=OneTime}"
                 TextAlignment="Center"
                 TextWrapping="Wrap" />
