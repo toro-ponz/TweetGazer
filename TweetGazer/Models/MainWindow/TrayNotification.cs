@@ -13,10 +13,26 @@ namespace TweetGazer.Models.MainWindow
         public TrayNotification(string message, NotificationType type)
         {
             this.Message = message.TrimEnd('\n', '\r', ' ');
-            this.Type = type;
+
+            switch (type)
+            {
+                case NotificationType.Normal:
+                    this.Color = new SolidColorBrush(Colors.DodgerBlue);
+                    break;
+                case NotificationType.Success:
+                    this.Color = new SolidColorBrush(Colors.Lime);
+                    break;
+                case NotificationType.Alert:
+                    this.Color = new SolidColorBrush(Colors.Orange);
+                    break;
+                case NotificationType.Error:
+                    this.Color = new SolidColorBrush(Colors.Red);
+                    break;
+            }
+            this.Color.Freeze();
         }
 
-        public NotificationType Type;
+        public Brush Color { get; }
 
         public string Message { get; }
     }

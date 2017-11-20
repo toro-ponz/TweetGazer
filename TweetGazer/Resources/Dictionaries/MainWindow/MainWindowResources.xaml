@@ -6,16 +6,11 @@
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Instructions.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Login.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/MovableCreateStatusTray.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Notification.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Video.xaml" />
 
         <!--  Style  -->
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Styles/Styles.xaml" />
-
-        <!--  Notifications  -->
-        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Notifications/Alert.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Notifications/Error.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Notifications/Normal.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Notifications/Success.xaml" />
 
         <!--  Flyouts  -->
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/AccountSettingsFlyout.xaml" />

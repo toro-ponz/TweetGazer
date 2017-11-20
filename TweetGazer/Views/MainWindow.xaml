@@ -450,11 +450,9 @@
             Grid.ColumnSpan="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
+            ItemTemplate="{StaticResource NotificationTray}"
             HorizontalContentAlignment="Center"
             ItemsSource="{Binding Path=TrayNotifications, Mode=OneTime}">
-            <ItemsControl.ItemTemplateSelector>
-                <Selectors:MainWindowNotificationTrayTemplateSelector />
-            </ItemsControl.ItemTemplateSelector>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel>

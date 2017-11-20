@@ -231,7 +231,6 @@
     <Compile Include="Models\Timeline\UserOverviewProperties.cs" />
     <Compile Include="Models\Timeline\UserProperties.cs" />
     <Compile Include="Models\Timeline\UserTimelineTab.cs" />
-    <Compile Include="Selectors\MainWindowNotificationTrayTemplateSelector.cs" />
     <Compile Include="Selectors\TimelineNotificationTrayTemplateSelector.cs" />
     <Compile Include="Selectors\StatusMediaTemplateSelector.cs" />
     <Compile Include="Selectors\ShowStatusItemTemplateSelector.cs" />
@@ -376,23 +375,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Dictionaries\MainWindow\Notifications\Alert.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Dictionaries\MainWindow\Notifications\Error.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Dictionaries\MainWindow\Notifications\Normal.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Dictionaries\MainWindow\Notifications\Storyboards\NotificationShowStoryboard.xaml">
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Storyboards\NotificationShowStoryboard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Dictionaries\MainWindow\Notifications\Success.xaml">
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Notification.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
