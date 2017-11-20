@@ -448,8 +448,6 @@
         <!--  上部通知  -->
         <ItemsControl
             Grid.ColumnSpan="2"
-            MinWidth="200px"
-            MaxWidth="500px"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             HorizontalContentAlignment="Center"
