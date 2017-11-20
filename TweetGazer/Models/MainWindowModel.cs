@@ -47,7 +47,7 @@ namespace TweetGazer.Models
                 await Task.Run(async  () =>
                 {
                     this.TrayNotifications.Add(new TrayNotification(message, type));
-                    await Task.Delay(7000);
+                    await Task.Delay(5000);
                     this.RemoveNotice();
                 });
             }
