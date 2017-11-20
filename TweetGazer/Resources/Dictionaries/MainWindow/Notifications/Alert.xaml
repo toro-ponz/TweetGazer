@@ -1,6 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <DataTemplate x:Key="NotificationAlertTray">
-        <Grid Background="Orange">
+        <Grid>
+            <Rectangle
+                Fill="Orange"
+                RadiusX="10"
+                RadiusY="10" />
+
             <TextBlock
                 Margin="10"
                 FontSize="20"
