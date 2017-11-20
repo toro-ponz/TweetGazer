@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <DataTemplate x:Key="NotificationErrorTray">
-        <Grid VerticalAlignment="Bottom" Background="Red">
+        <Grid Background="Red">
             <TextBlock
                 Margin="10"
                 FontSize="20"
