@@ -302,33 +302,6 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
-        <!--  トレイ通知領域  -->
-        <ItemsControl
-            Grid.ColumnSpan="2"
-            MinWidth="200px"
-            MaxWidth="500px"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            HorizontalContentAlignment="Center"
-            ItemsSource="{Binding Path=TrayNotifications, Mode=OneTime}">
-            <ItemsControl.ItemTemplateSelector>
-                <Selectors:MainWindowNotificationTrayTemplateSelector />
-            </ItemsControl.ItemTemplateSelector>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel>
-                        <i:Interaction.Behaviors>
-                            <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5">
-                                <ei:FluidMoveBehavior.EaseY>
-                                    <QuadraticEase EasingMode="EaseOut" />
-                                </ei:FluidMoveBehavior.EaseY>
-                            </ei:FluidMoveBehavior>
-                        </i:Interaction.Behaviors>
-                    </VirtualizingStackPanel>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-
         <!--  通信状態の表示領域  -->
         <Grid
             x:Name="NetworkGrid"
@@ -471,5 +444,32 @@
             ContentTemplate="{StaticResource Instructions}"
             DataContext="{Binding}"
             Visibility="Collapsed" />
+
+        <!--  上部通知  -->
+        <ItemsControl
+            Grid.ColumnSpan="2"
+            MinWidth="200px"
+            MaxWidth="500px"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            HorizontalContentAlignment="Center"
+            ItemsSource="{Binding Path=TrayNotifications, Mode=OneTime}">
+            <ItemsControl.ItemTemplateSelector>
+                <Selectors:MainWindowNotificationTrayTemplateSelector />
+            </ItemsControl.ItemTemplateSelector>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel>
+                        <i:Interaction.Behaviors>
+                            <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5">
+                                <ei:FluidMoveBehavior.EaseY>
+                                    <QuadraticEase EasingMode="EaseOut" />
+                                </ei:FluidMoveBehavior.EaseY>
+                            </ei:FluidMoveBehavior>
+                        </i:Interaction.Behaviors>
+                    </VirtualizingStackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
     </Grid>
 </Controls:MetroWindow>
