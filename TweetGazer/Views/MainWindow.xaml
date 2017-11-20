@@ -305,8 +305,11 @@
         <!--  トレイ通知領域  -->
         <ItemsControl
             Grid.ColumnSpan="2"
-            MaxHeight="100"
+            MinWidth="200px"
+            MaxWidth="500px"
+            HorizontalAlignment="Center"
             VerticalAlignment="Top"
+            HorizontalContentAlignment="Center"
             ItemsSource="{Binding Path=TrayNotifications, Mode=OneTime}">
             <ItemsControl.ItemTemplateSelector>
                 <Selectors:MainWindowNotificationTrayTemplateSelector />
@@ -324,13 +327,6 @@
                     </VirtualizingStackPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.Template>
-                <ControlTemplate TargetType="{x:Type ItemsControl}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ItemsControl.Template>
         </ItemsControl>
 
         <!--  通信状態の表示領域  -->
