@@ -199,7 +199,7 @@
     <Compile Include="Models\MainWindow\Search.cs" />
     <Compile Include="Models\MainWindow\StatusMedia.cs" />
     <Compile Include="Models\MainWindow\TimelinesGrid.cs" />
-    <Compile Include="Models\MainWindow\TrayNotification.cs" />
+    <Compile Include="Models\MainWindow\ToastNotification.cs" />
     <Compile Include="Models\ShowDialogs\ListProperties.cs" />
     <Compile Include="Models\ShowDialogs\SearchRepliesProperties.cs" />
     <Compile Include="Models\ShowDialogs\ShowAddToList.cs" />

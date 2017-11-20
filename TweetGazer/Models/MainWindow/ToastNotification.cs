@@ -3,14 +3,14 @@ using System.Windows.Media;
 
 namespace TweetGazer.Models.MainWindow
 {
-    public class TrayNotification : NotificationObject
+    public class ToastNotification : NotificationObject
     {
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type"></param>
-        public TrayNotification(string message, NotificationType type)
+        public ToastNotification(string message, NotificationType type)
         {
             this.Message = message.TrimEnd('\n', '\r', ' ');
 

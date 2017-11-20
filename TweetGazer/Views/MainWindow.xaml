@@ -445,14 +445,14 @@
             DataContext="{Binding}"
             Visibility="Collapsed" />
 
-        <!--  上部通知  -->
+        <!--  トースト通知  -->
         <ItemsControl
             Grid.ColumnSpan="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             ItemTemplate="{StaticResource NotificationTray}"
             HorizontalContentAlignment="Center"
-            ItemsSource="{Binding Path=TrayNotifications, Mode=OneTime}">
+            ItemsSource="{Binding Path=ToastNotifications, Mode=OneTime}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel>

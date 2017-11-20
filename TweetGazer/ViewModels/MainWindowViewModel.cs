@@ -23,7 +23,7 @@ namespace TweetGazer.ViewModels
         public MainWindowViewModel()
         {
             this.MainWindowModel = new MainWindowModel(this);
-            this.TrayNotifications = this.MainWindowModel.TrayNotifications;
+            this.ToastNotifications = this.MainWindowModel.ToastNotifications;
             this.Login();
 
             this.CreateStatus = new CreateStatusViewModel();
@@ -476,7 +476,7 @@ namespace TweetGazer.ViewModels
         public AddAccountViewModel AddAccount { get; }
         public NetworkStateViewModel NetworkState { get; }
         public InstructionsViewModel Instructions { get; }
-        public ObservableCollection<TrayNotification> TrayNotifications { get; }
+        public ObservableCollection<ToastNotification> ToastNotifications { get; }
 
         private MainWindowModel MainWindowModel;
     }
