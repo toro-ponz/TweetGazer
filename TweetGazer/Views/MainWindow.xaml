@@ -66,13 +66,9 @@
             <ColumnDefinition Width="57" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto" MaxHeight="150" />
-        </Grid.RowDefinitions>
 
         <!--  左部メニュー  -->
-        <Grid Grid.RowSpan="2">
+        <Grid>
             <Grid
                 Width="50"
                 Margin="5,0,0,0"
@@ -288,10 +284,7 @@
         </Grid>
 
         <!--  タイムライン背面  -->
-        <StackPanel
-            Grid.Row="0"
-            Grid.Column="1"
-            VerticalAlignment="Center">
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <TextBlock
                 FontSize="30"
                 Foreground="{DynamicResource AccentColorBrush}"
@@ -301,10 +294,7 @@
         </StackPanel>
 
         <!--  タイムライン  -->
-        <ItemsControl
-            Grid.Row="0"
-            Grid.Column="1"
-            ItemsSource="{Binding Path=Timelines.Grid}">
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding Path=Timelines.Grid}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid />
@@ -312,41 +302,9 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
-        <!--  トレイ通知領域  -->
-        <ItemsControl
-            Grid.Row="1"
-            Grid.Column="1"
-            MaxHeight="100"
-            ItemsSource="{Binding Path=TrayNotifications, Mode=OneTime}">
-            <ItemsControl.ItemTemplateSelector>
-                <Selectors:MainWindowNotificationTrayTemplateSelector />
-            </ItemsControl.ItemTemplateSelector>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel>
-                        <i:Interaction.Behaviors>
-                            <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5">
-                                <ei:FluidMoveBehavior.EaseY>
-                                    <QuadraticEase EasingMode="EaseOut" />
-                                </ei:FluidMoveBehavior.EaseY>
-                            </ei:FluidMoveBehavior>
-                        </i:Interaction.Behaviors>
-                    </VirtualizingStackPanel>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.Template>
-                <ControlTemplate TargetType="{x:Type ItemsControl}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ItemsControl.Template>
-        </ItemsControl>
-
         <!--  通信状態の表示領域  -->
         <Grid
             x:Name="NetworkGrid"
-            Grid.RowSpan="2"
             Grid.Column="1"
             MaxWidth="500"
             HorizontalAlignment="Left"
@@ -450,10 +408,7 @@
         </Grid>
 
         <!--  移動可能なコンテンツの親キャンバス  -->
-        <Canvas
-            Grid.RowSpan="2"
-            Grid.ColumnSpan="2"
-            Margin="0,-30,0,0">
+        <Canvas Grid.ColumnSpan="2" Margin="0,-30,0,0">
             <!--  移動可能なツイートトレイ  -->
             <ContentControl
                 Canvas.Left="{Binding Path=CreateStatusTrayXPosition, Source={x:Static Properties:Settings.Default}, Mode=OneTime}"
@@ -467,7 +422,7 @@
         </Canvas>
 
         <!--  Flyoutの背面  -->
-        <Grid Grid.RowSpan=" 2" Grid.ColumnSpan="2">
+        <Grid Grid.ColumnSpan="2">
             <Button Style="{StaticResource BackButtonStyle}" Visibility="{Binding Path=FlyoutCloseVisibility}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
@@ -479,17 +434,38 @@
 
         <!--  ログイン画面  -->
         <ContentControl
-            Grid.RowSpan="2"
             Grid.ColumnSpan="2"
             ContentTemplate="{StaticResource Login}"
             DataContext="{Binding}" />
 
         <!--  チュートリアル画面  -->
         <ContentControl
-            Grid.RowSpan="2"
             Grid.ColumnSpan="2"
             ContentTemplate="{StaticResource Instructions}"
             DataContext="{Binding}"
             Visibility="Collapsed" />
+
+        <!--  トースト通知  -->
+        <ItemsControl
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            ItemTemplate="{StaticResource NotificationTray}"
+            HorizontalContentAlignment="Center"
+            ItemsSource="{Binding Path=ToastNotifications, Mode=OneTime}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel>
+                        <i:Interaction.Behaviors>
+                            <ei:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5">
+                                <ei:FluidMoveBehavior.EaseY>
+                                    <QuadraticEase EasingMode="EaseOut" />
+                                </ei:FluidMoveBehavior.EaseY>
+                            </ei:FluidMoveBehavior>
+                        </i:Interaction.Behaviors>
+                    </VirtualizingStackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
     </Grid>
 </Controls:MetroWindow>

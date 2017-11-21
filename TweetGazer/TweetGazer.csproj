@@ -181,6 +181,8 @@
     <Compile Include="Common\Notification.cs" />
     <Compile Include="Common\NotificationsStack.cs" />
     <Compile Include="Common\SecretParameters.cs" />
+    <Compile Include="Converters\SignInvertAndHalfConverter.cs" />
+    <Compile Include="Converters\SignInvertConverter.cs" />
     <Compile Include="Converters\BooleanInvertConverter.cs" />
     <Compile Include="Converters\BooleanToOrientationConverter.cs" />
     <Compile Include="Converters\BooleanInvertAndToVisibilityConverter.cs" />
@@ -197,7 +199,7 @@
     <Compile Include="Models\MainWindow\Search.cs" />
     <Compile Include="Models\MainWindow\StatusMedia.cs" />
     <Compile Include="Models\MainWindow\TimelinesGrid.cs" />
-    <Compile Include="Models\MainWindow\TrayNotification.cs" />
+    <Compile Include="Models\MainWindow\ToastNotification.cs" />
     <Compile Include="Models\ShowDialogs\ListProperties.cs" />
     <Compile Include="Models\ShowDialogs\SearchRepliesProperties.cs" />
     <Compile Include="Models\ShowDialogs\ShowAddToList.cs" />
@@ -229,7 +231,6 @@
     <Compile Include="Models\Timeline\UserOverviewProperties.cs" />
     <Compile Include="Models\Timeline\UserProperties.cs" />
     <Compile Include="Models\Timeline\UserTimelineTab.cs" />
-    <Compile Include="Selectors\MainWindowNotificationTrayTemplateSelector.cs" />
     <Compile Include="Selectors\TimelineNotificationTrayTemplateSelector.cs" />
     <Compile Include="Selectors\StatusMediaTemplateSelector.cs" />
     <Compile Include="Selectors\ShowStatusItemTemplateSelector.cs" />
@@ -374,19 +375,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Dictionaries\MainWindow\Notifications\Alert.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Storyboards\NotificationShowStoryboard.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Dictionaries\MainWindow\Notifications\Error.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Dictionaries\MainWindow\Notifications\Normal.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Dictionaries\MainWindow\Notifications\Success.xaml">
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Notification.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

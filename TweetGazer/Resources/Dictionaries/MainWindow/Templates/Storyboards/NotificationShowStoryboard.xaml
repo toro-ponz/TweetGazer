@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Storyboard x:Key="NotificationShowStoryboard">
+        <DoubleAnimation
+            Storyboard.TargetProperty="(Canvas.Top)"
+            To="70"
+            Duration="0:0:0.1" />
+        <DoubleAnimation
+            BeginTime="0:0:4.9"
+            Storyboard.TargetProperty="(Canvas.Top)"
+            To="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight, Converter={StaticResource SignInvertConverter}, Mode=OneWay}"
+            Duration="0:0:0.1" />
+    </Storyboard>
+</ResourceDictionary>

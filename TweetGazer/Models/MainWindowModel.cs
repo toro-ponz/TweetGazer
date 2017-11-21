@@ -29,8 +29,8 @@ namespace TweetGazer.Models
             //tempフォルダを削除
             CommonMethods.DeleteDirectory(SecretParameters.TemporaryDirectoryPath);
 
-            this.TrayNotifications = new ObservableCollection<TrayNotification>();
-            BindingOperations.EnableCollectionSynchronization(this.TrayNotifications, new object());
+            this.ToastNotifications = new ObservableCollection<ToastNotification>();
+            BindingOperations.EnableCollectionSynchronization(this.ToastNotifications, new object());
             
             this.Timers = new List<Timer>();
         }
@@ -46,8 +46,8 @@ namespace TweetGazer.Models
             {
                 await Task.Run(async  () =>
                 {
-                    this.TrayNotifications.Add(new TrayNotification(message, type));
-                    await Task.Delay(7000);
+                    this.ToastNotifications.Add(new ToastNotification(message, type));
+                    await Task.Delay(5000);
                     this.RemoveNotice();
                 });
             }
@@ -63,9 +63,9 @@ namespace TweetGazer.Models
         /// <param name="noticeNumber">削除する通知番号</param>
         private void RemoveNotice(int noticeNumber = 0)
         {
-            if (noticeNumber < this.TrayNotifications.Count)
+            if (noticeNumber < this.ToastNotifications.Count)
             {
-                this.TrayNotifications.RemoveAt(noticeNumber);
+                this.ToastNotifications.RemoveAt(noticeNumber);
             }
         }
 
@@ -409,7 +409,7 @@ namespace TweetGazer.Models
 
         }
 
-        public ObservableCollection<TrayNotification> TrayNotifications { get; }
+        public ObservableCollection<ToastNotification> ToastNotifications { get; }
 
         private List<IDisposable> Disposables;
         private List<Timer> Timers;
