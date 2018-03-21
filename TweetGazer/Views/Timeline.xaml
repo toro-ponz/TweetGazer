@@ -249,6 +249,7 @@
                     </i:Interaction.Triggers>
                     <TextBlock
                         HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
                         FontSize="12"
                         Foreground="White"
                         Text="Settings" />
@@ -269,8 +270,14 @@
                             VerticalAlignment="Center"
                             FontSize="18"
                             Foreground="White"
-                            Text="表示するツイート"
+                            Text="フィルタリング表示するツイート"
                             TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Margin="30,0,0,0"
+                            FontSize="14"
+                            Visibility="{Binding Path=IsFiltered, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Hyperlink Foreground="White" Command="{Binding Path=ResetFilterCommand, Mode=OneTime}">フィルターをリセットする</Hyperlink>
+                        </TextBlock>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
                             <CheckBox IsChecked="{Binding Path=IsVisibleRetweet, Mode=TwoWay}">
                                 <TextBlock
@@ -292,7 +299,7 @@
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeImagesStatus, Mode=TwoWay}">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleImagesStatus, Mode=TwoWay}">
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="16"
@@ -302,7 +309,7 @@
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeGifStatus, Mode=TwoWay}">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleGifStatus, Mode=TwoWay}">
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="16"
@@ -312,7 +319,7 @@
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeVideoStatus, Mode=TwoWay}">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleVideoStatus, Mode=TwoWay}">
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="16"
@@ -322,22 +329,12 @@
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeLinkStatus, Mode=TwoWay}">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleLinkStatus, Mode=TwoWay}">
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="16"
                                     Foreground="White"
                                     Text="リンク付きツイート"
-                                    TextTrimming="CharacterEllipsis" />
-                            </CheckBox>
-                        </StackPanel>
-                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleOtherStatus, Mode=TwoWay}">
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="その他すべてのツイート"
                                     TextTrimming="CharacterEllipsis" />
                             </CheckBox>
                         </StackPanel>
