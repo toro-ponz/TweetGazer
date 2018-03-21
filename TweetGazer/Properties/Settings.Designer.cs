@@ -514,5 +514,17 @@ namespace TweetGazer.Properties {
                 this["IsConfirmOfDestroyMute"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CanCreateStatusTrayProtrusion {
+            get {
+                return ((bool)(this["CanCreateStatusTrayProtrusion"]));
+            }
+            set {
+                this["CanCreateStatusTrayProtrusion"] = value;
+            }
+        }
     }
 }

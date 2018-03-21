@@ -146,6 +146,15 @@
                                     Text="ツイートトレイを表示する"
                                     TextWrapping="Wrap" />
                             </CheckBox>
+                            <CheckBox
+                                Margin="30,5"
+                                IsChecked="{Binding Path=CanCreateStatusTrayProtrusion, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="{Binding Path=IsVisibleCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="トレイが画面からはみ出ないようにする"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
                         </StackPanel>
                     </StackPanel>
 
