@@ -157,6 +157,9 @@ namespace TweetGazer.Behaviors
 
         private static void PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
+            // 一旦スムーズスクロールをOFFにする
+            return;
+
             if (Properties.Settings.Default.IsSmoothScrolling &&
                 Animate(sender, -Math.Sign(e.Delta / 2) * GetScrollAmount(sender as ScrollViewer)))
             {

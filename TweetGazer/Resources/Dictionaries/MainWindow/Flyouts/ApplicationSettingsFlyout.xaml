@@ -140,12 +140,6 @@
                                     Text="画像ダイアログにて画像をクリックでダイアログを閉じる"
                                     TextWrapping="Wrap" />
                             </CheckBox>
-                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsSmoothScrolling, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
-                                <TextBlock
-                                    FontSize="26"
-                                    Text="滑らかなスクロールを行う"
-                                    TextWrapping="Wrap" />
-                            </CheckBox>
                             <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVisibleCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
                                 <TextBlock
                                     FontSize="26"
