@@ -68,6 +68,7 @@ namespace TweetGazer.Models.MainWindow
         /// </summary>
         public override void Close()
         {
+            this.SearchText = "";
             base.Close();
             this.Timeline.Home();
         }
