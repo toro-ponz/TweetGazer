@@ -9,13 +9,12 @@ namespace TweetGazer.Models.Timeline
         /// </summary>
         public TimelinePageData()
         {
-            this._IsVisibleRetweet = true;
-            this._IsVisibleReply = true;
-            this._IsVisibleIncludeImagesStatus = true;
-            this._IsVisibleIncludeGifStatus = true;
-            this._IsVisibleIncludeVideoStatus = true;
-            this._IsVisibleIncludeLinkStatus = true;
-            this._IsVisibleOtherStatus = true;
+            this._IsVisibleRetweet = false;
+            this._IsVisibleReply = false;
+            this._IsVisibleImagesStatus = false;
+            this._IsVisibleGifStatus = false;
+            this._IsVisibleVideoStatus = false;
+            this._IsVisibleLinkStatus = false;
         }
 
         #region Title 変更通知プロパティ
@@ -82,84 +81,68 @@ namespace TweetGazer.Models.Timeline
         private bool _IsVisibleReply;
         #endregion
 
-        #region IsVisibleIncludeImagesStatus 変更通知プロパティ
-        public bool IsVisibleIncludeImagesStatus
+        #region IsVisibleImagesStatus 変更通知プロパティ
+        public bool IsVisibleImagesStatus
         {
             get
             {
-                return this._IsVisibleIncludeImagesStatus;
+                return this._IsVisibleImagesStatus;
             }
             set
             {
-                this._IsVisibleIncludeImagesStatus = value;
+                this._IsVisibleImagesStatus = value;
                 this.RaisePropertyChanged();
             }
         }
-        private bool _IsVisibleIncludeImagesStatus;
+        private bool _IsVisibleImagesStatus;
         #endregion
 
-        #region IsVisibleIncludeGifStatus 変更通知プロパティ
-        public bool IsVisibleIncludeGifStatus
+        #region IsVisibleGifStatus 変更通知プロパティ
+        public bool IsVisibleGifStatus
         {
             get
             {
-                return this._IsVisibleIncludeGifStatus;
+                return this._IsVisibleGifStatus;
             }
             set
             {
-                this._IsVisibleIncludeGifStatus = value;
+                this._IsVisibleGifStatus = value;
                 this.RaisePropertyChanged();
             }
         }
-        private bool _IsVisibleIncludeGifStatus;
+        private bool _IsVisibleGifStatus;
         #endregion
 
-        #region IsVisibleIncludeVideoStatus 変更通知プロパティ
-        public bool IsVisibleIncludeVideoStatus
+        #region IsVisibleVideoStatus 変更通知プロパティ
+        public bool IsVisibleVideoStatus
         {
             get
             {
-                return this._IsVisibleIncludeVideoStatus;
+                return this._IsVisibleVideoStatus;
             }
             set
             {
-                this._IsVisibleIncludeVideoStatus = value;
+                this._IsVisibleVideoStatus = value;
                 this.RaisePropertyChanged();
             }
         }
-        private bool _IsVisibleIncludeVideoStatus;
+        private bool _IsVisibleVideoStatus;
         #endregion
 
-        #region IsVisibleIncludeLinkStatus 変更通知プロパティ
-        public bool IsVisibleIncludeLinkStatus
+        #region IsVisibleLinkStatus 変更通知プロパティ
+        public bool IsVisibleLinkStatus
         {
             get
             {
-                return this._IsVisibleIncludeLinkStatus;
+                return this._IsVisibleLinkStatus;
             }
             set
             {
-                this._IsVisibleIncludeLinkStatus = value;
+                this._IsVisibleLinkStatus = value;
                 this.RaisePropertyChanged();
             }
         }
-        private bool _IsVisibleIncludeLinkStatus;
-        #endregion
-
-        #region IsVisibleOtherStatus 変更通知プロパティ
-        public bool IsVisibleOtherStatus
-        {
-            get
-            {
-                return this._IsVisibleOtherStatus;
-            }
-            set
-            {
-                this._IsVisibleOtherStatus = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        private bool _IsVisibleOtherStatus;
+        private bool _IsVisibleLinkStatus;
         #endregion
 
         public TimelineType TimelineType { get; set; }

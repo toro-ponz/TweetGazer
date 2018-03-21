@@ -968,23 +968,43 @@ namespace TweetGazer.Models
 
             collectionView.Filter = x =>
             {
+                // 1つも指定されていない場合はすべてのツイートを表示
+                if (!this.IsFiltered)
+                {
+                    return true;
+                }
+
                 var item = (TimelineItemProperties)x;
-                var status = item.StatusProperties != null;
-                var media = status && item.StatusProperties.Media.Count > 0;
-                var excludeRetweet = !this.IsVisibleRetweet && (status && item.StatusProperties.IsRetweetedByUser);
-                var excludeReply = !this.IsVisibleReply && (status && item.StatusProperties.ReplyToStatusProperties.IsExist);
-                var excludeImage = !this.IsVisibleIncludeImagesStatus && (media && item.StatusProperties.Media.First().Type == StatusMediaType.Image);
-                var excludeGif = !this.IsVisibleIncludeGifStatus && (media && item.StatusProperties.Media.First().Type == StatusMediaType.AnimationGif);
-                var excludeVideo = !this.IsVisibleIncludeVideoStatus && (media && item.StatusProperties.Media.First().Type == StatusMediaType.Video);
-                var excludeLink = !this.IsVisibleIncludeLinkStatus && (status && item.StatusProperties.HyperlinkText.Urls.Count > 0);
-                var excludeOther = !this.IsVisibleOtherStatus &&
-                    (status &&
-                    !media &&
-                    !item.StatusProperties.IsRetweetedByUser &&
-                    !item.StatusProperties.ReplyToStatusProperties.IsExist &&
-                    item.StatusProperties.HyperlinkText.Urls.Count <= 0);
-                return !excludeRetweet && !excludeReply && !excludeImage && !excludeGif && !excludeVideo && !excludeLink && !excludeOther;
+                var isStatus = item.StatusProperties != null;
+                var isMedia = isStatus && item.StatusProperties.Media.Any();
+                var isRetweet = isStatus && item.StatusProperties.IsRetweetedByUser;
+                var isReply = isStatus && item.StatusProperties.ReplyToStatusProperties.IsExist;
+                var isImage = isMedia && item.StatusProperties.Media.First().Type == StatusMediaType.Image;
+                var isGif = isMedia && item.StatusProperties.Media.First().Type == StatusMediaType.AnimationGif;
+                var isVideo = isMedia && item.StatusProperties.Media.First().Type == StatusMediaType.Video;
+                var isLink = isStatus && item.StatusProperties.HyperlinkText.Urls.Any();
+
+                return (this.IsVisibleRetweet && isRetweet)
+                    || (this.IsVisibleReply && isReply)
+                    || (this.IsVisibleImagesStatus && isImage)
+                    || (this.IsVisibleGifStatus && isGif)
+                    || (this.IsVisibleVideoStatus && isVideo)
+                    || (this.IsVisibleLinkStatus && isLink)
+                    || !isStatus;
             };
+        }
+
+        /// <summary>
+        /// フィルターのリセット
+        /// </summary>
+        public void ResetFilter()
+        {
+            this.IsVisibleRetweet = false;
+            this.IsVisibleReply = false;
+            this.IsVisibleImagesStatus = false;
+            this.IsVisibleGifStatus = false;
+            this.IsVisibleVideoStatus = false;
+            this.IsVisibleLinkStatus = false;
         }
 
         /// <summary>
@@ -1456,6 +1476,21 @@ namespace TweetGazer.Models
         private bool _IsVisibleSettings;
         #endregion
 
+        #region IsFiltered 変更通知プロパティ
+        public bool IsFiltered
+        {
+            get
+            {
+                return this.IsVisibleRetweet
+                    || this.IsVisibleReply
+                    || this.IsVisibleImagesStatus
+                    || this.IsVisibleGifStatus
+                    || this.IsVisibleVideoStatus
+                    || this.IsVisibleLinkStatus;
+            }
+        }
+        #endregion
+
         #region IsVisibleRetweet 変更通知プロパティ
         public bool IsVisibleRetweet
         {
@@ -1467,6 +1502,7 @@ namespace TweetGazer.Models
             {
                 this.Data.CurrentPage.IsVisibleRetweet = value;
                 this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(this.IsFiltered));
                 this.Filtering();
             }
         }
@@ -1483,87 +1519,75 @@ namespace TweetGazer.Models
             {
                 this.Data.CurrentPage.IsVisibleReply = value;
                 this.RaisePropertyChanged();
-                this.Filtering();
-            }
-        }
-        private bool _IsVisibleReply;
-        #endregion
-
-        #region IsVisibleIncludeImagesStatus 変更通知プロパティ
-        public bool IsVisibleIncludeImagesStatus
-        {
-            get
-            {
-                return this.Data.CurrentPage.IsVisibleIncludeImagesStatus;
-            }
-            set
-            {
-                this.Data.CurrentPage.IsVisibleIncludeImagesStatus = value;
-                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(this.IsFiltered));
                 this.Filtering();
             }
         }
         #endregion
 
-        #region IsVisibleIncludeGifStatus 変更通知プロパティ
-        public bool IsVisibleIncludeGifStatus
+        #region IsVisibleImagesStatus 変更通知プロパティ
+        public bool IsVisibleImagesStatus
         {
             get
             {
-                return this.Data.CurrentPage.IsVisibleIncludeGifStatus;
+                return this.Data.CurrentPage.IsVisibleImagesStatus;
             }
             set
             {
-                this.Data.CurrentPage.IsVisibleIncludeGifStatus = value;
+                this.Data.CurrentPage.IsVisibleImagesStatus = value;
                 this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(this.IsFiltered));
                 this.Filtering();
             }
         }
         #endregion
 
-        #region IsVisibleIncludeVideoStatus 変更通知プロパティ
-        public bool IsVisibleIncludeVideoStatus
+        #region IsVisibleGifStatus 変更通知プロパティ
+        public bool IsVisibleGifStatus
         {
             get
             {
-                return this.Data.CurrentPage.IsVisibleIncludeVideoStatus;
+                return this.Data.CurrentPage.IsVisibleGifStatus;
             }
             set
             {
-                this.Data.CurrentPage.IsVisibleIncludeVideoStatus = value;
+                this.Data.CurrentPage.IsVisibleGifStatus = value;
                 this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(this.IsFiltered));
                 this.Filtering();
             }
         }
         #endregion
 
-        #region IsVisibleIncludeLinkStatus 変更通知プロパティ
-        public bool IsVisibleIncludeLinkStatus
+        #region IsVisibleVideoStatus 変更通知プロパティ
+        public bool IsVisibleVideoStatus
         {
             get
             {
-                return this.Data.CurrentPage.IsVisibleIncludeLinkStatus;
+                return this.Data.CurrentPage.IsVisibleVideoStatus;
             }
             set
             {
-                this.Data.CurrentPage.IsVisibleIncludeLinkStatus = value;
+                this.Data.CurrentPage.IsVisibleVideoStatus = value;
                 this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(this.IsFiltered));
                 this.Filtering();
             }
         }
         #endregion
 
-        #region IsVisibleOtherStatus 変更通知プロパティ
-        public bool IsVisibleOtherStatus
+        #region IsVisibleLinkStatus 変更通知プロパティ
+        public bool IsVisibleLinkStatus
         {
             get
             {
-                return this.Data.CurrentPage.IsVisibleOtherStatus;
+                return this.Data.CurrentPage.IsVisibleLinkStatus;
             }
             set
             {
-                this.Data.CurrentPage.IsVisibleOtherStatus = value;
+                this.Data.CurrentPage.IsVisibleLinkStatus = value;
                 this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(this.IsFiltered));
                 this.Filtering();
             }
         }
