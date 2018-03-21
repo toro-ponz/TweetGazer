@@ -48,7 +48,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="IsSmoothScrolling" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="CreateStatusTrayXPosition" Type="System.Double" Scope="User">
       <Value Profile="(Default)">100</Value>
