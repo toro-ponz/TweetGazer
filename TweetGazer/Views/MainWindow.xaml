@@ -416,7 +416,10 @@
                 ContentTemplate="{StaticResource MovableCreateStatusTray}"
                 DataContext="{Binding}">
                 <i:Interaction.Behaviors>
-                    <ei:MouseDragElementBehavior X="{Binding Path=CreateStatusTrayXPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}" Y="{Binding Path=CreateStatusTrayYPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}" />
+                    <ei:MouseDragElementBehavior
+                        ConstrainToParentBounds="{Binding Path=CanCreateStatusTrayProtrusion, Source={x:Static Properties:Settings.Default}, Mode=OneWay}"
+                        X="{Binding Path=CreateStatusTrayXPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                        Y="{Binding Path=CreateStatusTrayYPosition, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}" />
                 </i:Interaction.Behaviors>
             </ContentControl>
         </Canvas>
