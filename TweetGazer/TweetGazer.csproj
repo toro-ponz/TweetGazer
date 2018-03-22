@@ -266,6 +266,15 @@
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindows\Flyouts\ExtraGrid\Lists.xaml.cs">
+      <DependentUpon>Lists.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindows\Flyouts\ExtraGrid\Trends.xaml.cs">
+      <DependentUpon>Trends.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindows\Flyouts\ExtraGrid\Users.xaml.cs">
+      <DependentUpon>Users.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Pages\Instructions\Instruction1.xaml.cs">
       <DependentUpon>Instruction1.xaml</DependentUpon>
     </Compile>
@@ -315,18 +324,6 @@
       <SubType>Designer</SubType>
     </Resource>
     <Page Include="Resources\Dictionaries\Application\ApplicationResources.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Dictionaries\Application\AddTimelineExtraGrid\Lists.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Dictionaries\Application\AddTimelineExtraGrid\Trends.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Dictionaries\Application\AddTimelineExtraGrid\Users.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -505,6 +502,18 @@
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindows\Flyouts\ExtraGrid\Lists.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindows\Flyouts\ExtraGrid\Trends.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindows\Flyouts\ExtraGrid\Users.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pages\Instructions\Instruction1.xaml">
       <SubType>Designer</SubType>

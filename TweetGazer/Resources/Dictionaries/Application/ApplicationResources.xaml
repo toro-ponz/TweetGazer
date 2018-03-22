@@ -16,10 +16,5 @@
 
         <!--  Icons  -->
         <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/Icons/VectorImages.xaml" />
-
-        <!--  AddTimelineExtraGrid  -->
-        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/AddTimelineExtraGrid/Lists.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/AddTimelineExtraGrid/Users.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Application/AddTimelineExtraGrid/Trends.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

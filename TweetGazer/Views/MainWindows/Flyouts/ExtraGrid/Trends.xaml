@@ -1,9 +1,10 @@
-﻿<ResourceDictionary
+﻿<UserControl
+    x:Class="TweetGazer.Views.MainWindows.Flyouts.ExtraGrid.Trends"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Behaviors="clr-namespace:TweetGazer.Behaviors">
 
-    <Grid x:Key="AddTimelineExtraGridTrends">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -71,7 +72,7 @@
                                 Grid.Column="1"
                                 Foreground="{DynamicResource GrayBrush2}"
                                 Text="{Binding Path=Count, Mode=OneTime, StringFormat={}{0:N0}件のツイート}"
-                                Visibility="{Binding CountVisibility}" />
+                                Visibility="{Binding Path=HasCount, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
                         </Grid>
                     </Button>
                 </DataTemplate>
@@ -90,4 +91,4 @@
             </ItemsControl.Template>
         </ItemsControl>
     </Grid>
-</ResourceDictionary>
+</UserControl>
