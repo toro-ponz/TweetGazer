@@ -2,12 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using TweetGazer.Common;
 
 namespace TweetGazer.Models.MainWindow
@@ -203,21 +199,6 @@ namespace TweetGazer.Models.MainWindow
         private MediaType _Type;
         #endregion
 
-        #region DeleteButtonVisibility 変更通知プロパティ
-        public Visibility DeleteButtonVisibility
-        {
-            get
-            {
-                if (this.IsEnabled)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
-            }
-        }
-        #endregion
-
         #region Source 変更通知プロパティ
         public ObservableCollection<Uri> Source
         {
@@ -230,7 +211,6 @@ namespace TweetGazer.Models.MainWindow
                 this._Source = value;
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(nameof(this.UploadButtonIsEnabled));
-                this.RaisePropertyChanged(nameof(this.DeleteButtonVisibility));
             }
         }
         private ObservableCollection<Uri> _Source;
@@ -247,7 +227,6 @@ namespace TweetGazer.Models.MainWindow
             {
                 this._IsEnabled = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.DeleteButtonVisibility));
             }
         }
         private bool _IsEnabled;
