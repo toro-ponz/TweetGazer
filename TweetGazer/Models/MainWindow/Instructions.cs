@@ -19,15 +19,7 @@ namespace TweetGazer.Models.MainWindow
             };
             this._PageNumber = 0;
             this.PagesCount = this.Pages.Count;
-
-            if (Common.CommonMethods.CheckFirstBoot())
-            {
-                this._Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this._Visibility = Visibility.Collapsed;
-            }
+            this._IsOpen = Common.CommonMethods.CheckFirstBoot();
         }
 
         /// <summary>
@@ -61,24 +53,24 @@ namespace TweetGazer.Models.MainWindow
         /// </summary>
         public void Close()
         {
-            this.Visibility = Visibility.Collapsed;
+            this.IsOpen = false;
             this.PageNumber = 0;
         }
 
-        #region Visibility 変更通知プロパティ
-        public Visibility Visibility
+        #region IsOpen 変更通知プロパティ
+        public bool IsOpen
         {
             get
             {
-                return this._Visibility;
+                return this._IsOpen;
             }
             set
             {
-                this._Visibility = value;
+                this._IsOpen = value;
                 this.RaisePropertyChanged();
             }
         }
-        private Visibility _Visibility;
+        private bool _IsOpen;
         #endregion
 
         #region PageNumber 変更通知プロパティ
