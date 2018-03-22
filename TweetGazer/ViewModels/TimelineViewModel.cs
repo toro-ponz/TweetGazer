@@ -34,15 +34,18 @@ namespace TweetGazer.ViewModels
                         case nameof(this.Timeline.Message):
                             this.Message = this.Timeline.Message;
                             break;
-                        case nameof(this.Timeline.ProgressRingVisibility):
-                            this.RaisePropertyChanged(() => this.ProgressRingVisibility);
+                        case nameof(this.Timeline.IsLoading):
+                            this.RaisePropertyChanged(() => this.IsLoading);
+                            break;
+                        case nameof(this.Timeline.IsInitializing):
+                            this.RaisePropertyChanged(() => this.IsInitializing);
                             break;
                         case nameof(this.Timeline.Title):
                             this.Title = this.Timeline.Title;
                             break;
                         case nameof(this.Timeline.VerticalOffset):
                             this.RaisePropertyChanged(() => this.VerticalOffset);
-                            this.RaisePropertyChanged(() => this.UpButtonVisibility);
+                            this.RaisePropertyChanged(() => this.IsScrolled);
                             break;
                         case nameof(this.Timeline.IsVisibleSettings):
                             this.RaisePropertyChanged(() => this.IsVisibleSettings);
@@ -88,7 +91,7 @@ namespace TweetGazer.ViewModels
                         case nameof(this.Timeline.Data.PageSuffix):
                             this.RaisePropertyChanged(() => this.IsVisibleBackButton);
                             this.RaisePropertyChanged(() => this.VerticalOffset);
-                            this.RaisePropertyChanged(() => this.UpButtonVisibility);
+                            this.RaisePropertyChanged(() => this.IsScrolled);
                             this.RaisePropertyChanged(() => this.IsFiltered);
                             this.RaisePropertyChanged(() => this.IsVisibleRetweet);
                             this.RaisePropertyChanged(() => this.IsVisibleReply);
@@ -224,27 +227,32 @@ namespace TweetGazer.ViewModels
             this.Timeline.Clear();
         }
 
-        #region UpButtonVisibility 変更通知プロパティ
-        public Visibility UpButtonVisibility
+        #region IsScrolled 変更通知プロパティ
+        public bool IsScrolled
         {
             get
             {
-                if (this.VerticalOffset > 0.0d)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
+                return this.VerticalOffset > 0.0d;
             }
         }
         #endregion
 
-        #region ProgressRingVisibility 変更通知プロパティ
-        public Visibility ProgressRingVisibility
+        #region IsLoading 変更通知プロパティ
+        public bool IsLoading
         {
             get
             {
-                return this.Timeline.ProgressRingVisibility;
+                return this.Timeline.IsLoading;
+            }
+        }
+        #endregion
+
+        #region IsInitializing 変更通知プロパティ
+        public bool IsInitializing
+        {
+            get
+            {
+                return this.Timeline.IsInitializing;
             }
         }
         #endregion
@@ -332,7 +340,7 @@ namespace TweetGazer.ViewModels
             {
                 this.Timeline.VerticalOffset = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.UpButtonVisibility));
+                this.RaisePropertyChanged(nameof(this.IsScrolled));
             }
         }
         #endregion
