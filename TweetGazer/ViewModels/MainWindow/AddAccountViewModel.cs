@@ -1,6 +1,5 @@
 ﻿using Livet;
 using Livet.EventListeners;
-using System.Windows;
 using TweetGazer.Models.MainWindow;
 
 namespace TweetGazer.ViewModels.MainWindow
@@ -13,15 +12,14 @@ namespace TweetGazer.ViewModels.MainWindow
         public AddAccountViewModel(MainWindowViewModel mainWindowViewModel)
         {
             this.AddAccount = new AddAccount(mainWindowViewModel);
-            this._Visibility = this.AddAccount.Visibility;
             this._IsPinTextBoxEnabled = false;
             this.CompositeDisposable.Add(
                 new PropertyChangedEventListener(this.AddAccount, (_, __) =>
                 {
                     switch (__.PropertyName)
                     {
-                        case nameof(this.AddAccount.Visibility):
-                            this.Visibility = this.AddAccount.Visibility;
+                        case nameof(this.AddAccount.IsOpen):
+                            this.RaisePropertyChanged(() => this.IsOpen);
                             break;
                         case nameof(this.AddAccount.Pin):
                             this.RaisePropertyChanged(() => this.Pin);
@@ -69,20 +67,14 @@ namespace TweetGazer.ViewModels.MainWindow
             this.AddAccount.OpenAuthenticationUrl();
         }
 
-        #region Visibility 変更通知プロパティ
-        public Visibility Visibility
+        #region IsOpen 変更通知プロパティ
+        public bool IsOpen
         {
             get
             {
-                return this._Visibility;
-            }
-            set
-            {
-                this._Visibility = value;
-                this.RaisePropertyChanged();
+                return this.AddAccount.IsOpen;
             }
         }
-        private Visibility _Visibility;
         #endregion
 
         #region Pin 変更通知プロパティ

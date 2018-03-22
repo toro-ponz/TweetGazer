@@ -1,9 +1,7 @@
 ﻿using CoreTweet;
 using Livet;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows;
 using TweetGazer.Common;
 using TweetGazer.ViewModels;
 
@@ -22,14 +20,7 @@ namespace TweetGazer.Models.MainWindow
             this._Message = "";
             this._Session = null;
             this.AuthenticationUrl = null;
-            if (CommonMethods.CheckFirstBoot())
-            {
-                this._Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this._Visibility = Visibility.Collapsed;
-            }
+            this._IsOpen = CommonMethods.CheckFirstBoot();
         }
 
         /// <summary>
@@ -41,7 +32,7 @@ namespace TweetGazer.Models.MainWindow
             this.Message = "";
             this.Session = null;
             this.AuthenticationUrl = null;
-            this.Visibility = Visibility.Visible;
+            this.IsOpen = true;
         }
 
         /// <summary>
@@ -104,7 +95,7 @@ namespace TweetGazer.Models.MainWindow
         {
             if (AccountTokens.Users.Count != 0)
             {
-                this.Visibility = Visibility.Collapsed;
+                this.IsOpen = false;
                 this.Pin = "";
                 this.Message = "";
                 this.Session = null;
@@ -128,20 +119,20 @@ namespace TweetGazer.Models.MainWindow
             }
         }
 
-        #region Visibility 変更通知プロパティ
-        public Visibility Visibility
+        #region IsOpen 変更通知プロパティ
+        public bool IsOpen
         {
             get
             {
-                return this._Visibility;
+                return this._IsOpen;
             }
             set
             {
-                this._Visibility = value;
+                this._IsOpen = value;
                 this.RaisePropertyChanged();
             }
         }
-        private Visibility _Visibility;
+        private bool _IsOpen;
         #endregion
 
         #region Pin 変更通知プロパティ
