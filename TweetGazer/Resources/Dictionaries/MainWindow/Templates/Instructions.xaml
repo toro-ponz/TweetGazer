@@ -8,7 +8,7 @@
         <Grid
             Background="#77FFFFFF"
             DataContext="{Binding Path=DataContext.Instructions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}"
-            Visibility="{Binding Path=Visibility, Mode=OneWay}">
+            Visibility="{Binding Path=IsOpen, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <Grid Margin="20" Background="White">
                 <Grid.RowDefinitions>
                     <RowDefinition />

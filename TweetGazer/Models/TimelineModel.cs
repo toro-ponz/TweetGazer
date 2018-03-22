@@ -32,7 +32,7 @@ namespace TweetGazer.Models
 
             this.Disposables = new List<IDisposable>();
             this.Timers = new List<Timer>();
-            this._ProgressRingVisibility = Visibility.Collapsed;
+            this._IsLoading = false;
             this._IsVisibleSettings = false;
             
             this.TimelineItems = new ObservableCollection<TimelineItemProperties>();
@@ -141,7 +141,6 @@ namespace TweetGazer.Models
             {
                 this.VerticalOffset = 0;
                 this.IsInitializing = true;
-                this.ProgressRingVisibility = Visibility.Visible;
             }
 
             try
@@ -192,7 +191,6 @@ namespace TweetGazer.Models
 
                 this.IsLoading = false;
                 this.IsInitializing = false;
-                this.ProgressRingVisibility = Visibility.Collapsed;
 
                 if (maxId == null)
                 {
@@ -206,7 +204,6 @@ namespace TweetGazer.Models
 
             this.IsLoading = false;
             this.IsInitializing = false;
-            this.ProgressRingVisibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -1398,20 +1395,36 @@ namespace TweetGazer.Models
         }
         #endregion
 
-        #region ProgressRingVisibility 変更通知プロパティ
-        public Visibility ProgressRingVisibility
+        #region IsLoading 変更通知プロパティ
+        public bool IsLoading
         {
             get
             {
-                return this._ProgressRingVisibility;
+                return this._IsLoading;
             }
             set
             {
-                this._ProgressRingVisibility = value;
+                this._IsLoading = value;
                 this.RaisePropertyChanged();
             }
         }
-        private Visibility _ProgressRingVisibility;
+        private bool _IsLoading;
+        #endregion
+
+        #region IsInitializing 変更通知プロパティ
+        public bool IsInitializing
+        {
+            get
+            {
+                return this._IsInitializing;
+            }
+            set
+            {
+                this._IsInitializing = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private bool _IsInitializing;
         #endregion
 
         #region Message 変更通知プロパティ
@@ -1638,8 +1651,5 @@ namespace TweetGazer.Models
 
         private List<IDisposable> Disposables;
         private List<Timer> Timers;
-
-        private bool IsLoading;
-        private bool IsInitializing;
     }
 }

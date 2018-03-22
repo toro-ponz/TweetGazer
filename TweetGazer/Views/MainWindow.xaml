@@ -98,7 +98,7 @@
                             <Grid
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
-                                Visibility="{Binding Path=MentionsNotificationVisibility}">
+                                Visibility="{Binding Path=HasMentionNotifications, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                                 <Rectangle
                                     Width="20"
                                     Height="20"
@@ -130,7 +130,7 @@
                             <Grid
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
-                                Visibility="{Binding Path=NoticeVisibility}">
+                                Visibility="{Binding Path=HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                                 <Rectangle
                                     Width="20"
                                     Height="20"
@@ -426,7 +426,7 @@
 
         <!--  Flyoutの背面  -->
         <Grid Grid.ColumnSpan="2">
-            <Button Style="{StaticResource BackButtonStyle}" Visibility="{Binding Path=FlyoutCloseVisibility}">
+            <Button Style="{StaticResource BackButtonStyle}" Visibility="{Binding Path=IsOpeningFlyouts, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <ei:CallMethodAction MethodName="CloseFlyout" TargetObject="{Binding}" />

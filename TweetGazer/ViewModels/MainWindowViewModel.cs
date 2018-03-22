@@ -46,7 +46,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.CreateStatus.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -57,7 +57,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.AddTimeline.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -68,7 +68,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.AccountSettings.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -79,7 +79,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.ApplicationSettings.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -90,7 +90,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.Mentions.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -101,7 +101,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.Notifications.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -112,7 +112,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.DirectMessages.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -123,16 +123,16 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.Search.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
             );
             this.CompositeDisposable.Add(
-                new PropertyChangedEventListener(MentionsStack.Mentions, (_, __) => this.RaisePropertyChanged(() => this.MentionsNotificationVisibility))
+                new PropertyChangedEventListener(MentionsStack.Mentions, (_, __) => this.RaisePropertyChanged(() => this.HasMentionNotifications))
             );
             this.CompositeDisposable.Add(
-                new PropertyChangedEventListener(NotificationsStack.Notifications, (_, __) => this.RaisePropertyChanged(() => this.NoticeVisibility))
+                new PropertyChangedEventListener(NotificationsStack.Notifications, (_, __) => this.RaisePropertyChanged(() => this.HasNotifications))
             );
             this.CompositeDisposable.Add(
                 new PropertyChangedEventListener(Properties.Settings.Default, (_, __) =>
@@ -412,53 +412,39 @@ namespace TweetGazer.ViewModels
             this.MainWindowModel.ChangeColors();
         }
 
-        #region MentionsNotificationVisibility 変更通知プロパティ
-        public Visibility MentionsNotificationVisibility
+        #region HasMentionNotifications 変更通知プロパティ
+        public bool HasMentionNotifications
         {
             get
             {
-                if (MentionsStack.Mentions != null && MentionsStack.Mentions.Count != 0)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
+                return MentionsStack.Mentions.Any();
             }
         }
         #endregion
 
-        #region NoticeVisibility 変更通知プロパティ
-        public Visibility NoticeVisibility
+        #region HasNotifications 変更通知プロパティ
+        public bool HasNotifications
         {
             get
             {
-                if (NotificationsStack.Notifications != null && NotificationsStack.Notifications.Count != 0)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
+                return NotificationsStack.Notifications.Any();
             }
         }
         #endregion
 
-        #region FlyoutCloseVisibility 変更通知プロパティ
-        public Visibility FlyoutCloseVisibility
+        #region IsOpeningFlyouts 変更通知プロパティ
+        public bool IsOpeningFlyouts
         {
             get
             {
-                if (!this.CreateStatus.IsOpen &&
-                    !this.AddTimeline.IsOpen &&
-                    !this.Mentions.IsOpen &&
-                    !this.Notifications.IsOpen &&
-                    !this.DirectMessages.IsOpen &&
-                    !this.AccountSettings.IsOpen &&
-                    !this.ApplicationSettings.IsOpen &&
-                    !this.Search.IsOpen)
-                {
-                    return Visibility.Collapsed;
-                }
-                return Visibility.Visible;
+                return this.CreateStatus.IsOpen
+                    || this.AddTimeline.IsOpen
+                    || this.Mentions.IsOpen
+                    || this.Notifications.IsOpen
+                    || this.DirectMessages.IsOpen
+                    || this.AccountSettings.IsOpen
+                    || this.ApplicationSettings.IsOpen
+                    || this.Search.IsOpen;
             }
         }
         #endregion

@@ -1,7 +1,6 @@
 ﻿using CoreTweet;
 using Livet;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Input;
 using TweetGazer.Common;
 
@@ -40,19 +39,12 @@ namespace TweetGazer.Models.Timeline
             this.TimelineModel.ShowSearchTimeline(this.TrendName);
         }
 
-        #region TrendCountVisibility 変更通知プロパティ
-        public Visibility TrendCountVisibility
+        #region HasTrendCount 変更通知プロパティ
+        public bool HasTrendCount
         {
             get
             {
-                if (this.TrendCount == null)
-                {
-                    return Visibility.Collapsed;
-                }
-                else
-                {
-                    return Visibility.Visible;
-                }
+                return this.TrendCount != null;
             }
         }
         #endregion
@@ -91,7 +83,7 @@ namespace TweetGazer.Models.Timeline
             {
                 this._TrendCount = int.Parse(value, CultureInfo.CurrentCulture);
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.TrendCountVisibility));
+                this.RaisePropertyChanged(nameof(this.HasTrendCount));
             }
         }
         private int? _TrendCount;

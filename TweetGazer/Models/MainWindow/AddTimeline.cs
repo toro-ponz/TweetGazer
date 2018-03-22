@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -195,13 +194,12 @@ namespace TweetGazer.Models.MainWindow
                 );
             }
 
-            var contentControl = new ContentControl()
-            {
-                Content = Application.Current.FindResource("AddTimelineExtraGridLists") as Grid,
-                DataContext = itemsSource
-            };
-
-            this.ExtraGrid.First().Children.Add(contentControl);
+            this.ExtraGrid.First().Children.Add(
+                new Views.MainWindows.Flyouts.ExtraGrid.Lists()
+                {
+                    DataContext = itemsSource
+                }
+            );
         }
 
         /// <summary>
@@ -231,12 +229,12 @@ namespace TweetGazer.Models.MainWindow
                 }
             }
 
-            var contentControl = new ContentControl()
-            {
-                Content = Application.Current.FindResource("AddTimelineExtraGridUsers") as Grid,
-                DataContext = new UsersModel(this, itemsSource, this.TokenSuffix)
-            };
-            this.ExtraGrid.First().Children.Add(contentControl);
+            this.ExtraGrid.First().Children.Add(
+                new Views.MainWindows.Flyouts.ExtraGrid.Users()
+                {
+                    DataContext = new UsersModel(this, itemsSource, this.TokenSuffix)
+                }
+            );
         }
 
         /// <summary>
@@ -259,24 +257,23 @@ namespace TweetGazer.Models.MainWindow
                     {
                         Rank = i,
                         Name = trend.Name,
-                        CountVisibility = Visibility.Collapsed
+                        HasCount = trend.TweetVolume != null
                     };
                     if (trend.TweetVolume != null)
                     {
                         item.Count = (int)trend.TweetVolume;
-                        item.CountVisibility = Visibility.Visible;
                     }
                     itemsSource.Add(item);
                     i++;
                 }
             }
 
-            var contentControl = new ContentControl()
-            {
-                Content = Application.Current.FindResource("AddTimelineExtraGridTrends") as Grid,
-                DataContext = new TrendsModel(this, itemsSource)
-            };
-            this.ExtraGrid.First().Children.Add(contentControl);
+            this.ExtraGrid.First().Children.Add(
+                new Views.MainWindows.Flyouts.ExtraGrid.Trends()
+                {
+                    DataContext = new TrendsModel(this, itemsSource)
+                }
+            );
         }
 
         /// <summary>
@@ -384,11 +381,11 @@ namespace TweetGazer.Models.MainWindow
             }
 
             public ICommand SelectCommand { get; }
-            public Visibility CountVisibility { get; set; }
 
             public string Name { get; set; }
             public int Rank { get; set; }
             public int Count { get; set; }
+            public bool HasCount { get; set; }
 
             private AddTimeline AddTimeline;
         }

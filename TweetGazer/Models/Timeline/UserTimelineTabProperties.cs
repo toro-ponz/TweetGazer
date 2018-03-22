@@ -1,5 +1,4 @@
 ﻿using Livet;
-using System.Windows;
 using System.Windows.Input;
 using TweetGazer.Common;
 
@@ -69,71 +68,51 @@ namespace TweetGazer.Models.Timeline
             set
             {
                 this._Tab = value;
-                this.RaisePropertyChanged(nameof(this.TweetsTabSelectedVisibility));
-                this.RaisePropertyChanged(nameof(this.TweetsAndRepliesTabSelectedVisibility));
-                this.RaisePropertyChanged(nameof(this.MediaTabSelectedVisibility));
-                this.RaisePropertyChanged(nameof(this.FavoritesTabSelectedVisibility));
+                this.RaisePropertyChanged(nameof(this.IsTweetsTab));
+                this.RaisePropertyChanged(nameof(this.IsTweetsAndRepliesTab));
+                this.RaisePropertyChanged(nameof(this.IsMediaTab));
+                this.RaisePropertyChanged(nameof(this.IsFavoritesTab));
             }
         }
         private UserTimelineTab _Tab;
         #endregion
 
-        #region TweetsTabSelectedVisibility 変更通知プロパティ
-        public Visibility TweetsTabSelectedVisibility
+        #region IsTweetsTab 変更通知プロパティ
+        public bool IsTweetsTab
         {
             get
             {
-                if (this.Tab == UserTimelineTab.Tweets)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
+                return this.Tab == UserTimelineTab.Tweets;
             }
         }
         #endregion
 
-        #region TweetsAndRepliesTabSelectedVisibility 変更通知プロパティ
-        public Visibility TweetsAndRepliesTabSelectedVisibility
+        #region IsTweetsAndRepliesTab 変更通知プロパティ
+        public bool IsTweetsAndRepliesTab
         {
             get
             {
-                if (this.Tab == UserTimelineTab.TweetsAndReplies)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
+                return this.Tab == UserTimelineTab.TweetsAndReplies;
             }
         }
         #endregion
 
-        #region MediaTabSelectedVisibility 変更通知プロパティ
-        public Visibility MediaTabSelectedVisibility
+        #region IsMediaTab 変更通知プロパティ
+        public bool IsMediaTab
         {
             get
             {
-                if (this.Tab == UserTimelineTab.Media)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
+                return this.Tab == UserTimelineTab.Media;
             }
         }
         #endregion
 
-        #region FavoritesTabSelectedVisibility 変更通知プロパティ
-        public Visibility FavoritesTabSelectedVisibility
+        #region IsFavoritesTab 変更通知プロパティ
+        public bool IsFavoritesTab
         {
             get
             {
-                if (this.Tab == UserTimelineTab.Favorites)
-                {
-                    return Visibility.Visible;
-                }
-
-                return Visibility.Collapsed;
+                return this.Tab == UserTimelineTab.Favorites;
             }
         }
         #endregion
