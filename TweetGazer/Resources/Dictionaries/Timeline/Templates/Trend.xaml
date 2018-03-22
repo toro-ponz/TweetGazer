@@ -35,7 +35,7 @@
                         FontSize="12"
                         Foreground="DodgerBlue"
                         Text="{Binding Path=TrendCount, Mode=OneWay}"
-                        Visibility="{Binding Path=TrendCountVisibility, Mode=OneWay}" />
+                        Visibility="{Binding Path=HasTrendCount, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
                 </Grid>
             </Button>
         </Grid>
