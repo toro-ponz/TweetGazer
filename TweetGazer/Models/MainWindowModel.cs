@@ -186,6 +186,16 @@ namespace TweetGazer.Models
         }
 
         /// <summary>
+        /// ストリーミングを再接続する
+        /// </summary>
+        public void RestartStreaming()
+        {
+            this.Notify("ストリーミングを再接続します", NotificationType.Normal);
+
+            this.StartStreaming();
+        }
+
+        /// <summary>
         /// デバッグコンソールを開く
         /// </summary>
         public void DebugConsoleOpen()
