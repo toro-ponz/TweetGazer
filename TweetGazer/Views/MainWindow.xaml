@@ -209,6 +209,9 @@
                         DataContext="{Binding Path=NetworkState, Mode=OneTime}"
                         Style="{StaticResource FlatButtonStyle}">
                         <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="RestartStreaming" TargetObject="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type Grid}}}" />
+                            </i:EventTrigger>
                             <i:EventTrigger EventName="MouseEnter">
                                 <ei:ChangePropertyAction
                                     PropertyName="Visibility"

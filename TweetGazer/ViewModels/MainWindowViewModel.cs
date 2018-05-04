@@ -7,7 +7,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Windows;
 using TweetGazer.Common;
 using TweetGazer.Models;
 using TweetGazer.Models.MainWindow;
@@ -270,6 +269,14 @@ namespace TweetGazer.ViewModels
                 timeline.TimelineViewModel.Clear();
                 await timeline.TimelineViewModel.Update();
             }
+        }
+
+        /// <summary>
+        /// ストリーミングを再接続する
+        /// </summary>
+        public void RestartStreaming()
+        {
+            this.MainWindowModel.RestartStreaming();
         }
 
         /// <summary>
