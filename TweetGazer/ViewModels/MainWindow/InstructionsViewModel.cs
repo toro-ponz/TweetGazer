@@ -15,7 +15,6 @@ namespace TweetGazer.ViewModels.MainWindow
         {
             this.Instructions = new Instructions();
 
-            this._Visibility = this.Instructions.Visibility;
             this._PageNumber = this.Instructions.PageNumber;
             this.PagesCount = this.Instructions.PagesCount;
 
@@ -24,8 +23,8 @@ namespace TweetGazer.ViewModels.MainWindow
                 {
                     switch (__.PropertyName)
                     {
-                        case nameof(this.Instructions.Visibility):
-                            this.Visibility = this.Instructions.Visibility;
+                        case nameof(this.Instructions.IsOpen):
+                            this.RaisePropertyChanged(() => this.IsOpen);
                             break;
                         case nameof(this.Instructions.PageNumber):
                             this.PageNumber = this.Instructions.PageNumber;
@@ -59,20 +58,14 @@ namespace TweetGazer.ViewModels.MainWindow
             this.Instructions.Close();
         }
 
-        #region Visibility 変更通知プロパティ
-        public Visibility Visibility
+        #region IsOpen 変更通知プロパティ
+        public bool IsOpen
         {
             get
             {
-                return this._Visibility;
-            }
-            set
-            {
-                this._Visibility = value;
-                this.RaisePropertyChanged();
+                return this.Instructions.IsOpen;
             }
         }
-        private Visibility _Visibility;
         #endregion
 
         #region Page 変更通知プロパティ
@@ -96,7 +89,7 @@ namespace TweetGazer.ViewModels.MainWindow
             {
                 this._PageNumber = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(Page));
+                this.RaisePropertyChanged(nameof(this.Page));
             }
         }
         private int _PageNumber;

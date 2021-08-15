@@ -25,7 +25,9 @@ namespace TweetGazer.Behaviors
         {
             var itemsControl = sender as ItemsControl;
             if (itemsControl == null)
+            {
                 return;
+            }
 
             itemsControl.ItemContainerGenerator.ItemsChanged += async (s, eventArgs) =>
             {
@@ -44,16 +46,22 @@ namespace TweetGazer.Behaviors
         {
             var itemsControl = sender as ItemsControl;
             if (itemsControl == null)
+            {
                 return;
+            }
 
             //最上位への追加でない場合リターン
             if (e.Position.Index > 0)
+            {
                 return;
+            }
 
             ScrollViewer scrollViewer = null;
             var controlTemplate = itemsControl.Template;
             if (controlTemplate != null)
+            {
                 scrollViewer = controlTemplate.FindName("ScrollViewer", itemsControl) as ScrollViewer;
+            }
 
             if (scrollViewer != null)
             {
@@ -69,7 +77,10 @@ namespace TweetGazer.Behaviors
                         {
                             //描画されるまで最大3秒待つ
                             if (height != scrollViewer.ExtentHeight)
+                            {
                                 break;
+                            }
+
                             System.Threading.Thread.Sleep(1);
                         }
                     });

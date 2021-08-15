@@ -2,6 +2,7 @@
 using Livet.EventListeners;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using TweetGazer.Behaviors;
 using TweetGazer.Common;
 using TweetGazer.Models.MainWindow;
 
@@ -27,6 +28,9 @@ namespace TweetGazer.ViewModels.MainWindow
                 {
                     switch (__.PropertyName)
                     {
+                        case nameof(this.CreateStatus.CaretPosition):
+                            this.CaretPosition = this.CreateStatus.CaretPosition;
+                            break;
                         case nameof(this.CreateStatus.IsProgressRingVisible):
                             this.IsProgressRingVisible = this.CreateStatus.IsProgressRingVisible;
                             break;
@@ -96,6 +100,22 @@ namespace TweetGazer.ViewModels.MainWindow
         {
             this.CreateStatus.SelectUser(suffix);
         }
+
+        #region CaretPosition 変更通知プロパティ
+        public CaretPosition CaretPosition
+        {
+            get
+            {
+                return this._CaretPosition;
+            }
+            set
+            {
+                this._CaretPosition = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private CaretPosition _CaretPosition;
+        #endregion
 
         #region IsProgressRingVisible 変更通知プロパティ
         public bool IsProgressRingVisible

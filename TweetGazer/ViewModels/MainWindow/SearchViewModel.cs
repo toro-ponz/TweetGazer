@@ -21,7 +21,7 @@ namespace TweetGazer.ViewModels.MainWindow
             this.Search = new Search();
 
             this._IsVisibleBackButton = false;
-            this._TimelineItems = new List<TimelineItemProperties>();
+            this._TimelineItems = new ObservableCollection<TimelineItemProperties>();
             this.CompositeDisposable.Add(
                 new PropertyChangedEventListener(this.Search, (_, __) =>
                 {
@@ -85,9 +85,9 @@ namespace TweetGazer.ViewModels.MainWindow
                     {
                         switch (__.PropertyName)
                         {
-                            case nameof(this.Timeline.Data.IsVisibleBackButton):
                             case nameof(this.Timeline.Data.PageSuffix):
                                 this.IsVisibleBackButton = this.Timeline.Data.IsVisibleBackButton;
+                                this.TimelineItems = this.Timeline.TimelineItems;
                                 break;
                         }
                     })
@@ -105,7 +105,7 @@ namespace TweetGazer.ViewModels.MainWindow
         }
 
         #region TimelineItems 変更通知プロパティ
-        public IEnumerable<TimelineItemProperties> TimelineItems
+        public ObservableCollection<TimelineItemProperties> TimelineItems
         {
             get
             {
@@ -117,7 +117,7 @@ namespace TweetGazer.ViewModels.MainWindow
                 this.RaisePropertyChanged();
             }
         }
-        private IEnumerable<TimelineItemProperties> _TimelineItems;
+        private ObservableCollection<TimelineItemProperties> _TimelineItems;
         #endregion
 
         #region IsOpen 変更通知プロパティ

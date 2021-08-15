@@ -5,13 +5,14 @@
         Home,
         User,
         List,
-        Mentions,
-        MentionsStack,
+        Mention,
+        MentionStack,
+        Notification,
+        NotificationStack,
+        Trend,
+        TrendStack,
+        Search,
         Favorite,
         DirectMessage,
-        Trend,
-        Search,
-        Notifications,
-        NotificationsStack
     }
 }

@@ -21,20 +21,29 @@ namespace TweetGazer.Models.MainWindow
             this.ProfileBannerIsChanged = false;
 
             if (user == null)
+            {
                 return;
+            }
 
             this._Name = user.Name;
             this._ScreenName = user.ScreenName;
             this._Description = user.Description;
             if (user.Location != null)
+            {
                 this._Location = user.Location.ToString();
+            }
+
             this._Url = user.Url;
 
-            if (!String.IsNullOrEmpty(user.ProfileImageUrlHttps))
+            if (!string.IsNullOrEmpty(user.ProfileImageUrlHttps))
+            {
                 this._ProfileImage = new Uri(user.ProfileImageUrlHttps.Replace("_normal.", "_bigger."));
+            }
 
-            if (!String.IsNullOrEmpty(user.ProfileBannerUrl))
+            if (!string.IsNullOrEmpty(user.ProfileBannerUrl))
+            {
                 this._ProfileBanner = new Uri(user.ProfileBannerUrl);
+            }
         }
 
         /// <summary>
@@ -47,7 +56,10 @@ namespace TweetGazer.Models.MainWindow
             this.ScreenName = user.ScreenName;
             this.Description = user.Description;
             if (user.Location != null)
+            {
                 this.Location = user.Location.ToString();
+            }
+
             this.Url = user.Url;
 
             this.OtherProfileIsChanged = false;
@@ -59,8 +71,10 @@ namespace TweetGazer.Models.MainWindow
         /// <param name="user"></param>
         private void ReloadProfileImage(CoreTweet.User user)
         {
-            if (!String.IsNullOrEmpty(user.ProfileImageUrlHttps))
+            if (!string.IsNullOrEmpty(user.ProfileImageUrlHttps))
+            {
                 this.ProfileImage = new Uri(user.ProfileImageUrlHttps.Replace("_normal.", "_bigger."));
+            }
 
             this.ProfileImageIsChanged = false;
         }
@@ -71,8 +85,10 @@ namespace TweetGazer.Models.MainWindow
         /// <param name="user"></param>
         private void ReloadProfileBanner(CoreTweet.User user)
         {
-            if (!String.IsNullOrEmpty(user.ProfileBannerUrl))
+            if (!string.IsNullOrEmpty(user.ProfileBannerUrl))
+            {
                 this.ProfileBanner = new Uri(user.ProfileBannerUrl);
+            }
 
             this.ProfileBannerIsChanged = false;
         }
@@ -85,38 +101,38 @@ namespace TweetGazer.Models.MainWindow
         {
             if (this.ProfileImageIsChanged)
             {
-                if (await AccountTokens.UpdateProfileImage(this.TokenSuffix, this.ProfileImage.OriginalString))
+                if (await AccountTokens.UpdateProfileImageAsync(this.TokenSuffix, this.ProfileImage.OriginalString))
                 {
-                    CommonMethods.Notify("プロフィール画像の更新成功．", NotificationType.Success);
-                    this.ReloadProfileImage(AccountTokens.Users[TokenSuffix]);
+                    CommonMethods.Notify("プロフィール画像の更新成功", NotificationType.Success);
+                    this.ReloadProfileImage(AccountTokens.Users[this.TokenSuffix]);
                 }
                 else
                 {
-                    CommonMethods.Notify("プロフィール画像の更新失敗．", NotificationType.Error);
+                    CommonMethods.Notify("プロフィール画像の更新失敗", NotificationType.Error);
                 }
             }
             if (this.ProfileBannerIsChanged)
             {
-                if (await AccountTokens.UpdateProfileBanner(this.TokenSuffix, this.ProfileBanner.OriginalString))
+                if (await AccountTokens.UpdateProfileBannerAsync(this.TokenSuffix, this.ProfileBanner.OriginalString))
                 {
-                    CommonMethods.Notify("プロフィールバナーの更新成功．", NotificationType.Success);
-                    this.ReloadProfileBanner(AccountTokens.Users[TokenSuffix]);
+                    CommonMethods.Notify("プロフィールバナーの更新成功", NotificationType.Success);
+                    this.ReloadProfileBanner(AccountTokens.Users[this.TokenSuffix]);
                 }
                 else
                 {
-                    CommonMethods.Notify("プロフィールバナーの更新失敗．", NotificationType.Error);
+                    CommonMethods.Notify("プロフィールバナーの更新失敗", NotificationType.Error);
                 }
             }
             if (this.OtherProfileIsChanged)
             {
-                if (await AccountTokens.UpdateProfile(this.TokenSuffix, this.Name, this.Url, this.Location, this.Description))
+                if (await AccountTokens.UpdateProfileAsync(this.TokenSuffix, this.Name, this.Url, this.Location, this.Description))
                 {
-                    CommonMethods.Notify("プロフィールの更新成功．", NotificationType.Success);
+                    CommonMethods.Notify("プロフィールの更新成功", NotificationType.Success);
                     this.ReloadProfile(AccountTokens.Users[this.TokenSuffix]);
                 }
                 else
                 {
-                    CommonMethods.Notify("プロフィールの更新失敗．", NotificationType.Error);
+                    CommonMethods.Notify("プロフィールの更新失敗", NotificationType.Error);
                 }
             }
         }
@@ -127,13 +143,13 @@ namespace TweetGazer.Models.MainWindow
         /// <returns></returns>
         public async Task RemoveProfileBanner()
         {
-            if (await AccountTokens.RemoveProfileBanner(this.TokenSuffix))
+            if (await AccountTokens.RemoveProfileBannerAsync(this.TokenSuffix))
             {
-                CommonMethods.Notify("プロフィールバナーの削除成功．", NotificationType.Success);
+                CommonMethods.Notify("プロフィールバナーの削除成功", NotificationType.Success);
             }
             else
             {
-                CommonMethods.Notify("プロフィールバナーの削除失敗．", NotificationType.Error);
+                CommonMethods.Notify("プロフィールバナーの削除失敗", NotificationType.Error);
             }
         }
 

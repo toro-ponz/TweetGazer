@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DataTemplate x:Key="Trend">
+        <Grid DataContext="{Binding Path=TrendProperties}">
+            <Button
+                Margin="2,5"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
+                Command="{Binding Path=SelectCommand, Mode=OneTime}"
+                Style="{StaticResource UwpLikeButtonStyle1}">
+                <Grid Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Grid.RowSpan="2"
+                        HorizontalAlignment="Center"
+                        FontSize="20"
+                        Foreground="{DynamicResource TextBrush}"
+                        Text="{Binding Path=TrendRank, Mode=OneWay}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="16"
+                        Foreground="{DynamicResource TextBrush}"
+                        Text="{Binding Path=TrendName, Mode=OneWay}"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontSize="12"
+                        Foreground="DodgerBlue"
+                        Text="{Binding Path=TrendCount, Mode=OneWay}"
+                        Visibility="{Binding Path=HasTrendCount, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
+                </Grid>
+            </Button>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

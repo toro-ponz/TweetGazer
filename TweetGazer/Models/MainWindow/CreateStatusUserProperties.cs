@@ -19,9 +19,13 @@ namespace TweetGazer.Models.MainWindow
 
             this.TokenSuffix = tokenSuffix;
             if (tokenSuffix == 0)
+            {
                 this._IsCreate = true;
+            }
             else
+            {
                 this._IsCreate = false;
+            }
         }
 
         /// <summary>
@@ -33,7 +37,9 @@ namespace TweetGazer.Models.MainWindow
         public async Task<bool> Upload(MediaType mediaType, IReadOnlyCollection<string> fileNames)
         {
             if (!this.IsCreate)
+            {
                 return false;
+            }
 
             switch (mediaType)
             {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using TweetGazer.Behaviors;
 using TweetGazer.Common;
-using TweetGazer.Models.ShowDialongs;
+using TweetGazer.Models.ShowDialogs;
 
 namespace TweetGazer.ViewModels.ShowDialogs
 {

@@ -2,15 +2,14 @@
 using Livet;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
 using System.Timers;
 using TweetGazer.Common;
 using System.Collections.ObjectModel;
 using TweetGazer.Models.MainWindow;
 using System.Windows.Data;
 using System.Threading.Tasks;
-using System.Diagnostics;
+using MahApps.Metro;
+using TweetGazer.ViewModels;
 
 namespace TweetGazer.Models
 {
@@ -19,13 +18,17 @@ namespace TweetGazer.Models
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public MainWindowModel()
+        public MainWindowModel(MainWindowViewModel mainWindowViewModel)
         {
+            this.MainWindowViewModel = mainWindowViewModel;
+
+            this.DebugConsoleWindow = new Views.DebugConsoleWindow();
+
             //tempフォルダを削除
             CommonMethods.DeleteDirectory(SecretParameters.TemporaryDirectoryPath);
 
-            this.TrayNotifications = new ObservableCollection<TrayNotification>();
-            BindingOperations.EnableCollectionSynchronization(this.TrayNotifications, new object());
+            this.ToastNotifications = new ObservableCollection<ToastNotification>();
+            BindingOperations.EnableCollectionSynchronization(this.ToastNotifications, new object());
             
             this.Timers = new List<Timer>();
         }
@@ -35,20 +38,20 @@ namespace TweetGazer.Models
         /// </summary>
         /// <param name="message">通知内容</param>
         /// <param name="type">通知タイプ</param>
-        public void Notify(string message, NotificationType type)
+        public async void Notify(string message, NotificationType type)
         {
             try
             {
-                Task.Run(async  () =>
+                await Task.Run(async  () =>
                 {
-                    this.TrayNotifications.Add(new TrayNotification(message, type));
-                    await Task.Delay(7000);
+                    this.ToastNotifications.Add(new ToastNotification(message, type));
+                    await Task.Delay(5000);
                     this.RemoveNotice();
                 });
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
@@ -56,74 +59,57 @@ namespace TweetGazer.Models
         /// 通知を削除する
         /// </summary>
         /// <param name="noticeNumber">削除する通知番号</param>
-        public void RemoveNotice(int noticeNumber = 0)
+        private void RemoveNotice(int noticeNumber = 0)
         {
-            if (noticeNumber < this.TrayNotifications.Count)
-                this.TrayNotifications.RemoveAt(noticeNumber);
+            if (noticeNumber < this.ToastNotifications.Count)
+            {
+                this.ToastNotifications.RemoveAt(noticeNumber);
+            }
         }
 
         /// <summary>
-        /// ストリーミングを開始する
+        /// デバッグコンソールを開く
         /// </summary>
-        public void StartStreaming()
+        public void DebugConsoleOpen()
         {
-            if (this.Disposables != null)
+            if (this.DebugConsoleWindow.Visibility == System.Windows.Visibility.Collapsed)
             {
-                foreach (var disposable in this.Disposables)
-                    disposable.Dispose();
-
-                while (this.Disposables.Count != 0)
-                    this.Disposables.RemoveAt(0);
+                this.DebugConsoleWindow.Show();
             }
-
-            //ストリーミング開始
-            try
+            else
             {
-                if (this.Disposables == null)
-                    this.Disposables = new List<IDisposable>();
+                this.DebugConsoleWindow.Visibility = System.Windows.Visibility.Collapsed;
+            }
+        }
 
-                var users = AccountTokens.Users;
-                for (int i = 0; i < users.Count; i++)
+        /// <summary>
+        /// ウィンドウのカラーを変更する
+        /// </summary>
+        public void ChangeColors()
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+            {
+                try
                 {
-                    var stream = AccountTokens.StartStreaming(i, StreamingMode.User);
-                    if (stream != null)
+                    var accentColor = Properties.Settings.Default.AccentColor;
+                    var baseColor = Properties.Settings.Default.BaseColor;
+
+                    if (accentColor == null || baseColor == null)
                     {
-                        var j = i;
-                        //再接続
-                        stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry()).Repeat();
-                        //ツイートが流れてきたとき
-                        stream.OfType<StatusMessage>().Subscribe(x =>
-                        {
-                            if (x.Status.Entities != null && x.Status.Entities.UserMentions != null)
-                            {
-                                foreach (var mention in x.Status.Entities.UserMentions)
-                                {
-                                    if (mention.Id == users[j].Id)
-                                        this.ReceiveMention(j, x);
-                                }
-                            }
-                        });
-                        //ツイート・ダイレクトメッセージが削除されたとき
-                        stream.OfType<DeleteMessage>().Subscribe(x =>
-                        {
-
-                        });
-                        //ツイート以外の通知を受け取ったとき
-                        stream.OfType<EventMessage>().Subscribe(x =>
-                        {
-                            ReceiveEventMessage(j, x);
-                        });
-                        //ダイレクトメッセージを受け取ったとき
-                        stream.OfType<CoreTweet.DirectMessage>().Subscribe(ReceiveDirectMessage);
-
-                        this.Disposables.Add(stream.Connect());
+                        return;
                     }
+
+                    ThemeManager.ChangeAppStyle(
+                            mainWindow.Resources,
+                            ThemeManager.GetAccent(accentColor),
+                            ThemeManager.GetAppTheme(baseColor));
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.Write(e);
-                return;
+                catch (Exception e)
+                {
+                    this.Notify("アクセントカラー・テーマカラーの変更中にエラーが発生しました", NotificationType.Error);
+                    DebugConsole.Write(e);
+                }
             }
         }
 
@@ -150,8 +136,13 @@ namespace TweetGazer.Models
             if (this.Timers != null)
             {
                 foreach (var timer in this.Timers)
+                {
                     timer.Dispose();
+                }
             }
+
+            this.DebugConsoleWindow.Visibility = System.Windows.Visibility.Collapsed;
+            this.DebugConsoleWindow.Close();
 
             Properties.Settings.Default.Save();
         }
@@ -164,31 +155,43 @@ namespace TweetGazer.Models
         private void ReceiveMention(int tokenSuffix, StatusMessage statusMessage)
         {
             if (statusMessage.Status.CurrentUserRetweet != null)
+            {
                 return;
+            }
 
             if (Properties.Settings.Default.IsNotify)
             {
                 var text = "";
-                if (statusMessage.Status.ExtendedTweet != null && !String.IsNullOrEmpty(statusMessage.Status.ExtendedTweet.FullText))
+                if (statusMessage.Status.ExtendedTweet != null && !string.IsNullOrEmpty(statusMessage.Status.ExtendedTweet.FullText))
+                {
                     text = statusMessage.Status.ExtendedTweet.FullText;
-                else if (statusMessage.Status.FullText != null && !String.IsNullOrEmpty(statusMessage.Status.FullText))
+                }
+                else if (statusMessage.Status.FullText != null && !string.IsNullOrEmpty(statusMessage.Status.FullText))
+                {
                     text = statusMessage.Status.FullText;
+                }
                 else
+                {
                     text = statusMessage.Status.Text;
+                }
 
                 CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
                 this.Notify(statusMessage.Status.User.Name + "さんからのメンション\n" + text, NotificationType.Normal);
             }
 
             if (statusMessage.Status.RetweetedStatus != null)
+            {
                 NotificationsStack.StackNotification(
                     statusMessage.Status.User,
                     statusMessage.Status.RetweetedStatus.User,
                     Timeline.NotificationPropertiesType.Retweeted,
                     statusMessage.Status.User.Name + "さんにツイートがリツイートされました。\n" + statusMessage.Status.RetweetedStatus.Text,
                     statusMessage.Status.RetweetedStatus.Id);
+            }
             else
+            {
                 MentionsStack.StackMention(statusMessage.Status);
+            }
         }
 
         /// <summary>
@@ -199,7 +202,9 @@ namespace TweetGazer.Models
         private void ReceiveEventMessage(int tokenSuffix, EventMessage eventMessage)
         {
             if (eventMessage.Source.Id == AccountTokens.Users[tokenSuffix].Id)
+            {
                 return;
+            }
 
             var isNotify = false;
             var isPlaySound = false;
@@ -268,7 +273,9 @@ namespace TweetGazer.Models
             }
 
             if (isPlaySound)
+            {
                 CommonMethods.PlaySoundEffect(SoundEffect.Notification1);
+            }
             if (isNotify)
             {
                 this.Notify(text, NotificationType.Normal);
@@ -284,9 +291,12 @@ namespace TweetGazer.Models
 
         }
 
-        public ObservableCollection<TrayNotification> TrayNotifications { get; }
+        public ObservableCollection<ToastNotification> ToastNotifications { get; }
 
         private List<IDisposable> Disposables;
         private List<Timer> Timers;
+
+        private Views.DebugConsoleWindow DebugConsoleWindow;
+        private MainWindowViewModel MainWindowViewModel;
     }
 }

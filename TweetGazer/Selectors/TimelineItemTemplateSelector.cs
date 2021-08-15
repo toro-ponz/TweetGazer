@@ -13,9 +13,11 @@ namespace TweetGazer.Selectors
             var timeline = container as FrameworkElement;
             var data = item as TimelineItemProperties;
             if (timeline == null || data == null)
+            {
                 return null;
+            }
 
-            switch (data.Type)
+            switch (data.TimelineItemType)
             {
                 case TimelineItemType.Status:
                     result = timeline.FindResource("Status") as DataTemplate;
@@ -26,8 +28,11 @@ namespace TweetGazer.Selectors
                 case TimelineItemType.Trend:
                     result = timeline.FindResource("Trend") as DataTemplate;
                     break;
-                case TimelineItemType.TabButton:
-                    result = timeline.FindResource("Tab") as DataTemplate;
+                case TimelineItemType.UserTimelineTab:
+                    result = timeline.FindResource("UserTimelineTab") as DataTemplate;
+                    break;
+                case TimelineItemType.SearchTimelineTab:
+                    result = timeline.FindResource("SearchTimelineTab") as DataTemplate;
                     break;
                 case TimelineItemType.Button:
                     result = timeline.FindResource("Loading") as DataTemplate;

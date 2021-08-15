@@ -1,0 +1,34 @@
+﻿<Window
+    x:Class="TweetGazer.Views.DebugConsoleWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Common="clr-namespace:TweetGazer.Common"
+    Title="TweetGazerDebugConsole"
+    Width="400"
+    Height="300"
+    Background="Black"
+    Closing="Window_Closing">
+
+    <Grid>
+        <ItemsControl ItemsSource="{Binding Source={x:Static Common:DebugConsole.Data}, Mode=OneWay}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding Mode=OneTime}"
+                            TextWrapping="Wrap" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="{x:Type ItemsControl}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+        </ItemsControl>
+    </Grid>
+</Window>

@@ -22,8 +22,7 @@ namespace TweetGazer.Common
         /// <summary>
         /// メンションをスタックに積む
         /// </summary>
-        /// <param name="user">送ってきたユーザー</param>
-        /// <param name="status">送られてきたツイート</param>
+        /// <param name="status">メンション</param>
         public static void StackMention(Status status)
         {
             if (Mentions == null)
@@ -40,7 +39,9 @@ namespace TweetGazer.Common
         public static void Clear()
         {
             if (Mentions != null)
+            {
                 Mentions.Clear();
+            }
         }
 
         public static ObservableCollection<Mention> Mentions { get; private set; }

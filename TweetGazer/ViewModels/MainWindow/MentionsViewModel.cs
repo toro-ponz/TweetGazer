@@ -24,7 +24,7 @@ namespace TweetGazer.ViewModels.MainWindow
             this.Mentions = new Mentions();
 
             this._IsVisibleBackButton = false;
-            this._TimelineItems = new List<TimelineItemProperties>();
+            this._TimelineItems = new ObservableCollection<TimelineItemProperties>();
             this.CompositeDisposable.Add(
                 new PropertyChangedEventListener(this.Mentions, (_, __) =>
                 {
@@ -68,24 +68,24 @@ namespace TweetGazer.ViewModels.MainWindow
                 this.Timeline = this.Mentions.Timeline;
                 this.TimelineItems = this.Timeline.TimelineItems;
                 this.CompositeDisposable.Add(
-                    new PropertyChangedEventListener(this.Timeline.TimelineItems, (_, __) =>
+                    new PropertyChangedEventListener(this.Timeline.Data, (_, __) =>
                     {
                         switch (__.PropertyName)
                         {
-                            case nameof(this.Timeline.TimelineItems):
-                                this.RaisePropertyChanged(() => this.TimelineItems);
+                            case nameof(this.Timeline.Data.PageSuffix):
+                                this.IsVisibleBackButton = this.Timeline.Data.IsVisibleBackButton;
+                                this.TimelineItems = this.Timeline.TimelineItems;
                                 break;
                         }
                     })
                 );
                 this.CompositeDisposable.Add(
-                    new PropertyChangedEventListener(this.Timeline.Data, (_, __) =>
+                    new PropertyChangedEventListener(this.Timeline, (_, __) =>
                     {
                         switch (__.PropertyName)
                         {
-                            case nameof(this.Timeline.Data.IsVisibleBackButton):
-                            case nameof(this.Timeline.Data.PageSuffix):
-                                this.IsVisibleBackButton = this.Timeline.Data.IsVisibleBackButton;
+                            case nameof(this.Timeline.Message):
+                                this.Message = this.Timeline.Message;
                                 break;
                         }
                     })
@@ -103,7 +103,7 @@ namespace TweetGazer.ViewModels.MainWindow
         }
 
         #region TimelineItems 変更通知プロパティ
-        public IEnumerable<TimelineItemProperties> TimelineItems
+        public ObservableCollection<TimelineItemProperties> TimelineItems
         {
             get
             {
@@ -115,7 +115,23 @@ namespace TweetGazer.ViewModels.MainWindow
                 this.RaisePropertyChanged();
             }
         }
-        private IEnumerable<TimelineItemProperties> _TimelineItems;
+        private ObservableCollection<TimelineItemProperties> _TimelineItems;
+        #endregion
+
+        #region Message 変更通知プロパティ
+        public string Message
+        {
+            get
+            {
+                return this._Message;
+            }
+            set
+            {
+                this._Message = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        private string _Message;
         #endregion
 
         #region IsOpen 変更通知プロパティ

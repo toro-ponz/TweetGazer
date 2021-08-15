@@ -18,7 +18,9 @@ namespace TweetGazer.Models.Timeline
             this.TimelineModel = timelineModel;
             this.Type = type;
             if (parameter != null)
+            {
                 this.Parameter = parameter;
+            }
 
             this.LoadCommand = new RelayCommand<object>(this.Load);
         }
@@ -30,7 +32,9 @@ namespace TweetGazer.Models.Timeline
         private async void Load(object parameter)
         {
             if (this.Parameter == null || this.Visibility == Visibility.Collapsed)
+            {
                 return;
+            }
 
             switch (this.Type)
             {
@@ -41,13 +45,17 @@ namespace TweetGazer.Models.Timeline
                 case LoadingType.ReadMoreRepliesButton:
                     {
                         if (parameter is ICommand command)
+                        {
                             command?.Execute(this.Parameter);
+                        }
                     }
                     break;
                 case LoadingType.ReadMoreRepliesToMainStatus:
                     {
                         if (parameter is ICommand command)
+                        {
                             command?.Execute(this.Parameter);
+                        }
                     }
                     break;
             }

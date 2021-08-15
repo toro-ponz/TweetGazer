@@ -41,12 +41,11 @@ namespace TweetGazer.Models.MainWindow
             {
                 while (AccountTokens.Users.Count == 0)
                 {
-                    Task.Delay(1000);
+                    System.Threading.Thread.Sleep(100);
                 }
             });
 
-            if (AccountTokens.Users.Count != 0)
-                this.MainProfileImage = new Uri(AccountTokens.Users[0].ProfileImageUrlHttps.Replace("_normal.", "_bigger."));
+            this.MainProfileImage = new Uri(AccountTokens.Users[0].ProfileImageUrlHttps.Replace("_normal.", "_bigger."));
         }
 
         /// <summary>

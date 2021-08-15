@@ -6,8 +6,8 @@
 
 ## 概要
 
-『TweetGazer by とろゝ』はWindows PC用のTwitterクライアントです。  
-ホームタイムラインだけでなく、リストや検索結果なども並べて表示できます。 
+『TweetGazer by とろゝ』はWindows PC用のTwitterクライアントです。
+ホームタイムラインだけでなく、リストや検索結果なども並べて表示できます。
 
 ## 特徴
 
@@ -22,17 +22,18 @@
 
 ## ダウンロード・インストール
 
-下記リンクを参照してください。  
+下記リンクを参照してください。
 [TweetGazer - とろゝ(@toro_ponz) on GitHub Pages](https://toro-ponz.github.io/software/TweetGazer/)
 
 ## 開発
 
-[とろゝ@toro_ponz](https://toro-ponz.github.io/)  
+[とろゝ@toro_ponz](https://toro-ponz.github.io/)
 [Twitter](https://twitter.com/toro_ponz)
 
 ## 使用ライブラリ
 
  - [CoreTweet](https://github.com/CoreTweet/CoreTweet)
+ - [Gu.Wpf.Media](https://github.com/JohanLarsson/Gu.Wpf.Media)
  - [Lighty](https://github.com/sourcechord/Lighty)
  - [Livet](https://github.com/ugaya40/Livet)
  - [MahApps.Metro](https://github.com/MahApps/MahApps.Metro)
@@ -42,4 +43,4 @@
 
 ## ライセンス
 
-[MIT](License.txt)
+[MIT License (MIT)](LICENSE)

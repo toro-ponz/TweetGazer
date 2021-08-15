@@ -13,7 +13,8 @@
         Click="CloseButton_Click"
         Style="{StaticResource FlatButtonStyle}">
         <Grid Background="#50000000">
-            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid>
+                <!--  画像  -->
                 <Button
                     Margin="50,0"
                     HorizontalAlignment="Center"
@@ -23,44 +24,67 @@
                     <Image
                         x:Name="Image"
                         Behaviors:ImageBehavior.Source="{Binding Path=Image}"
-                        MouseMove="Image_MouseMove"
                         MouseWheel="Image_MouseWheel" />
                 </Button>
+
+                <!--  拡大画像  -->
+                <ScrollViewer
+                    x:Name="ZoomedImageScrollViewer"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Auto"
+                    Visibility="Collapsed">
+                    <Image
+                        x:Name="ZoomedImage"
+                        Behaviors:ImageBehavior.Source="{Binding Path=Image}"
+                        Cursor="ScrollAll"
+                        MouseLeave="ZoomedImage_MouseLeave"
+                        MouseLeftButtonDown="ZoomedImage_MouseLeftButtonDown"
+                        MouseLeftButtonUp="ZoomedImage_MouseLeftButtonUp"
+                        MouseMove="ZoomedImage_MouseMove"
+                        MouseWheel="Image_MouseWheel" />
+                </ScrollViewer>
+
+                <!--  Previousボタン  -->
                 <Button
                     Width="50"
                     Height="50"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
-                    Click="MoveButton_Click"
+                    Click="ResetZoomButton_Click"
                     Command="{Binding Path=PreviousCommand, Mode=OneTime}"
                     Style="{StaticResource UwpLikeButtonStyle2}"
                     Visibility="{Binding Path=IsLeftButtonVisible, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                     <ContentControl ContentTemplate="{StaticResource AccentColorLeftIcon}" />
                 </Button>
+
+                <!--  Nextボタン  -->
                 <Button
                     Width="50"
                     Height="50"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
-                    Click="MoveButton_Click"
+                    Click="ResetZoomButton_Click"
                     Command="{Binding Path=NextCommand, Mode=OneTime}"
                     Style="{StaticResource UwpLikeButtonStyle2}"
                     Visibility="{Binding Path=IsRightButtonVisible, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                     <ContentControl ContentTemplate="{StaticResource AccentColorRightIcon}" />
                 </Button>
+
+                <!--  拡大ボタン  -->
                 <Button
                     Width="30"
                     Height="30"
-                    Margin="10,10,50,10"
+                    Margin="10,50,10,10"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Click="MoveButton_Click"
-                    Command="{Binding Path=ToggleZoomCommand, Mode=OneTime}"
+                    Click="ZoomButton_Click"
                     Style="{StaticResource UwpLikeButtonStyle2}">
                     <ContentControl ContentTemplate="{StaticResource AccentColorSearchIcon}" />
                 </Button>
+
+                <!--  閉じるボタン  -->
                 <Button
                     Width="30"
                     Height="30"
@@ -72,27 +96,6 @@
                     <ContentControl ContentTemplate="{StaticResource AccentColorCloseIcon}" />
                 </Button>
             </Grid>
-            <Canvas
-                x:Name="ZoomCanvas"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                MouseMove="Image_MouseMove"
-                Visibility="{Binding Path=IsZoom, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ScrollViewer
-                    x:Name="ZoomScrollViewer"
-                    Background="{x:Null}"
-                    HorizontalScrollBarVisibility="Disabled"
-                    VerticalScrollBarVisibility="Disabled">
-                    <Canvas Background="{x:Null}">
-                        <Image
-                            x:Name="ZoomImage"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            Behaviors:ImageBehavior.Source="{Binding Path=Image}"
-                            MouseMove="Image_MouseMove" />
-                    </Canvas>
-                </ScrollViewer>
-            </Canvas>
         </Grid>
     </Button>
 </UserControl>

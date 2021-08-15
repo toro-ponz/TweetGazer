@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TweetGazer.Common;
 
@@ -16,7 +17,6 @@ namespace TweetGazer.Models.MainWindow
         {
             this.Users = new List<AccountSettingsParameters>();
             this.IsSaving = false;
-            base._TokenSuffix = 0;
             this.ReloadUsers();
         }
 
@@ -25,14 +25,13 @@ namespace TweetGazer.Models.MainWindow
         /// </summary>
         public async void ReloadUsers()
         {
-            this.TokenSuffix = 0;
-            while (this.IsSaving || AccountTokens.IsVerifying)
+            await Task.Run(() =>
             {
-                await Task.Run(() =>
+                while (AccountTokens.Users.Count == 0 || this.IsSaving)
                 {
                     System.Threading.Thread.Sleep(100);
-                });
-            }
+                }
+            });
 
             this.Users.Clear();
             this.ScreenNames.Clear();
@@ -40,9 +39,11 @@ namespace TweetGazer.Models.MainWindow
             foreach (var user in AccountTokens.Users)
             {
                 this.Users.Add(new AccountSettingsParameters(i, user));
-                this.ScreenNames.Add(user.ScreenName);
+                this.ScreenNames.Add("@" + user.ScreenName);
                 i++;
             }
+
+            this.TokenSuffix = 0;
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace TweetGazer.Models.MainWindow
         {
             this.IsSaving = true;
 
-            foreach (var user in Users)
+            foreach (var user in this.Users)
             {
                 await user.Save();
             }
@@ -75,14 +76,16 @@ namespace TweetGazer.Models.MainWindow
         public void SelectProfileImage()
         {
             //ファイルダイアログを表示
-            OpenFileDialog ofd = new OpenFileDialog()
+            var ofd = new OpenFileDialog()
             {
                 Filter = "画像ファイル(*.bmp;*.jpg;*.jpeg;.*.png;*.gif)|*.bmp;*.jpg;*.jpeg;*.png;*.gif",
                 Multiselect = false,
                 RestoreDirectory = true
             };
             if (ofd.ShowDialog() == false)
+            {
                 return;
+            }
 
             this.User.ProfileImage = new Uri(ofd.FileName);
         }
@@ -93,14 +96,16 @@ namespace TweetGazer.Models.MainWindow
         public void SelectProfileBanner()
         {
             //ファイルダイアログを表示
-            OpenFileDialog ofd = new OpenFileDialog()
+            var ofd = new OpenFileDialog()
             {
                 Filter = "画像ファイル(*.bmp;*.jpg;*.jpeg;.*.png;*.gif)|*.bmp;*.jpg;*.jpeg;*.png;*.gif",
                 Multiselect = false,
                 RestoreDirectory = true
             };
             if (ofd.ShowDialog() == false)
+            {
                 return;
+            }
 
             this.User.ProfileBanner = new Uri(ofd.FileName);
         }
@@ -126,12 +131,15 @@ namespace TweetGazer.Models.MainWindow
             get
             {
                 if (this.TokenSuffix >= this.Users.Count || this.TokenSuffix == -1)
+                {
                     return null;
-                return this.Users[TokenSuffix];
+                }
+
+                return this.Users[this.TokenSuffix];
             }
             set
             {
-                this.Users[TokenSuffix] = value;
+                this.Users[this.TokenSuffix] = value;
                 this.RaisePropertyChanged();
             }
         }

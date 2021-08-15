@@ -12,7 +12,10 @@ namespace TweetGazer.Behaviors
         public static bool? GetAnimationScrolling(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(AnimationScrollingProperty) as bool?;
         }
 
@@ -20,7 +23,10 @@ namespace TweetGazer.Behaviors
         public static void SetAnimationScrolling(DependencyObject element, bool? value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(AnimationScrollingProperty, value);
         }
 
@@ -49,7 +55,10 @@ namespace TweetGazer.Behaviors
         public static void SetScrollAmount(DependencyObject element, double value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(ScrollAmountProperty, value);
         }
 
@@ -57,7 +66,10 @@ namespace TweetGazer.Behaviors
         public static double GetScrollAmount(DependencyObject element)
         {
             if (element == null)
+            {
                 return 0;
+            }
+
             return (double)element.GetValue(ScrollAmountProperty);
         }
 
@@ -68,7 +80,10 @@ namespace TweetGazer.Behaviors
         public static double GetOffsetMediator(DependencyObject element)
         {
             if (element == null)
+            {
                 return 0;
+            }
+
             return (double)element.GetValue(OffsetMediatorProperty);
         }
 
@@ -76,7 +91,10 @@ namespace TweetGazer.Behaviors
         public static void SetOffsetMediator(DependencyObject element, double value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(OffsetMediatorProperty, value);
         }
 
@@ -87,7 +105,9 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as ScrollViewer;
             if (element == null)
+            {
                 return;
+            }
 
             element.ScrollToVerticalOffset((double)e.NewValue);
             SetOffsetMediator(element, (double)e.NewValue);
@@ -98,7 +118,10 @@ namespace TweetGazer.Behaviors
         public static double GetVerticalOffset(DependencyObject element)
         {
             if (element == null)
+            {
                 return 0;
+            }
+
             return (double)element.GetValue(VerticalOffsetProperty);
         }
 
@@ -106,7 +129,10 @@ namespace TweetGazer.Behaviors
         public static void SetVerticalOffset(DependencyObject element, double value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(VerticalOffsetProperty, value);
         }
 
@@ -116,27 +142,38 @@ namespace TweetGazer.Behaviors
         private static void VerticalOffset_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue == e.OldValue)
+            {
                 return;
+            }
 
             var element = sender as ScrollViewer;
             if (element == null)
+            {
                 return;
+            }
 
             OffsetMediator_Changed(sender, e);
         }
 
         private static void PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
+            // 一旦スムーズスクロールをOFFにする
+            return;
+
             if (Properties.Settings.Default.IsSmoothScrolling &&
                 Animate(sender, -Math.Sign(e.Delta / 2) * GetScrollAmount(sender as ScrollViewer)))
+            {
                 e.Handled = true;
+            }
         }
 
         private static void ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             var element = sender as ScrollViewer;
             if (element == null)
+            {
                 return;
+            }
 
             SetVerticalOffset(element, e.VerticalOffset);
         }
@@ -145,21 +182,23 @@ namespace TweetGazer.Behaviors
         {
             var element = sender as ScrollViewer;
             if (element == null)
-                return false;
-
-            if (Math.Sign(offset) != direction)
             {
-                target = GetVerticalOffset(element);
-                direction = Math.Sign(offset);
+                return false;
             }
 
-            target += offset;
-            target = Math.Max(Math.Min(target, element.ScrollableHeight), 0);
+            if (Math.Sign(offset) != Direction)
+            {
+                Target = GetVerticalOffset(element);
+                Direction = Math.Sign(offset);
+            }
+
+            Target += offset;
+            Target = Math.Max(Math.Min(Target, element.ScrollableHeight), 0);
 
             Storyboard.SetTarget(Animation, element);
             Storyboard.SetTargetProperty(Animation, new PropertyPath(OffsetMediatorProperty));
 
-            Animation.To = target;
+            Animation.To = Target;
             Animation.From = GetVerticalOffset(element);
 
             if (Animation.From != Animation.To)
@@ -174,18 +213,20 @@ namespace TweetGazer.Behaviors
         private static void CreateAnimation()
         {
             if (Animation != null)
+            {
                 return;
+            }
 
             Animation = new DoubleAnimation
             {
                 Duration = TimeSpan.FromSeconds(0.2d),
                 EasingFunction = new ExponentialEase { EasingMode = EasingMode.EaseOut }
             };
-            Animation.Completed += (s, e) => { direction = 0; };
+            Animation.Completed += (s, e) => { Direction = 0; };
         }
 
-        private static double target = 0.0d;
-        private static int direction = 0;
+        private static double Target = 0.0d;
+        private static int Direction = 0;
         private static DoubleAnimation Animation;
     }
 }

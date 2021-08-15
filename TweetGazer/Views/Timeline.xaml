@@ -9,16 +9,13 @@
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    MinWidth="200"
+    MinWidth="100"
+    FontFamily="Segoe UI Emoji"
     Foreground="{DynamicResource TextBrush}"
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/TimelineResources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/TimelineResources.xaml" />
     </UserControl.Resources>
 
     <Grid Background="{DynamicResource ControlBackgroundBrush}">
@@ -92,7 +89,7 @@
             Behaviors:ItemsControlBehavior.AddingScroll="Timeline"
             ItemsSource="{Binding Path=TimelineItems, Mode=OneWay}"
             ScrollViewer.CanContentScroll="True"
-            VirtualizingPanel.CacheLength="0"
+            VirtualizingPanel.CacheLength="3"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingStackPanel.IsVirtualizing="True">
             <ItemsControl.ItemTemplateSelector>
@@ -163,7 +160,7 @@
                 Margin="0,0,15,10"
                 HorizontalAlignment="Right"
                 Opacity="0.6"
-                Visibility="{Binding Path=UpButtonVisibility, Mode=OneWay}">
+                Visibility="{Binding Path=IsScrolled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                 <Button Style="{StaticResource UwpLikeButtonStyle1}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
@@ -252,6 +249,7 @@
                     </i:Interaction.Triggers>
                     <TextBlock
                         HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
                         FontSize="12"
                         Foreground="White"
                         Text="Settings" />
@@ -272,8 +270,14 @@
                             VerticalAlignment="Center"
                             FontSize="18"
                             Foreground="White"
-                            Text="表示するツイート"
+                            Text="フィルタリング表示するツイート"
                             TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Margin="30,0,0,0"
+                            FontSize="14"
+                            Visibility="{Binding Path=IsFiltered, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Hyperlink Foreground="White" Command="{Binding Path=ResetFilterCommand, Mode=OneTime}">フィルターをリセットする</Hyperlink>
+                        </TextBlock>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
                             <CheckBox IsChecked="{Binding Path=IsVisibleRetweet, Mode=TwoWay}">
                                 <TextBlock
@@ -295,7 +299,7 @@
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeImagesStatus, Mode=TwoWay}">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleImagesStatus, Mode=TwoWay}">
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="16"
@@ -305,7 +309,7 @@
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeGifStatus, Mode=TwoWay}">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleGifStatus, Mode=TwoWay}">
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="16"
@@ -315,7 +319,7 @@
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeVideoStatus, Mode=TwoWay}">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleVideoStatus, Mode=TwoWay}">
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="16"
@@ -325,22 +329,12 @@
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleIncludeLinkStatus, Mode=TwoWay}">
+                            <CheckBox IsChecked="{Binding Path=IsVisibleLinkStatus, Mode=TwoWay}">
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="16"
                                     Foreground="White"
                                     Text="リンク付きツイート"
-                                    TextTrimming="CharacterEllipsis" />
-                            </CheckBox>
-                        </StackPanel>
-                        <StackPanel Margin="30,5,5,5" Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Path=IsVisibleOtherStatus, Mode=TwoWay}">
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    FontSize="16"
-                                    Foreground="White"
-                                    Text="その他すべてのツイート"
                                     TextTrimming="CharacterEllipsis" />
                             </CheckBox>
                         </StackPanel>
@@ -379,11 +373,11 @@
         </Grid>
 
         <!--  プログレスリング  -->
-        <Grid Grid.Row="1" Visibility="{Binding Path=ProgressRingVisibility, Mode=OneWay}">
+        <Grid Grid.Row="1" Visibility="{Binding Path=IsInitializing, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <Grid.Background>
                 <SolidColorBrush Opacity="0.2" Color="Black" />
             </Grid.Background>
             <Controls:ProgressRing IsActive="True" />
         </Grid>
     </Grid>
-</UserControl> 
+</UserControl>

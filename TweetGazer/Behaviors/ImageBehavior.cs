@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Windows;
@@ -15,7 +14,10 @@ namespace TweetGazer.Behaviors
         public static ImageProperties GetSource(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(SourceProperty) as ImageProperties;
         }
 
@@ -23,7 +25,10 @@ namespace TweetGazer.Behaviors
         public static void SetSource(DependencyObject element, ImageProperties value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(SourceProperty, value);
         }
 
@@ -35,7 +40,9 @@ namespace TweetGazer.Behaviors
             var element = sender as Image;
             var imageProperties = e.NewValue as ImageProperties;
             if (element == null || imageProperties == null)
+            {
                 return;
+            }
 
             //画像サイズを元にロード中の仮画像を生成
             if (imageProperties.Height != 0 && imageProperties.Width != 0)
@@ -58,7 +65,10 @@ namespace TweetGazer.Behaviors
         public static ImageProperties GetImageSource(DependencyObject element)
         {
             if (element == null)
+            {
                 return null;
+            }
+
             return element.GetValue(ImageSourceProperty) as ImageProperties;
         }
 
@@ -66,7 +76,10 @@ namespace TweetGazer.Behaviors
         public static void SetImageSource(DependencyObject element, ImageProperties value)
         {
             if (element == null)
+            {
                 return;
+            }
+
             element.SetValue(ImageSourceProperty, value);
         }
 
@@ -78,14 +91,16 @@ namespace TweetGazer.Behaviors
             var element = sender as ImageBrush;
             var imageProperties = e.NewValue as ImageProperties;
             if (element == null || imageProperties == null)
+            {
                 return;
-            
+            }
+
             //画像サイズを元にロード中の仮画像を生成
             if (imageProperties.Height != 0 && imageProperties.Width != 0)
             {
-                element.ImageSource = CommonMethods.CreateTemporaryImageAsync(imageProperties.Width, imageProperties.Height);
-            }
 
+            }
+            
             //画像のロード
             if (imageProperties.IsLoad)
             {
@@ -144,7 +159,7 @@ namespace TweetGazer.Behaviors
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
@@ -154,34 +169,38 @@ namespace TweetGazer.Behaviors
         {
             get
             {
-                if (_Width == -1)
+                if (this._Width == -1)
                 {
                     LoadSizeAsync();
-                    return _Width;
+                    return this._Width;
                 }
                 else
-                    return _Width;
+                {
+                    return this._Width;
+                }
             }
             set
             {
-                _Width = value;
+                this._Width = value;
             }
         }
         public int Height
         {
             get
             {
-                if (_Height == -1)
+                if (this._Height == -1)
                 {
                     LoadSizeAsync();
-                    return _Height;
+                    return this._Height;
                 }
                 else
-                    return _Height;
+                {
+                    return this._Height;
+                }
             }
             set
             {
-                _Height = value;
+                this._Height = value;
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using TweetGazer.Behaviors;
+using TweetGazer.Models.Timeline;
 
 namespace TweetGazer.Selectors
 {
@@ -13,8 +13,10 @@ namespace TweetGazer.Selectors
             var media = container as FrameworkElement;
             var data = item as MediaProperties;
             if (media == null || data == null)
+            {
                 return null;
-            
+            }
+
             switch (data.Type)
             {
                 case StatusMediaType.Image:

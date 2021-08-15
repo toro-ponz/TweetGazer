@@ -23,6 +23,8 @@ namespace TweetGazer.Views.ShowDialogs
         {
             this.InitializeComponent();
 
+            this.Type = ZoomType.Normal;
+            this.Dragging = false;
             this.ShowImageViewModel = new ShowImageViewModel(images, suffix);
             this.DataContext = this.ShowImageViewModel;
         }
@@ -70,7 +72,9 @@ namespace TweetGazer.Views.ShowDialogs
         private void BlockButton_Click(object sender, RoutedEventArgs e)
         {
             if (!Properties.Settings.Default.IsCloseWhenClickImage)
+            {
                 e.Handled = true;
+            }
         }
 
         /// <summary>
@@ -91,64 +95,134 @@ namespace TweetGazer.Views.ShowDialogs
         private void Image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta > 0)
+            {
+                this.ResetZoom();
                 this.ShowImageViewModel.Previous();
+            }
             else
+            {
+                this.ResetZoom();
                 this.ShowImageViewModel.Next();
+            }
+
+            e.Handled = true;
         }
 
         /// <summary>
-        /// 画像の拡大
+        /// 
+        /// </summary>
+        private void ResetZoom()
+        {
+            this.Image.Visibility = Visibility.Visible;
+            this.ZoomedImageScrollViewer.Visibility = Visibility.Collapsed;
+            this.ZoomedImage.Width = this.Image.ActualWidth;
+            this.ZoomedImage.Height = this.Image.ActualHeight;
+            this.Type = ZoomType.Normal;
+        }
+
+        /// <summary>
+        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Image_MouseMove(object sender, MouseEventArgs e)
+        private void ResetZoomButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.ShowImageViewModel.IsZoom)
-            {
-                if (Double.IsNaN(this.ZoomImage.Width))
-                    this.ZoomImage.Width = this.Image.ActualWidth * 3;
-                if (Double.IsNaN(this.ZoomImage.Height))
-                    this.ZoomImage.Height = this.Image.ActualHeight * 3;
+            this.ResetZoom();
 
-                // 拡大部分のサイズは画像サイズの小さい方の2/5
-                if (Double.IsNaN(this.ZoomScrollViewer.Width) || Double.IsNaN(this.ZoomScrollViewer.Height))
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ZoomButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (this.Type)
+            {
+                case ZoomType.Normal:
+                    this.ZoomedImage.Width = this.Image.ActualWidth * 2;
+                    this.ZoomedImage.Height = this.Image.ActualHeight * 2;
+                    this.Image.Visibility = Visibility.Collapsed;
+                    this.ZoomedImageScrollViewer.Visibility = Visibility.Visible;
+                    this.Type = ZoomType.TwoTimes;
+                    break;
+                case ZoomType.TwoTimes:
+                    this.ZoomedImage.Width = this.ZoomedImage.ActualWidth / 2 * 3;
+                    this.ZoomedImage.Height = this.ZoomedImage.ActualHeight / 2 * 3;
+                    this.Type = ZoomType.ThreeTimes;
+                    break;
+                case ZoomType.ThreeTimes:
+                    this.ResetZoom();
+                    break;
+            }
+
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ZoomedImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.Dragging)
+            {
+                if (this.Point == e.GetPosition(this))
                 {
-                    if (this.Image.ActualHeight > this.Image.ActualWidth)
-                    {
-                        this.ZoomScrollViewer.Width = this.Image.ActualWidth / 2.5;
-                        this.ZoomScrollViewer.Height = this.Image.ActualWidth / 2.5;
-                    }
-                    else
-                    {
-                        this.ZoomScrollViewer.Width = this.Image.ActualHeight / 2.5;
-                        this.ZoomScrollViewer.Height = this.Image.ActualHeight / 2.5;
-                    }
+                    return;
                 }
 
-                var widthRatio = this.ZoomImage.ActualWidth / this.Image.ActualWidth;
-                var heightRatio = this.ZoomImage.ActualHeight / this.Image.ActualHeight;
-
-                var widthOffset = 0.0d;
-                var heightOffset = 0.0d;
-
-                // 拡大部分が画面からはみ出るならマウスポインタの逆側に移動
-                if (e.GetPosition(this.ZoomCanvas).X + this.ZoomScrollViewer.Width > this.RenderSize.Width - 10)
-                    widthOffset = this.ZoomScrollViewer.Width;
-                if (e.GetPosition(this.ZoomCanvas).Y + this.ZoomScrollViewer.Height > this.RenderSize.Height - 10)
-                    heightOffset = this.ZoomScrollViewer.Height;
-
-                Canvas.SetLeft(this.ZoomImage, (e.GetPosition(this.Image).X * -1) * widthRatio);
-                Canvas.SetTop(this.ZoomImage, (e.GetPosition(this.Image).Y * -1) * heightRatio);
-                Canvas.SetLeft(this.ZoomScrollViewer, e.GetPosition(this.ZoomCanvas).X - widthOffset);
-                Canvas.SetTop(this.ZoomScrollViewer, e.GetPosition(this.ZoomCanvas).Y - heightOffset);
-
-                this.ZoomImage.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.ZoomImage.Visibility = Visibility.Hidden;
+                var p = this.Point - e.GetPosition(this);
+                this.ZoomedImageScrollViewer.ScrollToHorizontalOffset(this.ZoomedImageScrollViewer.HorizontalOffset + p.X);
+                this.ZoomedImageScrollViewer.ScrollToVerticalOffset(this.ZoomedImageScrollViewer.VerticalOffset + p.Y);
+                this.Point = e.GetPosition(this);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ZoomedImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.Dragging = true;
+            this.Point = e.GetPosition(this);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ZoomedImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            this.Dragging = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ZoomedImage_MouseLeave(object sender, MouseEventArgs e)
+        {
+            this.Dragging = false;
+        }
+
+        private enum ZoomType
+        {
+            Normal,
+            TwoTimes,
+            ThreeTimes
+        }
+        private ZoomType Type;
+
+        private Point Point;
+        private bool Dragging;
 
         private ShowImageViewModel ShowImageViewModel { get; }
     }

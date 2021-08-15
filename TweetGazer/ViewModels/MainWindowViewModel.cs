@@ -1,15 +1,12 @@
 ﻿using CoreTweet;
 using Livet;
 using Livet.EventListeners;
-using MahApps.Metro;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Windows;
 using TweetGazer.Common;
 using TweetGazer.Models;
 using TweetGazer.Models.MainWindow;
@@ -24,21 +21,20 @@ namespace TweetGazer.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
-            this.MainWindowModel = new MainWindowModel();
-            this.TrayNotifications = this.MainWindowModel.TrayNotifications;
+            this.MainWindowModel = new MainWindowModel(this);
+            this.ToastNotifications = this.MainWindowModel.ToastNotifications;
             this.Login();
 
             this.CreateStatus = new CreateStatusViewModel();
             this.MovableCreateStatus = new MovableCreateStatusViewModel();
             this.AddTimeline = new AddTimelineViewModel(this);
-            this.AddAccount = new AddAccountViewModel();
+            this.AddAccount = new AddAccountViewModel(this);
             this.Mentions = new MentionsViewModel();
             this.Notifications = new NotificationsViewModel();
             this.DirectMessages = new DirectMessagesViewModel();
             this.AccountSettings = new AccountSettingsViewModel();
             this.Search = new SearchViewModel();
             this.ApplicationSettings = new ApplicationSettingsViewModel();
-            this.AddAccount = new AddAccountViewModel();
             this.NetworkState = new NetworkStateViewModel();
             this.Instructions = new InstructionsViewModel();
             this.Timelines = new TimelinesGridViewModel();
@@ -49,7 +45,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.CreateStatus.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -60,7 +56,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.AddTimeline.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -71,7 +67,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.AccountSettings.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -82,7 +78,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.ApplicationSettings.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -93,7 +89,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.Mentions.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -104,7 +100,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.Notifications.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -115,7 +111,7 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.DirectMessages.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
@@ -126,16 +122,16 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(this.Search.IsOpen):
-                            this.RaisePropertyChanged(() => this.FlyoutCloseVisibility);
+                            this.RaisePropertyChanged(() => this.IsOpeningFlyouts);
                             break;
                     }
                 })
             );
             this.CompositeDisposable.Add(
-                new PropertyChangedEventListener(MentionsStack.Mentions, (_, __) => this.RaisePropertyChanged(() => this.MentionsNotificationVisibility))
+                new PropertyChangedEventListener(MentionsStack.Mentions, (_, __) => this.RaisePropertyChanged(() => this.HasMentionNotifications))
             );
             this.CompositeDisposable.Add(
-                new PropertyChangedEventListener(NotificationsStack.Notifications, (_, __) => this.RaisePropertyChanged(() => this.NoticeVisibility))
+                new PropertyChangedEventListener(NotificationsStack.Notifications, (_, __) => this.RaisePropertyChanged(() => this.HasNotifications))
             );
             this.CompositeDisposable.Add(
                 new PropertyChangedEventListener(Properties.Settings.Default, (_, __) =>
@@ -143,10 +139,8 @@ namespace TweetGazer.ViewModels
                     switch (__.PropertyName)
                     {
                         case nameof(Properties.Settings.Default.AccentColor):
-                            this.ChangeTheme();
-                            break;
                         case nameof(Properties.Settings.Default.BaseColor):
-                            this.ChangeTheme();
+                            this.ChangeColors();
                             break;
                     }
                 })
@@ -174,10 +168,14 @@ namespace TweetGazer.ViewModels
         public void Home()
         {
             if (this.Timelines.Timelines.Count == 0)
+            {
                 return;
+            }
 
             foreach (var timeline in this.Timelines.Timelines)
+            {
                 timeline.TimelineViewModel.Home();
+            }
         }
 
         /// <summary>
@@ -186,21 +184,44 @@ namespace TweetGazer.ViewModels
         public void CloseFlyout()
         {
             if (this.CreateStatus.IsOpen)
+            {
                 this.CreateStatus.ToggleOpen();
+            }
+
             if (this.AddTimeline.IsOpen)
+            {
                 this.AddTimeline.ToggleOpen();
+            }
+
             if (this.Mentions.IsOpen)
+            {
                 this.Mentions.ToggleOpen();
+            }
+
             if (this.Notifications.IsOpen)
+            {
                 this.Notifications.ToggleOpen();
+            }
+
             if (this.DirectMessages.IsOpen)
+            {
                 this.DirectMessages.ToggleOpen();
+            }
+
             if (this.AccountSettings.IsOpen)
+            {
                 this.AccountSettings.ToggleOpen();
+            }
+
             if (this.ApplicationSettings.IsOpen)
+            {
                 this.ApplicationSettings.ToggleOpen();
+            }
+
             if (this.Search.IsOpen)
+            {
                 this.Search.ToggleOpen();
+            }
         }
 
         /// <summary>
@@ -209,13 +230,19 @@ namespace TweetGazer.ViewModels
         public void Close()
         {
             if (AccountTokens.TokensCount > 0)
+            {
                 this.Timelines.SaveColumnData();
+            }
 
             while (this.Timelines.Timelines.Count != 0)
+            {
                 this.Timelines.Timelines.First().TimelineViewModel.Close();
+            }
 
             while (this.Timelines.Grid.First().Children.Count != 0)
+            {
                 this.Timelines.Grid.First().Children.RemoveAt(0);
+            }
 
             this.Dispose();
         }
@@ -227,19 +254,29 @@ namespace TweetGazer.ViewModels
         {
             if (AccountTokens.TokensCount == 0 || AccountTokens.Users.Count == 0)
             {
-                this.MainWindowModel.Notify("トークン再認証開始．", NotificationType.Normal);
+                this.MainWindowModel.Notify("トークン再認証開始", NotificationType.Normal);
                 await AccountTokens.LoadTokensAsync();
                 return;
             }
 
             if (this.Timelines.Timelines.Count == 0)
+            {
                 return;
+            }
 
             foreach (var timeline in this.Timelines.Timelines)
             {
                 timeline.TimelineViewModel.Clear();
                 await timeline.TimelineViewModel.Update();
             }
+        }
+
+        /// <summary>
+        /// デバッグコンソールを開く
+        /// </summary>
+        public void DebugConsoleOpen()
+        {
+            this.MainWindowModel.DebugConsoleOpen();
         }
 
         /// <summary>
@@ -262,11 +299,15 @@ namespace TweetGazer.ViewModels
         public void Reply(int tokenSuffix, string text, string replyText = "リプライ先:なし", long? replyId = null)
         {
             if (!this.CreateStatus.IsOpen)
+            {
                 this.CreateStatus.ToggleOpen();
+            }
 
             this.CreateStatus.StatusText = text;
             this.CreateStatus.ReplyText = replyText;
             this.CreateStatus.ReplyId = replyId;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Undefined;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Last;
             this.CreateStatus.SelectUser(tokenSuffix);
         }
 
@@ -278,9 +319,13 @@ namespace TweetGazer.ViewModels
         public void QuotationLinkRetweet(int tokenSuffix, string link)
         {
             if (!this.CreateStatus.IsOpen)
+            {
                 this.CreateStatus.ToggleOpen();
+            }
 
             this.CreateStatus.StatusText = "\n" + link;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Undefined;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Top;
             this.CreateStatus.SelectUser(tokenSuffix);
         }
 
@@ -292,9 +337,13 @@ namespace TweetGazer.ViewModels
         public void QuotationTextRetweet(int tokenSuffix, string text)
         {
             if (!this.CreateStatus.IsOpen)
+            {
                 this.CreateStatus.ToggleOpen();
+            }
 
             this.CreateStatus.StatusText = "\n" + text;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Undefined;
+            this.CreateStatus.CaretPosition = Behaviors.CaretPosition.Top;
             this.CreateStatus.SelectUser(tokenSuffix);
         }
 
@@ -305,8 +354,10 @@ namespace TweetGazer.ViewModels
         {
             await Task.Run(() =>
             {
-                while (AddAccount == null)
+                while (this.AddAccount == null)
+                {
                     System.Threading.Thread.Sleep(100);
+                }
             });
 
             //トークンファイルが正常に読み込めなかった場合、ログイン画面を表示する
@@ -326,88 +377,63 @@ namespace TweetGazer.ViewModels
             catch (TwitterException e)
             {
                 this.MainWindowModel.Notify("トークン認証失敗.", NotificationType.Error);
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return;
             }
             catch (Exception e) when (e is HttpRequestException || e is WebException)
             {
-                this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした．\n左下の更新ボタンを押して再認証してください．", NotificationType.Error);
-                Debug.Write(e);
+                this.MainWindowModel.Notify("ネットワークに正常に接続できませんでした\n左下の更新ボタンを押して再認証してください", NotificationType.Error);
+                DebugConsole.Write(e);
                 return;
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
                 return;
             }
-
-            this.MainWindowModel.StartStreaming();
         }
 
         /// <summary>
-        /// ウィンドウのテーマを変更する
+        /// ウィンドウのカラーを変更する
         /// </summary>
-        private void ChangeTheme()
+        private void ChangeColors()
         {
-            var mainWindow = Common.CommonMethods.MainWindow;
-            if (mainWindow != null)
-            {
-                try
-                {
-                    ThemeManager.ChangeAppStyle(
-                            mainWindow,
-                            ThemeManager.GetAccent(Properties.Settings.Default.AccentColor.Replace("System.Windows.Controls.ComboBoxItem: ", "")),
-                            ThemeManager.GetAppTheme(Properties.Settings.Default.BaseColor.Replace("System.Windows.Controls.ComboBoxItem: ", "")));
-                }
-                catch (Exception e)
-                {
-                    this.Notify("エラーが発生しました．", NotificationType.Error);
-                    Debug.Write(e);
-                }
-            }
+            this.MainWindowModel.ChangeColors();
         }
 
-        #region MentionsNotificationVisibility 変更通知プロパティ
-        public Visibility MentionsNotificationVisibility
+        #region HasMentionNotifications 変更通知プロパティ
+        public bool HasMentionNotifications
         {
             get
             {
-                if (MentionsStack.Mentions != null && MentionsStack.Mentions.Count != 0)
-                    return Visibility.Visible;
-                return Visibility.Collapsed;
+                return MentionsStack.Mentions.Any();
             }
         }
         #endregion
 
-        #region NoticeVisibility 変更通知プロパティ
-        public Visibility NoticeVisibility
+        #region HasNotifications 変更通知プロパティ
+        public bool HasNotifications
         {
             get
             {
-                if (NotificationsStack.Notifications != null && NotificationsStack.Notifications.Count != 0)
-                    return Visibility.Visible;
-                return Visibility.Collapsed;
+                return NotificationsStack.Notifications.Any();
             }
         }
         #endregion
 
-        #region FlyoutCloseVisibility 変更通知プロパティ
-        public Visibility FlyoutCloseVisibility
+        #region IsOpeningFlyouts 変更通知プロパティ
+        public bool IsOpeningFlyouts
         {
             get
             {
-                if (!this.CreateStatus.IsOpen &&
-                    !this.AddTimeline.IsOpen &&
-                    !this.Mentions.IsOpen &&
-                    !this.Notifications.IsOpen &&
-                    !this.DirectMessages.IsOpen &&
-                    !this.AccountSettings.IsOpen &&
-                    !this.ApplicationSettings.IsOpen &&
-                    !this.Search.IsOpen)
-                {
-                    return Visibility.Collapsed;
-                }
-                return Visibility.Visible;
+                return this.CreateStatus.IsOpen
+                    || this.AddTimeline.IsOpen
+                    || this.Mentions.IsOpen
+                    || this.Notifications.IsOpen
+                    || this.DirectMessages.IsOpen
+                    || this.AccountSettings.IsOpen
+                    || this.ApplicationSettings.IsOpen
+                    || this.Search.IsOpen;
             }
         }
         #endregion
@@ -425,7 +451,7 @@ namespace TweetGazer.ViewModels
         public AddAccountViewModel AddAccount { get; }
         public NetworkStateViewModel NetworkState { get; }
         public InstructionsViewModel Instructions { get; }
-        public ObservableCollection<TrayNotification> TrayNotifications { get; }
+        public ObservableCollection<ToastNotification> ToastNotifications { get; }
 
         private MainWindowModel MainWindowModel;
     }

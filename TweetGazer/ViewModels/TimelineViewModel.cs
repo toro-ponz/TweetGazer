@@ -1,4 +1,5 @@
-﻿using Livet;
+﻿using CoreTweet.Streaming;
+using Livet;
 using Livet.EventListeners;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +25,6 @@ namespace TweetGazer.ViewModels
             this._Message = this.Timeline.Message;
             this._Title = this.Timeline.Data.CurrentPage.Title;
             this.ScreenName = this.Timeline.ScreenName;
-            this._IsVisibleSettings = this.Timeline.IsVisibleSettings;
 
             this.CompositeDisposable.Add(
                 new PropertyChangedEventListener(this.Timeline, (_, __) =>
@@ -34,18 +34,24 @@ namespace TweetGazer.ViewModels
                         case nameof(this.Timeline.Message):
                             this.Message = this.Timeline.Message;
                             break;
-                        case nameof(this.Timeline.ProgressRingVisibility):
-                            this.RaisePropertyChanged(() => this.ProgressRingVisibility);
+                        case nameof(this.Timeline.IsLoading):
+                            this.RaisePropertyChanged(() => this.IsLoading);
+                            break;
+                        case nameof(this.Timeline.IsInitializing):
+                            this.RaisePropertyChanged(() => this.IsInitializing);
                             break;
                         case nameof(this.Timeline.Title):
                             this.Title = this.Timeline.Title;
                             break;
                         case nameof(this.Timeline.VerticalOffset):
                             this.RaisePropertyChanged(() => this.VerticalOffset);
-                            this.RaisePropertyChanged(() => this.UpButtonVisibility);
+                            this.RaisePropertyChanged(() => this.IsScrolled);
                             break;
                         case nameof(this.Timeline.IsVisibleSettings):
-                            this.IsVisibleSettings = this.Timeline.IsVisibleSettings;
+                            this.RaisePropertyChanged(() => this.IsVisibleSettings);
+                            break;
+                        case nameof(this.Timeline.IsFiltered):
+                            this.RaisePropertyChanged(() => this.IsFiltered);
                             break;
                         case nameof(this.Timeline.IsVisibleRetweet):
                             this.RaisePropertyChanged(() => this.IsVisibleRetweet);
@@ -53,20 +59,17 @@ namespace TweetGazer.ViewModels
                         case nameof(this.Timeline.IsVisibleReply):
                             this.RaisePropertyChanged(() => this.IsVisibleReply);
                             break;
-                        case nameof(this.Timeline.IsVisibleIncludeImagesStatus):
-                            this.RaisePropertyChanged(() => this.IsVisibleIncludeImagesStatus);
+                        case nameof(this.Timeline.IsVisibleImagesStatus):
+                            this.RaisePropertyChanged(() => this.IsVisibleImagesStatus);
                             break;
-                        case nameof(this.Timeline.IsVisibleIncludeGifStatus):
-                            this.RaisePropertyChanged(() => this.IsVisibleIncludeGifStatus);
+                        case nameof(this.Timeline.IsVisibleGifStatus):
+                            this.RaisePropertyChanged(() => this.IsVisibleGifStatus);
                             break;
-                        case nameof(this.Timeline.IsVisibleIncludeVideoStatus):
-                            this.RaisePropertyChanged(() => this.IsVisibleIncludeVideoStatus);
+                        case nameof(this.Timeline.IsVisibleVideoStatus):
+                            this.RaisePropertyChanged(() => this.IsVisibleVideoStatus);
                             break;
-                        case nameof(this.Timeline.IsVisibleIncludeLinkStatus):
-                            this.RaisePropertyChanged(() => this.IsVisibleIncludeLinkStatus);
-                            break;
-                        case nameof(this.Timeline.IsVisibleOtherStatus):
-                            this.RaisePropertyChanged(() => this.IsVisibleOtherStatus);
+                        case nameof(this.Timeline.IsVisibleLinkStatus):
+                            this.RaisePropertyChanged(() => this.IsVisibleLinkStatus);
                             break;
                     }
                 })
@@ -88,14 +91,14 @@ namespace TweetGazer.ViewModels
                         case nameof(this.Timeline.Data.PageSuffix):
                             this.RaisePropertyChanged(() => this.IsVisibleBackButton);
                             this.RaisePropertyChanged(() => this.VerticalOffset);
-                            this.RaisePropertyChanged(() => this.UpButtonVisibility);
+                            this.RaisePropertyChanged(() => this.IsScrolled);
+                            this.RaisePropertyChanged(() => this.IsFiltered);
                             this.RaisePropertyChanged(() => this.IsVisibleRetweet);
                             this.RaisePropertyChanged(() => this.IsVisibleReply);
-                            this.RaisePropertyChanged(() => this.IsVisibleIncludeImagesStatus);
-                            this.RaisePropertyChanged(() => this.IsVisibleIncludeGifStatus);
-                            this.RaisePropertyChanged(() => this.IsVisibleIncludeVideoStatus);
-                            this.RaisePropertyChanged(() => this.IsVisibleIncludeLinkStatus);
-                            this.RaisePropertyChanged(() => this.IsVisibleOtherStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleImagesStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleGifStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleVideoStatus);
+                            this.RaisePropertyChanged(() => this.IsVisibleLinkStatus);
                             break;
                         case nameof(this.Timeline.Data.GridWidth):
                             this.RaisePropertyChanged(() => this.GridWidth);
@@ -108,6 +111,7 @@ namespace TweetGazer.ViewModels
             {
                 await this.Update();
             });
+            this.ResetFilterCommand = new Common.RelayCommand(this.ResetFilter);
 
             this.CompositeDisposable.Add(this.Timeline);
         }
@@ -161,6 +165,14 @@ namespace TweetGazer.ViewModels
         }
 
         /// <summary>
+        /// フィルターのリセット
+        /// </summary>
+        public void ResetFilter()
+        {
+            this.Timeline.ResetFilter();
+        }
+
+        /// <summary>
         /// タイムラインデータをシリアライズする
         /// </summary>
         /// <returns>タイムラインデータ</returns>
@@ -188,6 +200,26 @@ namespace TweetGazer.ViewModels
         }
 
         /// <summary>
+        /// ストリーミングで流れてきたツイートを流す
+        /// </summary>
+        /// <param name="statusMessage">ツイート</param>
+        /// <param name="userId">受け取ったユーザーID</param>
+        public void StreamStatusMessage(StatusMessage statusMessage, long? userId)
+        {
+            this.Timeline.StreamStatusMessage(statusMessage, userId);
+        }
+
+        /// <summary>
+        /// ストリーミングで流れてきた削除されたツイートを削除する
+        /// </summary>
+        /// <param name="statusMessage">削除されたツイート</param>
+        /// <param name="userId">受け取ったユーザーID</param>
+        public void StreamDeleteMessage(DeleteMessage deleteMessage, long? userId)
+        {
+            this.Timeline.StreamDeleteMessage(deleteMessage, userId);
+        }
+
+        /// <summary>
         /// タイムラインをクリアする
         /// </summary>
         public void Clear()
@@ -195,24 +227,32 @@ namespace TweetGazer.ViewModels
             this.Timeline.Clear();
         }
 
-        #region UpButtonVisibility 変更通知プロパティ
-        public Visibility UpButtonVisibility
+        #region IsScrolled 変更通知プロパティ
+        public bool IsScrolled
         {
             get
             {
-                if (this.VerticalOffset > 0.0d)
-                    return Visibility.Visible;
-                return Visibility.Collapsed;
+                return this.VerticalOffset > 0.0d;
             }
         }
         #endregion
 
-        #region ProgressRingVisibility 変更通知プロパティ
-        public Visibility ProgressRingVisibility
+        #region IsLoading 変更通知プロパティ
+        public bool IsLoading
         {
             get
             {
-                return this.Timeline.ProgressRingVisibility;
+                return this.Timeline.IsLoading;
+            }
+        }
+        #endregion
+
+        #region IsInitializing 変更通知プロパティ
+        public bool IsInitializing
+        {
+            get
+            {
+                return this.Timeline.IsInitializing;
             }
         }
         #endregion
@@ -300,7 +340,7 @@ namespace TweetGazer.ViewModels
             {
                 this.Timeline.VerticalOffset = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.UpButtonVisibility));
+                this.RaisePropertyChanged(nameof(this.IsScrolled));
             }
         }
         #endregion
@@ -325,15 +365,19 @@ namespace TweetGazer.ViewModels
         {
             get
             {
-                return this._IsVisibleSettings;
-            }
-            set
-            {
-                this._IsVisibleSettings = value;
-                this.RaisePropertyChanged();
+                return this.Timeline.IsVisibleSettings;
             }
         }
-        private bool _IsVisibleSettings;
+        #endregion
+
+        #region IsFiltered 変更通知プロパティ
+        public bool IsFiltered
+        {
+            get
+            {
+                return this.Timeline.IsFiltered;
+            }
+        }
         #endregion
 
         #region IsVisibleRetweet 変更通知プロパティ
@@ -346,8 +390,6 @@ namespace TweetGazer.ViewModels
             set
             {
                 this.Timeline.IsVisibleRetweet = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.TimelineItems));
             }
         }
         #endregion
@@ -362,93 +404,68 @@ namespace TweetGazer.ViewModels
             set
             {
                 this.Timeline.IsVisibleReply = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.TimelineItems));
             }
         }
         #endregion
 
-        #region IsVisibleIncludeImagesStatus 変更通知プロパティ
-        public bool IsVisibleIncludeImagesStatus
+        #region IsVisibleImagesStatus 変更通知プロパティ
+        public bool IsVisibleImagesStatus
         {
             get
             {
-                return this.Timeline.IsVisibleIncludeImagesStatus;
+                return this.Timeline.IsVisibleImagesStatus;
             }
             set
             {
-                this.Timeline.IsVisibleIncludeImagesStatus = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.TimelineItems));
+                this.Timeline.IsVisibleImagesStatus = value;
             }
         }
         #endregion
 
-        #region IsVisibleIncludeGifStatus 変更通知プロパティ
-        public bool IsVisibleIncludeGifStatus
+        #region IsVisibleGifStatus 変更通知プロパティ
+        public bool IsVisibleGifStatus
         {
             get
             {
-                return this.Timeline.IsVisibleIncludeGifStatus;
+                return this.Timeline.IsVisibleGifStatus;
             }
             set
             {
-                this.Timeline.IsVisibleIncludeGifStatus = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.TimelineItems));
+                this.Timeline.IsVisibleGifStatus = value;
             }
         }
         #endregion
 
-        #region IsVisibleIncludeVideoStatus 変更通知プロパティ
-        public bool IsVisibleIncludeVideoStatus
+        #region IsVisibleVideoStatus 変更通知プロパティ
+        public bool IsVisibleVideoStatus
         {
             get
             {
-                return this.Timeline.IsVisibleIncludeVideoStatus;
+                return this.Timeline.IsVisibleVideoStatus;
             }
             set
             {
-                this.Timeline.IsVisibleIncludeVideoStatus = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.TimelineItems));
+                this.Timeline.IsVisibleVideoStatus = value;
             }
         }
         #endregion
 
-        #region IsVisibleIncludeLinkStatus 変更通知プロパティ
-        public bool IsVisibleIncludeLinkStatus
+        #region IsVisibleLinkStatus 変更通知プロパティ
+        public bool IsVisibleLinkStatus
         {
             get
             {
-                return this.Timeline.IsVisibleIncludeLinkStatus;
+                return this.Timeline.IsVisibleLinkStatus;
             }
             set
             {
-                this.Timeline.IsVisibleIncludeLinkStatus = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.TimelineItems));
-            }
-        }
-        #endregion
-
-        #region IsVisibleOtherStatus 変更通知プロパティ
-        public bool IsVisibleOtherStatus
-        {
-            get
-            {
-                return this.Timeline.IsVisibleOtherStatus;
-            }
-            set
-            {
-                this.Timeline.IsVisibleOtherStatus = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.TimelineItems));
+                this.Timeline.IsVisibleLinkStatus = value;
             }
         }
         #endregion
 
         public ICommand UpdateCommand { get; }
+        public ICommand ResetFilterCommand { get; }
 
         public IEnumerable<TimelineItemProperties> TimelineItems
         {

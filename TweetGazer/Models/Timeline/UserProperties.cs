@@ -1,11 +1,11 @@
 ﻿using CoreTweet;
 using MahApps.Metro.Controls.Dialogs;
+using SourceChord.Lighty;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Navigation;
 using TweetGazer.Behaviors;
 using TweetGazer.Common;
 
@@ -32,11 +32,19 @@ namespace TweetGazer.Models.Timeline
             if (user.Entities != null && user.Entities.Description != null)
             {
                 if (user.Entities.Description.HashTags != null)
+                {
                     this.Description.Hashtags = user.Entities.Description.HashTags.ToList();
+                }
+
                 if (user.Entities.Description.UserMentions != null)
+                {
                     this.Description.Mentions = user.Entities.Description.UserMentions.ToList();
+                }
+
                 if (user.Entities.Description.Urls != null)
+                {
                     this.Description.Urls = user.Entities.Description.Urls.ToList();
+                }
             }
 
             this.StatusesCount = user.StatusesCount;
@@ -44,93 +52,222 @@ namespace TweetGazer.Models.Timeline
             this.FollowersCount = user.FollowersCount;
             this.FriendsCount = user.FriendsCount;
             if (user.ProfileBannerUrl != null)
+            {
                 this.ProfileBanner = new ImageProperties(user.ProfileBannerUrl, true);
+            }
+
             if (user.Entities != null && user.Entities.Url != null)
             {
                 if (user.Entities.Url.Urls.First().ExpandedUrl != null)
+                {
                     this.Url = new Uri(user.Entities.Url.Urls.First().ExpandedUrl);
+                }
                 else
+                {
                     this.Url = new Uri(user.Entities.Url.Urls.First().Url);
+                }
 
                 if (user.Entities.Url.Urls.First().DisplayUrl != null)
+                {
                     this.UrlText = user.Entities.Url.Urls.First().DisplayUrl;
+                }
                 else
+                {
                     this.UrlText = user.Entities.Url.Urls.First().Url;
+                }
             }
             this.CreatedAt = user.CreatedAt;
             this.IsProtected = user.IsProtected;
             if (user.IsMuting != null)
+            {
                 this._IsMuting = (bool)user.IsMuting;
+            }
 
-            this.FollowCommand = new RelayCommand(this.Follow);
+            this.ButtonCommand = new RelayCommand(this.Button);
             this.UrlCommand = new RelayCommand<Uri>(this.SelectUrl);
+            this.SendMessageCommand = new RelayCommand(this.SendMessage);
+            this.ShowListCommand = new RelayCommand(this.ShowList);
+            this.AddToListCommand = new RelayCommand(this.AddToList);
+            this.BlockCommand = new RelayCommand(this.Block);
+            this.MuteCommand = new RelayCommand(this.Mute);
+            this.DestroyMuteCommand = new RelayCommand(this.DestroyMute);
 
             this.LoadRelationship(user);
         }
 
         /// <summary>
-        /// フォローボタンをクリックしたとき
+        /// ボタンをクリックしたとき
         /// </summary>
-        private async void Follow()
+        private async void Button()
         {
-            var mainWindow = CommonMethods.MainWindow;
-            if (mainWindow == null)
-            {
-                CommonMethods.Notify("内部エラー．", MainWindow.NotificationType.Error);
-                return;
-            }
 
             // ブロック中のときはブロック解除を行う
             if (this.IsBlocking)
             {
-                if (await mainWindow.ShowMessageAsync("確認", this.Name + "(@" + this.ScreenName + ")のブロックを解除しますか？", MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
-                {
-                    var user = await AccountTokens.DestroyBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
-                    if (user != null)
-                    {
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックを解除しました．", MainWindow.NotificationType.Success);
-                        this.LoadRelationship(user);
-                    }
-                    else
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロック解除が正常に完了しませんでした．", MainWindow.NotificationType.Error);
-                }
+                this.DestroyBlock();
             }
             // フォロー中のときはフォロー解除を行う
             else if (this.IsFollowing)
             {
-                if (await mainWindow.ShowMessageAsync("確認", this.Name + "(@" + this.ScreenName + ")のフォローを解除しますか？", MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
-                {
-                    var user = await AccountTokens.DestroyFriendshipAsync(this.TimelineModel.TokenSuffix, this.Id);
-                    if (user != null)
-                    {
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローを解除しました．", MainWindow.NotificationType.Success);
-                        this.LoadRelationship(user);
-                    }
-                    else
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォロー解除が正常に完了しませんでした．", MainWindow.NotificationType.Error);
-                }
+                this.DestroyFollow();
             }
             // フォローリクエスト承認待ちのときは謝罪文を表示する
             else if (this.IsSendingFollowRequest)
             {
-                await mainWindow.ShowMessageAsync("申し訳ありません。", "フォローリクエストの解除はTwitter社からAPIが提供されていないため、公式のクライアント等から解除を行ってください。", MessageDialogStyle.Affirmative);
+                var mainWindow = CommonMethods.MainWindow;
+                if (mainWindow != null)
+                {
+                    await mainWindow.ShowMessageAsync("申し訳ありません。", "フォローリクエストの解除はTwitter社からAPIが提供されていないため、公式のクライアント等から解除を行ってください。", MessageDialogStyle.Affirmative);
+                }
             }
             // その他の場合はフォロー(又はフォローリクエスト)を行う
             else
             {
-                var text = "をフォロー";
-                if (this.IsProtected)
-                    text = "にフォローリクエストを送信";
-                if (await mainWindow.ShowMessageAsync("確認", this.Name + "(@" + this.ScreenName + ")" + text + "しますか？", MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
+                this.Follow();
+            }
+        }
+
+        /// <summary>
+        /// ユーザーをフォローする
+        /// </summary>
+        private async void Follow()
+        {
+            var text = this.Name + "(@" + this.ScreenName + ")";
+            if (this.IsProtected)
+            {
+                text += "にフォローリクエストを送信しますか？";
+            }
+            else
+            {
+                text += "をフォローしますか？";
+            }
+
+            if (!Properties.Settings.Default.IsConfirmOfFollow || await this.Confirm(text) == MessageDialogResult.Affirmative)
+            {
+                var user = await AccountTokens.CreateFriendshipAsync(this.TimelineModel.TokenSuffix, this.Id);
+                if (user != null)
                 {
-                    var user = await AccountTokens.CreateFriendshipAsync(this.TimelineModel.TokenSuffix, this.Id);
-                    if (user != null)
+                    if (this.IsProtected)
                     {
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")" + text + "しました．", MainWindow.NotificationType.Success);
-                        this.LoadRelationship(user);
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")にフォローリクエストを送信しました", MainWindow.NotificationType.Success);
                     }
                     else
-                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローが正常に完了しませんでした．", MainWindow.NotificationType.Error);
+                    {
+                        CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をフォローしました", MainWindow.NotificationType.Success);
+                    }
+
+                    this.LoadRelationship(user);
+                }
+                else
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローが正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ユーザーのフォローを解除する
+        /// </summary>
+        private async void DestroyFollow()
+        {
+            var text = this.Name + "(@" + this.ScreenName + ")のフォローを解除しますか？";
+            if (!Properties.Settings.Default.IsConfirmOfDestroyFollow || await this.Confirm(text) == MessageDialogResult.Affirmative)
+            {
+                var user = await AccountTokens.DestroyFriendshipAsync(this.TimelineModel.TokenSuffix, this.Id);
+                if (user != null)
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォローを解除しました", MainWindow.NotificationType.Success);
+                    this.LoadRelationship(user);
+                }
+                else
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のフォロー解除が正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ユーザーをブロックする
+        /// </summary>
+        private async void Block()
+        {
+            var text = this.Name + "(@" + this.ScreenName + ")をブロックしますか？";
+            if (!Properties.Settings.Default.IsConfirmOfBlock || await this.Confirm(text) == MessageDialogResult.Affirmative)
+            {
+                var user = await AccountTokens.CreateBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
+                if (user != null)
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をブロックしました", MainWindow.NotificationType.Success);
+                    this.LoadRelationship(user);
+                }
+                else
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックが正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ユーザーのブロックを解除する
+        /// </summary>
+        private async void DestroyBlock()
+        {
+            var text = this.Name + "(@" + this.ScreenName + ")のブロックを解除しますか？";
+            if (!Properties.Settings.Default.IsConfirmOfDestroyBlock || await this.Confirm(text) == MessageDialogResult.Affirmative)
+            {
+                var user = await AccountTokens.DestroyBlockAsync(this.TimelineModel.TokenSuffix, this.Id);
+                if (user != null)
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロックを解除しました", MainWindow.NotificationType.Success);
+                    this.LoadRelationship(user);
+                }
+                else
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のブロック解除が正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ユーザーをミュートする
+        /// </summary>
+        private async void Mute()
+        {
+            var text = this.Name + "(@" + this.ScreenName + ")をミュートしますか？";
+            if (!Properties.Settings.Default.IsConfirmOfMute || await this.Confirm(text) == MessageDialogResult.Affirmative)
+            {
+                var user = await AccountTokens.CreateMuteAsync(this.TimelineModel.TokenSuffix, this.Id);
+                if (user != null)
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")をミュートしました", MainWindow.NotificationType.Success);
+                    this.IsMuting = true;
+                    this.LoadRelationship(user);
+                }
+                else
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュートが正常に完了しませんでした", MainWindow.NotificationType.Error);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ユーザーのミュートを解除する
+        /// </summary>
+        private async void DestroyMute()
+        {
+            var text = this.Name + "(@" + this.ScreenName + ")のミュートを解除しますか？";
+            if (!Properties.Settings.Default.IsConfirmOfDestroyMute || await this.Confirm(text) == MessageDialogResult.Affirmative)
+            {
+                var user = await AccountTokens.DestroyMuteAsync(this.TimelineModel.TokenSuffix, this.Id);
+                if (user != null)
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュートを解除しました", MainWindow.NotificationType.Success);
+                    this.IsMuting = false;
+                    this.LoadRelationship(user);
+                }
+                else
+                {
+                    CommonMethods.Notify(this.Name + "(@" + this.ScreenName + ")のミュート解除が正常に完了しませんでした", MainWindow.NotificationType.Error);
                 }
             }
         }
@@ -142,18 +279,28 @@ namespace TweetGazer.Models.Timeline
         private async void LoadRelationship(User user)
         {
             if (user == null)
+            {
                 return;
+            }
 
             var relationship = await AccountTokens.ShowRelationshipAsync(this.TimelineModel.TokenSuffix, user.Id);
             if (relationship != null)
             {
                 if (relationship.Source.Id == relationship.Target.Id)
+                {
                     this.IsOwn = true;
+                }
+
                 if (relationship.Source.IsBlocking != null)
+                {
                     this.IsBlocking = (bool)relationship.Source.IsBlocking;
+                }
+
                 this.IsFollowing = relationship.Source.IsFollowing;
                 if (relationship.Source.IsFollowingRequested != null)
+                {
                     this.IsSendingFollowRequest = (bool)relationship.Source.IsFollowingRequested;
+                }
             }
         }
 
@@ -188,7 +335,7 @@ namespace TweetGazer.Models.Timeline
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
@@ -204,22 +351,68 @@ namespace TweetGazer.Models.Timeline
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
-        #region FollowButtonVisibility 変更通知プロパティ
-        public Visibility FollowButtonVisibility
+        /// <summary>
+        /// ユーザーにダイレクトメッセージを送る
+        /// </summary>
+        private void SendMessage()
         {
-            get
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
             {
-                if (this.IsOwn)
-                    return Visibility.Collapsed;
-                return Visibility.Visible;
+                (mainWindow.DataContext as ViewModels.MainWindowViewModel).Notify("未実装", MainWindow.NotificationType.Alert);
             }
         }
-        #endregion
 
+        /// <summary>
+        /// ユーザーのリストを表示する
+        /// </summary>
+        private void ShowList()
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+            {
+                using (var showList = new Views.ShowDialogs.ShowList(this.TimelineModel.TokenSuffix, this))
+                {
+                    LightBox.ShowDialog(mainWindow, showList);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ユーザーをリストに追加する
+        /// </summary>
+        private void AddToList()
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow != null)
+            {
+                using (var showAddToList = new Views.ShowDialogs.ShowAddToList(this.TimelineModel.TokenSuffix, this))
+                {
+                    LightBox.ShowDialog(mainWindow, showAddToList);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 確認ダイアログを表示する
+        /// </summary>
+        /// <param name="text">表示するテキスト</param>
+        /// <returns>Task<MessageDialogResult></returns>
+        private async Task<MessageDialogResult> Confirm(string text)
+        {
+            var mainWindow = CommonMethods.MainWindow;
+            if (mainWindow == null)
+            {
+                return MessageDialogResult.Negative;
+            }
+
+            return await mainWindow.ShowMessageAsync("確認", text, MessageDialogStyle.AffirmativeAndNegative);
+        }
+        
         #region IsOwn 変更通知プロパティ
         public bool IsOwn
         {
@@ -230,8 +423,8 @@ namespace TweetGazer.Models.Timeline
             set
             {
                 this._IsOwn = value;
-                this.RaisePropertyChanged(nameof(this.FollowButtonVisibility));
-                this.RaisePropertyChanged(nameof(this.HoveringFollowButtonText));
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(this.HoveringButtonText));
             }
         }
         private bool _IsOwn;
@@ -247,8 +440,8 @@ namespace TweetGazer.Models.Timeline
             private set
             {
                 this._IsBlocking = value;
-                this.RaisePropertyChanged(nameof(this.FollowButtonText));
-                this.RaisePropertyChanged(nameof(this.HoveringFollowButtonText));
+                this.RaisePropertyChanged(nameof(this.ButtonText));
+                this.RaisePropertyChanged(nameof(this.HoveringButtonText));
             }
         }
         private bool _IsBlocking;
@@ -264,26 +457,26 @@ namespace TweetGazer.Models.Timeline
             private set
             {
                 this._IsFollowing = value;
-                this.RaisePropertyChanged(nameof(this.FollowButtonText));
-                this.RaisePropertyChanged(nameof(this.HoveringFollowButtonText));
+                this.RaisePropertyChanged(nameof(this.ButtonText));
+                this.RaisePropertyChanged(nameof(this.HoveringButtonText));
             }
         }
         private bool _IsFollowing;
         #endregion
 
-        #region IsFollowButtonHover 変更通知プロパティ
-        public bool IsFollowButtonHover
+        #region IsButtonHover 変更通知プロパティ
+        public bool IsButtonHover
         {
             get
             {
-                return this._IsFollowButtonHover;
+                return this._IsButtonHover;
             }
             private set
             {
-                this._IsFollowButtonHover = value;
+                this._IsButtonHover = value;
             }
         }
-        private bool _IsFollowButtonHover;
+        private bool _IsButtonHover;
         #endregion
 
         #region IsProtected 変更通知プロパティ
@@ -296,8 +489,8 @@ namespace TweetGazer.Models.Timeline
             private set
             {
                 this._IsProtected = value;
-                this.RaisePropertyChanged(nameof(this.FollowButtonText));
-                this.RaisePropertyChanged(nameof(this.HoveringFollowButtonText));
+                this.RaisePropertyChanged(nameof(this.ButtonText));
+                this.RaisePropertyChanged(nameof(this.HoveringButtonText));
             }
         }
         private bool _IsProtected;
@@ -329,53 +522,79 @@ namespace TweetGazer.Models.Timeline
             private set
             {
                 this._IsSendingFollowRequest = value;
-                this.RaisePropertyChanged(nameof(this.FollowButtonText));
-                this.RaisePropertyChanged(nameof(this.HoveringFollowButtonText));
+                this.RaisePropertyChanged(nameof(this.ButtonText));
+                this.RaisePropertyChanged(nameof(this.HoveringButtonText));
             }
         }
         private bool _IsSendingFollowRequest;
         #endregion
 
-        #region FollowButtonText 変更通知プロパティ
-        public string FollowButtonText
+        #region ButtonText 変更通知プロパティ
+        public string ButtonText
         {
             get
             {
                 if (this._IsBlocking)
+                {
                     return "ブロック中";
+                }
                 else if (this._IsFollowing)
+                {
                     return "フォロー中";
+                }
                 else if (this._IsSendingFollowRequest)
+                {
                     return "承認待ち";
+                }
                 else if (this._IsProtected)
+                {
                     return "フォローする(鍵)";
+                }
                 else
+                {
                     return "フォローする";
+                }
             }
         }
         #endregion
 
-        #region HoveringFollowButtonText 変更通知プロパティ
-        public string HoveringFollowButtonText
+        #region HoveringButtonText 変更通知プロパティ
+        public string HoveringButtonText
         {
             get
             {
                 if (this._IsBlocking)
+                {
                     return "ブロック解除";
+                }
                 else if (this._IsFollowing)
+                {
                     return "フォロー解除";
+                }
                 else if (this._IsSendingFollowRequest)
+                {
                     return "リクエスト解除";
+                }
                 else if (this._IsProtected)
+                {
                     return "フォローする(鍵)";
+                }
                 else
+                {
                     return "フォローする";
+                }
             }
         }
         #endregion
 
-        public ICommand FollowCommand { get; }
+        public ICommand ButtonCommand { get; }
         public ICommand UrlCommand { get; }
+        public ICommand SendMessageCommand { get; }
+        public ICommand ShowListCommand { get; }
+        public ICommand AddToListCommand { get; }
+        public ICommand BlockCommand { get; }
+        public ICommand MuteCommand { get; }
+        public ICommand DestroyMuteCommand { get; }
 
         public DateTimeOffset CreatedAt { get; }
 

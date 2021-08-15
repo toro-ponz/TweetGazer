@@ -11,7 +11,7 @@ namespace TweetGazer
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            ThemeManager.AddAccent("DodgerBlue", new Uri("pack://application:,,,/Themes/DodgerBlue.xaml"));
+            ThemeManager.AddAccent("DodgerBlue", new Uri("pack://application:,,,/Resources/Dictionaries/Application/AccentColors/DodgerBlue.xaml"));
 
             base.OnStartup(e);
         }

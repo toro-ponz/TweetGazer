@@ -1,0 +1,396 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:Properties="clr-namespace:TweetGazer.Properties"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+
+    <!--  アプリケーション設定Flyout  -->
+    <Controls:Flyout
+        x:Key="ApplicationSettingsFlyout"
+        Margin="-50,0,0,0"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Stretch"
+        CloseButtonVisibility="Collapsed"
+        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
+        DataContext="{Binding Path=ApplicationSettings}"
+        Foreground="{DynamicResource TextBrush}"
+        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
+        Position="Top">
+        <Controls:Flyout.Background>
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
+        </Controls:Flyout.Background>
+        <Grid Margin="50,50,0,30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition />
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <TextBlock
+                    FontSize="30"
+                    Text="設定"
+                    TextWrapping="Wrap" />
+                <Border
+                    VerticalAlignment="Bottom"
+                    BorderBrush="{DynamicResource AccentColorBrush}"
+                    BorderThickness="0,0,0,1" />
+            </Grid>
+            <ScrollViewer Grid.Row="1">
+                <WrapPanel HorizontalAlignment="Stretch">
+                    <!--  一般  -->
+                    <StackPanel Margin="20,20,0,0" HorizontalAlignment="Stretch">
+                        <TextBlock
+                            Margin="30,10"
+                            FontSize="28"
+                            Text="一般"
+                            TextWrapping="Wrap" />
+                        <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
+                        <StackPanel Margin="60,30">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Width="300"
+                                    FontSize="26"
+                                    Text="アクセントカラー" />
+                                <ComboBox
+                                    Width="300"
+                                    Margin="30,5"
+                                    FontSize="24"
+                                    SelectedIndex="{Binding Path=AccentColorIndex, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                    SelectedValue="{Binding Path=AccentColor, Source={x:Static Properties:Settings.Default}, Mode=OneWayToSource}"
+                                    SelectedValuePath="Content">
+                                    <ComboBoxItem>DodgerBlue</ComboBoxItem>
+                                    <ComboBoxItem>Red</ComboBoxItem>
+                                    <ComboBoxItem>Green</ComboBoxItem>
+                                    <ComboBoxItem>Blue</ComboBoxItem>
+                                    <ComboBoxItem>Purple</ComboBoxItem>
+                                    <ComboBoxItem>Orange</ComboBoxItem>
+                                    <ComboBoxItem>Lime</ComboBoxItem>
+                                    <ComboBoxItem>Emerald</ComboBoxItem>
+                                    <ComboBoxItem>Teal</ComboBoxItem>
+                                    <ComboBoxItem>Cyan</ComboBoxItem>
+                                    <ComboBoxItem>Indigo</ComboBoxItem>
+                                    <ComboBoxItem>Violet</ComboBoxItem>
+                                    <ComboBoxItem>Pink</ComboBoxItem>
+                                    <ComboBoxItem>Magenta</ComboBoxItem>
+                                    <ComboBoxItem>Crimson</ComboBoxItem>
+                                    <ComboBoxItem>Amber</ComboBoxItem>
+                                    <ComboBoxItem>Yellow</ComboBoxItem>
+                                    <ComboBoxItem>Brown</ComboBoxItem>
+                                    <ComboBoxItem>Olive</ComboBoxItem>
+                                    <ComboBoxItem>Steel</ComboBoxItem>
+                                    <ComboBoxItem>Mauve</ComboBoxItem>
+                                    <ComboBoxItem>Taupe</ComboBoxItem>
+                                    <ComboBoxItem>Sienna</ComboBoxItem>
+                                    <ComboBoxItem>Cobalt</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Width="300"
+                                    FontSize="26"
+                                    Text="テーマ" />
+                                <ComboBox
+                                    Width="300"
+                                    Margin="30,5"
+                                    FontSize="24"
+                                    SelectedIndex="{Binding Path=BaseColorIndex, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                    SelectedValue="{Binding Path=BaseColor, Source={x:Static Properties:Settings.Default}, Mode=OneWayToSource}"
+                                    SelectedValuePath="Content">
+                                    <ComboBoxItem>BaseLight</ComboBoxItem>
+                                    <ComboBoxItem>BaseDark</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <CheckBox
+                                Margin="0,5"
+                                IsChecked="{Binding Path=IsUpdateCheck, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="False">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="起動時に更新を確認する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox
+                                Margin="0,5"
+                                IsChecked="{Binding Path=IsSendDebugInformations, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="False">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="デバッグ情報を送信する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsCloseAfterCreateStatusCorrect, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="ツイート時に自動でツイート画面を閉じる"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsCreateStatusWhenPressCtrlEnter, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="Ctrl+Enterでツイートを送信する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsCloseWhenClickImage, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="画像ダイアログにて画像をクリックでダイアログを閉じる"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVisibleCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="ツイートトレイを表示する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox
+                                Margin="30,5"
+                                IsChecked="{Binding Path=CanCreateStatusTrayProtrusion, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="{Binding Path=IsVisibleCreateStatusTray, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="トレイが画面からはみ出ないようにする"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!--  通知  -->
+                    <StackPanel
+                        Margin="20,20,0,0"
+                        HorizontalAlignment="Stretch"
+                        IsEnabled="False">
+                        <TextBlock
+                            Margin="30,10"
+                            FontSize="28"
+                            Text="通知"
+                            TextWrapping="Wrap" />
+                        <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
+                        <StackPanel Margin="60,30">
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="通知を許可する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox
+                                Margin="30,5"
+                                IsChecked="{Binding Path=IsNotifyOfMention, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="メンション"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox
+                                Margin="30,5"
+                                IsChecked="{Binding Path=IsNotifyOfReply, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="リプライ"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox
+                                Margin="30,5"
+                                IsChecked="{Binding Path=IsNotifyOfFavorite, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="いいね"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox
+                                Margin="30,5"
+                                IsChecked="{Binding Path=IsNotifyOfRetweet, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="リツイート"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox
+                                Margin="30,5"
+                                IsChecked="{Binding Path=IsNotifyOfQuote, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="引用"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox
+                                Margin="30,5"
+                                IsChecked="{Binding Path=IsNotifyOfFollow, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}"
+                                IsEnabled="{Binding Path=IsNotify, Source={x:Static Properties:Settings.Default}, Mode=OneWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="フォロー"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!--  タイムライン  -->
+                    <StackPanel Margin="20,20,0,0" HorizontalAlignment="Stretch">
+                        <TextBlock
+                            Margin="30,10"
+                            FontSize="28"
+                            Text="タイムライン"
+                            TextWrapping="Wrap" />
+                        <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
+                        <StackPanel Margin="60,30">
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsGifAutoPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="アニメーションGIFを自動再生する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsGifLoopPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="アニメーションGIFをループ再生させる"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVideoLoopPlay, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="動画をループ再生させる"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsDisplayReplyStatus, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="リプライ先をTL上に表示する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsVisibleViaInformation, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="Via情報を表示する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsThumbnailing, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="ツイートの画像をトリミング(Crop)して表示する"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                            <CheckBox Margin="0,5" IsChecked="{Binding Path=IsUseFavoriteStar, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                <TextBlock
+                                    FontSize="26"
+                                    Text="いいねアイコンを星にする"
+                                    TextWrapping="Wrap" />
+                            </CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!--  確認  -->
+                    <StackPanel Margin="20,20,0,0" HorizontalAlignment="Stretch">
+                        <TextBlock
+                            Margin="30,10"
+                            FontSize="28"
+                            Text="確認"
+                            TextWrapping="Wrap" />
+                        <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,0,0,1" />
+                        <WrapPanel Margin="30">
+                            <StackPanel Margin="30,0">
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfCreateStatus, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ツイート"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDeleteStatus, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ツイート削除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfFavorite, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="いいね"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDestroyFavorite, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="いいね解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfRetweet, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="リツイート"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfUnretweet, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="リツイート解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfFollow, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="フォロー"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDestroyFollow, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="フォロー解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                            </StackPanel>
+                            <StackPanel Margin="30,0">
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfBlock, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ブロック"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDestroyBlock, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ブロック解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfMute, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ミュート"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                                <CheckBox Margin="0,5" IsChecked="{Binding Path=IsConfirmOfDestroyMute, Source={x:Static Properties:Settings.Default}, Mode=TwoWay}">
+                                    <TextBlock
+                                        FontSize="26"
+                                        Text="ミュート解除"
+                                        TextWrapping="Wrap" />
+                                </CheckBox>
+                            </StackPanel>
+                        </WrapPanel>
+                    </StackPanel>
+                </WrapPanel>
+            </ScrollViewer>
+            <Button
+                Grid.Row="2"
+                Width="100"
+                Height="40"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Content="閉じる"
+                FontSize="16"
+                Style="{StaticResource AccentedSquareButtonStyle}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:CallMethodAction MethodName="Close" TargetObject="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </Grid>
+    </Controls:Flyout>
+</ResourceDictionary>

@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <ResourceDictionary.MergedDictionaries>
+        <!--  Templates  -->
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Gif.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Image.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Instructions.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Login.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/MovableCreateStatusTray.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Notification.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Templates/Video.xaml" />
+
+        <!--  Style  -->
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Styles/Styles.xaml" />
+
+        <!--  Flyouts  -->
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/AccountSettingsFlyout.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/AddTimelineFlyout.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/ApplicationSettingsFlyout.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/CreateStatusFlyout.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/DirectMessagesFlyout.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/MentionsFlyout.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/NotificationsFlyout.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/MainWindow/Flyouts/SearchFlyout.xaml" />
+
+        <!--  Timeline  -->
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Status.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Status/Media.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/User.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/UserTimelineTab.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Loading.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Notification.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/SearchTimelineTab.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Resources/Dictionaries/Timeline/Templates/Trend.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

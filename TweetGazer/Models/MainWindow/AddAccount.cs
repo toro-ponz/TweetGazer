@@ -1,10 +1,9 @@
 ﻿using CoreTweet;
 using Livet;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows;
 using TweetGazer.Common;
+using TweetGazer.ViewModels;
 
 namespace TweetGazer.Models.MainWindow
 {
@@ -13,16 +12,15 @@ namespace TweetGazer.Models.MainWindow
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public AddAccount()
+        public AddAccount(MainWindowViewModel mainWindowViewModel)
         {
+            this.MainWindowViewModel = mainWindowViewModel;
+
             this._Pin = "";
             this._Message = "";
             this._Session = null;
             this.AuthenticationUrl = null;
-            if (CommonMethods.CheckFirstBoot())
-                this._Visibility = Visibility.Visible;
-            else
-                this._Visibility = Visibility.Collapsed;
+            this._IsOpen = CommonMethods.CheckFirstBoot();
         }
 
         /// <summary>
@@ -34,7 +32,7 @@ namespace TweetGazer.Models.MainWindow
             this.Message = "";
             this.Session = null;
             this.AuthenticationUrl = null;
-            this.Visibility = Visibility.Visible;
+            this.IsOpen = true;
         }
 
         /// <summary>
@@ -57,7 +55,7 @@ namespace TweetGazer.Models.MainWindow
             else
             {
                 this.Pin = "";
-                this.Message = "認証に失敗しました．\nURLクリックからやり直してください．";
+                this.Message = "認証に失敗しました\nURLクリックからやり直してください";
                 this.Session = null;
                 this.AuthenticationUrl = null;
             }
@@ -69,10 +67,14 @@ namespace TweetGazer.Models.MainWindow
         public async void OpenAuthenticationUrl()
         {
             if (this._Session == null || this.AuthenticationUrl == null)
+            {
                 await this.CreateSession();
+            }
 
             if (this._Session == null || this.AuthenticationUrl == null)
+            {
                 return;
+            }
 
             try
             {
@@ -81,7 +83,7 @@ namespace TweetGazer.Models.MainWindow
             }
             catch (Exception e)
             {
-                Debug.Write(e);
+                DebugConsole.Write(e);
             }
         }
 
@@ -92,7 +94,7 @@ namespace TweetGazer.Models.MainWindow
         {
             if (AccountTokens.Users.Count != 0)
             {
-                this.Visibility = Visibility.Collapsed;
+                this.IsOpen = false;
                 this.Pin = "";
                 this.Message = "";
                 this.Session = null;
@@ -107,25 +109,29 @@ namespace TweetGazer.Models.MainWindow
         {
             this.Session = await AccountTokens.CreateAuthenticationSessionAsync();
             if (this._Session != null)
+            {
                 this.AuthenticationUrl = this._Session.AuthorizeUri;
+            }
             else
+            {
                 this.Message = "セッションの生成に失敗しました。\n認証ボタンを押し、再度セッションを生成してください。";
+            }
         }
 
-        #region Visibility 変更通知プロパティ
-        public Visibility Visibility
+        #region IsOpen 変更通知プロパティ
+        public bool IsOpen
         {
             get
             {
-                return this._Visibility;
+                return this._IsOpen;
             }
             set
             {
-                this._Visibility = value;
+                this._IsOpen = value;
                 this.RaisePropertyChanged();
             }
         }
-        private Visibility _Visibility;
+        private bool _IsOpen;
         #endregion
 
         #region Pin 変更通知プロパティ
@@ -166,7 +172,10 @@ namespace TweetGazer.Models.MainWindow
             get
             {
                 if (this._Session == null)
+                {
                     return false;
+                }
+
                 return true;
             }
         }
@@ -178,12 +187,14 @@ namespace TweetGazer.Models.MainWindow
             set
             {
                 this._Session = value;
-                this.RaisePropertyChanged(nameof(IsPinTextBoxEnabled));
+                this.RaisePropertyChanged(nameof(this.IsPinTextBoxEnabled));
             }
         }
         private OAuth.OAuthSession _Session;
         #endregion
 
         private Uri AuthenticationUrl;
+
+        private MainWindowViewModel MainWindowViewModel;
     }
 }

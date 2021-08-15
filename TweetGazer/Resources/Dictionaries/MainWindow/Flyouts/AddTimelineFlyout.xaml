@@ -1,0 +1,222 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+
+    <!--  タイムライン追加Flyout  -->
+    <Controls:Flyout
+        x:Key="AddTimelineFlyout"
+        Width="335"
+        Margin="0,30,0,0"
+        CloseCommand="{Binding Path=CloseCommand, Mode=OneTime}"
+        DataContext="{Binding Path=AddTimeline}"
+        Foreground="{DynamicResource TextBrush}"
+        IsOpen="{Binding Path=IsOpen, Mode=TwoWay}"
+        Position="Left">
+        <Controls:Flyout.Background>
+            <SolidColorBrush Opacity="0.8" Color="{DynamicResource FlyoutColor}" />
+        </Controls:Flyout.Background>
+        <Grid Width="280" HorizontalAlignment="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Margin="10,0"
+                    Orientation="Horizontal">
+                    <Button
+                        Width="73"
+                        Height="73"
+                        Margin="0"
+                        HorizontalAlignment="Left"
+                        Style="{StaticResource UwpLikeButtonStyle2}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddOwnTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Image Source="{Binding Path=ProfileImageUrl}" />
+                    </Button>
+                    <ComboBox
+                        Width="170"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        ItemsSource="{Binding Path=ScreenNames}"
+                        SelectedIndex="{Binding Path=TokenSuffix, Mode=TwoWay}" />
+                </StackPanel>
+                <Grid
+                    Grid.Row="1"
+                    Width="270"
+                    Height="270"
+                    Margin="5,15,5,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Controls:Tile
+                        Title="Timeline"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Home"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddHomeTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="User"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Width="80"
+                        Height="80"
+                        Margin="5,5,5,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        CommandParameter="User"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddUserTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="List"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="List"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddListTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Mention"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Mention"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddMentionTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Notice"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Notice"
+                        HorizontalTitleAlignment="Center"
+                        IsEnabled="False">
+                        <!--<i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddHomeTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>-->
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Search"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Search"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddSearchTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Trend"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Trend"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddTrendTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="Favorite"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="Favorite"
+                        HorizontalTitleAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddFavoriteTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Controls:Tile>
+                    <Controls:Tile
+                        Title="DM"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        CommandParameter="DM"
+                        HorizontalTitleAlignment="Center"
+                        IsEnabled="False">
+                        <!--<i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="AddHomeTimeline" TargetObject="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>-->
+                    </Controls:Tile>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <ItemsControl Grid.Row="2" ItemsSource="{Binding Path=ExtraGrid}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
+        </Grid>
+    </Controls:Flyout>
+</ResourceDictionary>

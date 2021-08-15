@@ -102,17 +102,23 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoreTweet, Version=0.8.0.384, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CoreTweet.0.8.0.384\lib\net45\CoreTweet.dll</HintPath>
+    <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
-    <Reference Include="Lighty, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lighty.0.3.0.0\lib\net45\Lighty.dll</HintPath>
+    <Reference Include="CoreTweet, Version=1.0.0.483, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CoreTweet.1.0.0.483\lib\net45\CoreTweet.dll</HintPath>
+    </Reference>
+    <Reference Include="Gu.Wpf.Media, Version=0.5.1.0, Culture=neutral, PublicKeyToken=aa972a35ea817caf, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gu.Wpf.Media.0.5.1\lib\net45\Gu.Wpf.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="Lighty, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lighty.0.3.2\lib\net45\Lighty.dll</HintPath>
     </Reference>
     <Reference Include="Livet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
       <HintPath>..\packages\LivetCask.1.3.1.0\lib\net45\Livet.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net46\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -142,8 +148,7 @@
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -155,8 +160,8 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="WindowsBase" />
-    <Reference Include="WpfAnimatedGif, Version=1.4.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WpfAnimatedGif.1.4.14\lib\net\WpfAnimatedGif.dll</HintPath>
+    <Reference Include="WpfAnimatedGif, Version=1.4.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAnimatedGif.1.4.18\lib\net\WpfAnimatedGif.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -164,13 +169,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\VideoMediaElementBehavior.cs" />
+    <Compile Include="Behaviors\TextBoxBehavior.cs" />
     <Compile Include="Behaviors\GifMediaElementBehavior.cs" />
     <Compile Include="Behaviors\ImageBehavior.cs" />
     <Compile Include="Behaviors\ItemsControlBehavior.cs" />
     <Compile Include="Behaviors\ReadMoreBehavior.cs" />
-    <Compile Include="Behaviors\StatusMediaItemsControlBehavior.cs" />
     <Compile Include="Behaviors\StatausTextBlockBehavior.cs" />
+    <Compile Include="Common\DebugConsole.cs" />
     <Compile Include="Common\DirectMessage.cs" />
     <Compile Include="Common\DirectMessagesStack.cs" />
     <Compile Include="Common\Mention.cs" />
@@ -178,6 +183,9 @@
     <Compile Include="Common\Notification.cs" />
     <Compile Include="Common\NotificationsStack.cs" />
     <Compile Include="Common\SecretParameters.cs" />
+    <Compile Include="Converters\SignInvertAndHalfConverter.cs" />
+    <Compile Include="Converters\SignInvertConverter.cs" />
+    <Compile Include="Converters\BooleanInvertConverter.cs" />
     <Compile Include="Converters\BooleanToOrientationConverter.cs" />
     <Compile Include="Converters\BooleanInvertAndToVisibilityConverter.cs" />
     <Compile Include="Converters\NullImageConverter.cs" />
@@ -193,10 +201,13 @@
     <Compile Include="Models\MainWindow\Search.cs" />
     <Compile Include="Models\MainWindow\StatusMedia.cs" />
     <Compile Include="Models\MainWindow\TimelinesGrid.cs" />
-    <Compile Include="Models\MainWindow\TrayNotification.cs" />
-    <Compile Include="Models\ShowDialongs\SearchRepliesProperties.cs" />
-    <Compile Include="Models\ShowDialongs\ShowImageModel.cs" />
-    <Compile Include="Models\ShowDialongs\ShowStatusModel.cs" />
+    <Compile Include="Models\MainWindow\ToastNotification.cs" />
+    <Compile Include="Models\ShowDialogs\ListProperties.cs" />
+    <Compile Include="Models\ShowDialogs\SearchRepliesProperties.cs" />
+    <Compile Include="Models\ShowDialogs\ShowAddToList.cs" />
+    <Compile Include="Models\ShowDialogs\ShowImageModel.cs" />
+    <Compile Include="Models\ShowDialogs\ShowListModel.cs" />
+    <Compile Include="Models\ShowDialogs\ShowStatusModel.cs" />
     <Compile Include="Models\Timeline\LoadingProperties.cs" />
     <Compile Include="Models\MainWindow\AccountSettings.cs" />
     <Compile Include="Models\MainWindow\AddTimeline.cs" />
@@ -205,9 +216,12 @@
     <Compile Include="Models\MainWindow\FlyoutBase.cs" />
     <Compile Include="Models\MainWindow\Mentions.cs" />
     <Compile Include="Common\MentionsStack.cs" />
+    <Compile Include="Models\Timeline\MediaProperties.cs" />
     <Compile Include="Models\Timeline\NotificationProperties.cs" />
     <Compile Include="Models\Timeline\QuotationStatusProperties.cs" />
     <Compile Include="Models\Timeline\ReplyToStatusProperties.cs" />
+    <Compile Include="Models\Timeline\SearchTimelineTab.cs" />
+    <Compile Include="Models\Timeline\SearchTimelineTabProperties.cs" />
     <Compile Include="Models\Timeline\StatusProperties.cs" />
     <Compile Include="Models\Timeline\TimelineNotice.cs" />
     <Compile Include="Models\Timeline\UserTimelineTabProperties.cs" />
@@ -219,7 +233,6 @@
     <Compile Include="Models\Timeline\UserOverviewProperties.cs" />
     <Compile Include="Models\Timeline\UserProperties.cs" />
     <Compile Include="Models\Timeline\UserTimelineTab.cs" />
-    <Compile Include="Selectors\MainWindowNotificationTrayTemplateSelector.cs" />
     <Compile Include="Selectors\TimelineNotificationTrayTemplateSelector.cs" />
     <Compile Include="Selectors\StatusMediaTemplateSelector.cs" />
     <Compile Include="Selectors\ShowStatusItemTemplateSelector.cs" />
@@ -240,12 +253,26 @@
     <Compile Include="ViewModels\MainWindow\NotificationsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TimelinesGridViewModel.cs" />
+    <Compile Include="ViewModels\ShowDialogs\ShowAddToListViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowImageViewModel.cs" />
+    <Compile Include="ViewModels\ShowDialogs\ShowListViewModel.cs" />
     <Compile Include="ViewModels\ShowDialogs\ShowStatusViewModel.cs" />
     <Compile Include="ViewModels\TimelineViewModel.cs" />
-    <Compile Include="Selectors\CreatingStatusMediaTemplateSelector.cs" />
+    <Compile Include="Selectors\CreateStatusMediaTemplateSelector.cs" />
+    <Compile Include="Views\DebugConsoleWindow.xaml.cs">
+      <DependentUpon>DebugConsoleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindows\Flyouts\ExtraGrid\Lists.xaml.cs">
+      <DependentUpon>Lists.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindows\Flyouts\ExtraGrid\Trends.xaml.cs">
+      <DependentUpon>Trends.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindows\Flyouts\ExtraGrid\Users.xaml.cs">
+      <DependentUpon>Users.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\Instructions\Instruction1.xaml.cs">
       <DependentUpon>Instruction1.xaml</DependentUpon>
@@ -253,17 +280,32 @@
     <Compile Include="Views\Pages\Instructions\Instruction2.xaml.cs">
       <DependentUpon>Instruction2.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ShowDialogs\ShowAddToList.xaml.cs">
+      <DependentUpon>ShowAddToList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ShowDialogs\ShowCopiableText.xaml.cs">
       <DependentUpon>ShowCopiableText.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ShowDialogs\ShowFollowers.xaml.cs">
+      <DependentUpon>ShowFollowers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShowDialogs\ShowFollows.xaml.cs">
+      <DependentUpon>ShowFollows.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ShowDialogs\ShowImage.xaml.cs">
       <DependentUpon>ShowImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShowDialogs\ShowList.xaml.cs">
+      <DependentUpon>ShowList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShowDialogs\ShowMovie.xaml.cs">
       <DependentUpon>ShowMovie.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShowDialogs\ShowStatus.xaml.cs">
       <DependentUpon>ShowStatus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShowDialogs\ShowUser.xaml.cs">
+      <DependentUpon>ShowUser.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Timeline.xaml.cs">
       <DependentUpon>Timeline.xaml</DependentUpon>
@@ -276,41 +318,201 @@
     <Compile Include="Common\AccountTokens.cs" />
     <Compile Include="Common\CommonMethods.cs" />
     <Compile Include="Common\RelayCommand.cs" />
-    <Resource Include="Themes\DodgerBlue.xaml">
+    <Resource Include="Resources\Dictionaries\Application\AccentColors\DodgerBlue.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
-    <Page Include="Resources\Dictionaries\ApplicationResources.xaml">
+    <Page Include="Resources\Dictionaries\Application\ApplicationResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Dictionaries\MainWindowFlyouts.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Dictionaries\MainWindowResources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Dictionaries\StatusMediaTemplates.xaml">
+    <Page Include="Resources\Dictionaries\Application\Convertors\Convertors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Dictionaries\VectorImages.xaml">
+    <Page Include="Resources\Dictionaries\Application\Icons\VectorImages.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\Button.xaml">
+    <Page Include="Resources\Dictionaries\Application\Styles\ScrollViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Dictionaries\TimelineResources.xaml">
+    <Page Include="Resources\Dictionaries\MainWindow\Flyouts\AccountSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Flyouts\AddTimelineFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Flyouts\ApplicationSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Flyouts\CreateStatusFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Flyouts\DirectMessagesFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Flyouts\MentionsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Flyouts\NotificationsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Flyouts\SearchFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\MainWindowResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Storyboards\NotificationShowStoryboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Notification.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Gif.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Image.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Instructions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\MovableCreateStatusTray.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Styles\LightBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\MainWindow\Templates\Video.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\ShowDialogs\ShowStatus\Templates\MainStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\ShowDialogs\ShowStatus\Templates\ReadMoreReplies.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\ShowDialogs\ShowStatus\Templates\ReadMoreRepliesButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\ShowDialogs\ShowStatus\Templates\ReadMoreRepliesToMainStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\ShowDialogs\ShowStatus\Templates\ReplyStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\ShowDialogs\ShowStatus\ShowStatusResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Notifications\Alert.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Notifications\Error.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Notifications\Normal.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Notifications\Success.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Templates\UserTimelineTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Templates\Notification.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Templates\SearchTimelineTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Templates\Loading.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Templates\Trend.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Templates\User.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Templates\Status.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\Templates\Status\Media.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\Application\Styles\Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dictionaries\Timeline\TimelineResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DebugConsoleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindows\Flyouts\ExtraGrid\Lists.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindows\Flyouts\ExtraGrid\Trends.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindows\Flyouts\ExtraGrid\Users.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pages\Instructions\Instruction1.xaml">
       <SubType>Designer</SubType>
@@ -320,13 +522,29 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ShowDialogs\ShowAddToList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ShowDialogs\ShowCopiableText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShowDialogs\ShowFollowers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShowDialogs\ShowFollows.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ShowDialogs\ShowImage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ShowDialogs\ShowList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ShowDialogs\ShowMovie.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -335,6 +553,10 @@
     <Page Include="Views\ShowDialogs\ShowStatus.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ShowDialogs\ShowUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Timeline.xaml">
       <Generator>MSBuild:Compile</Generator>

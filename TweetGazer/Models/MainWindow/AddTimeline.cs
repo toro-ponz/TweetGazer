@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -37,7 +36,9 @@ namespace TweetGazer.Models.MainWindow
             this.ExtraGrid.Add(new Grid());
             this.ScreenNames.Clear();
             foreach (var user in AccountTokens.Users)
+            {
                 this.ScreenNames.Add("@" + user.ScreenName);
+            }
         }
         
         /// <summary>
@@ -92,7 +93,7 @@ namespace TweetGazer.Models.MainWindow
         {
             var page = new TimelinePageData()
             {
-                TimelineType = TimelineType.Mentions
+                TimelineType = TimelineType.Mention
             };
 
             this.CreateTimeline(page);
@@ -193,13 +194,12 @@ namespace TweetGazer.Models.MainWindow
                 );
             }
 
-            var contentControl = new ContentControl()
-            {
-                Content = Application.Current.FindResource("AddTimelineExtreGridLists") as Grid,
-                DataContext = itemsSource
-            };
-
-            this.ExtraGrid.First().Children.Add(contentControl);
+            this.ExtraGrid.First().Children.Add(
+                new Views.MainWindows.Flyouts.ExtraGrid.Lists()
+                {
+                    DataContext = itemsSource
+                }
+            );
         }
 
         /// <summary>
@@ -229,12 +229,12 @@ namespace TweetGazer.Models.MainWindow
                 }
             }
 
-            var contentControl = new ContentControl()
-            {
-                Content = Application.Current.FindResource("AddTimelineExtreGridUsers") as Grid,
-                DataContext = new UsersModel(this, itemsSource, this.TokenSuffix)
-            };
-            this.ExtraGrid.First().Children.Add(contentControl);
+            this.ExtraGrid.First().Children.Add(
+                new Views.MainWindows.Flyouts.ExtraGrid.Users()
+                {
+                    DataContext = new UsersModel(this, itemsSource, this.TokenSuffix)
+                }
+            );
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace TweetGazer.Models.MainWindow
             this.ExtraGrid.Clear();
             this.ExtraGrid.Add(new Grid());
 
-            var trendResult = await AccountTokens.LoadTrendsAsync(TokenSuffix);
+            var trendResult = await AccountTokens.LoadTrendsAsync(this.TokenSuffix);
             var itemsSource = new List<TrendProperties>();
 
             var i = 1;
@@ -257,24 +257,23 @@ namespace TweetGazer.Models.MainWindow
                     {
                         Rank = i,
                         Name = trend.Name,
-                        CountVisibility = Visibility.Collapsed
+                        HasCount = trend.TweetVolume != null
                     };
                     if (trend.TweetVolume != null)
                     {
                         item.Count = (int)trend.TweetVolume;
-                        item.CountVisibility = Visibility.Visible;
                     }
                     itemsSource.Add(item);
                     i++;
                 }
             }
 
-            var contentControl = new ContentControl()
-            {
-                Content = Application.Current.FindResource("AddTimelineExtreGridTrends") as Grid,
-                DataContext = new TrendsModel(this, itemsSource)
-            };
-            this.ExtraGrid.First().Children.Add(contentControl);
+            this.ExtraGrid.First().Children.Add(
+                new Views.MainWindows.Flyouts.ExtraGrid.Trends()
+                {
+                    DataContext = new TrendsModel(this, itemsSource)
+                }
+            );
         }
 
         /// <summary>
@@ -343,8 +342,8 @@ namespace TweetGazer.Models.MainWindow
                 var page = new TimelinePageData()
                 {
                     TimelineType = TimelineType.User,
-                    TargetUserId = Id,
-                    TargetUserName = Name
+                    TargetUserId = this.Id,
+                    TargetUserName = this.Name
                 };
                 this.AddTimeline.CreateTimeline(page);
                 this.AddTimeline.ExtraGrid.First().Children.Clear();
@@ -382,11 +381,11 @@ namespace TweetGazer.Models.MainWindow
             }
 
             public ICommand SelectCommand { get; }
-            public Visibility CountVisibility { get; set; }
 
             public string Name { get; set; }
             public int Rank { get; set; }
             public int Count { get; set; }
+            public bool HasCount { get; set; }
 
             private AddTimeline AddTimeline;
         }
@@ -405,8 +404,10 @@ namespace TweetGazer.Models.MainWindow
 
             private async void Search()
             {
-                if (String.IsNullOrEmpty(this.Text))
+                if (string.IsNullOrEmpty(this.Text))
+                {
                     return;
+                }
 
                 this.Users.Clear();
                 foreach (var user in await AccountTokens.LoadSearchedUsersAsync(this.TokenSuffix, this.Text))
@@ -449,8 +450,10 @@ namespace TweetGazer.Models.MainWindow
 
             private void Search()
             {
-                if (String.IsNullOrEmpty(this.Text))
+                if (string.IsNullOrEmpty(this.Text))
+                {
                     return;
+                }
 
                 var page = new TimelinePageData()
                 {

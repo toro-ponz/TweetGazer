@@ -1,0 +1,13 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Converters="clr-namespace:TweetGazer.Converters">
+
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <Converters:BooleanInvertConverter x:Key="BooleanInvertConverter" />
+    <Converters:BooleanToOrientationConverter x:Key="BooleanToOrientationConverter" />
+    <Converters:BooleanInvertAndToVisibilityConverter x:Key="BooleanInvertAndToVisibilityConverter" />
+    <Converters:SignInvertAndHalfConverter x:Key="SignInvertAndHalfConverter" />
+    <Converters:SignInvertConverter x:Key="SignInvertConverter" />
+    <Converters:NullImageConverter x:Key="NullImageConverter" />
+</ResourceDictionary>

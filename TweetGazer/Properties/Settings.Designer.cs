@@ -12,7 +12,7 @@ namespace TweetGazer.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -20,6 +20,54 @@ namespace TweetGazer.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Cobalt")]
+        public string AccentColor {
+            get {
+                return ((string)(this["AccentColor"]));
+            }
+            set {
+                this["AccentColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BaseLight")]
+        public string BaseColor {
+            get {
+                return ((string)(this["BaseColor"]));
+            }
+            set {
+                this["BaseColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AccentColorIndex {
+            get {
+                return ((int)(this["AccentColorIndex"]));
+            }
+            set {
+                this["AccentColorIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int BaseColorIndex {
+            get {
+                return ((int)(this["BaseColorIndex"]));
+            }
+            set {
+                this["BaseColorIndex"] = value;
             }
         }
         
@@ -157,7 +205,7 @@ namespace TweetGazer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IsSmoothScrolling {
             get {
                 return ((bool)(this["IsSmoothScrolling"]));
@@ -289,54 +337,6 @@ namespace TweetGazer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Cobalt")]
-        public string AccentColor {
-            get {
-                return ((string)(this["AccentColor"]));
-            }
-            set {
-                this["AccentColor"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("BaseDark")]
-        public string BaseColor {
-            get {
-                return ((string)(this["BaseColor"]));
-            }
-            set {
-                this["BaseColor"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int AccentColorIndex {
-            get {
-                return ((int)(this["AccentColorIndex"]));
-            }
-            set {
-                this["AccentColorIndex"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int BaseColorIndex {
-            get {
-                return ((int)(this["BaseColorIndex"]));
-            }
-            set {
-                this["BaseColorIndex"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IsUseFavoriteStar {
             get {
@@ -368,6 +368,162 @@ namespace TweetGazer.Properties {
             }
             set {
                 this["IsMinimizeCreateStatusTray"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsConfirmOfCreateStatus {
+            get {
+                return ((bool)(this["IsConfirmOfCreateStatus"]));
+            }
+            set {
+                this["IsConfirmOfCreateStatus"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsConfirmOfDeleteStatus {
+            get {
+                return ((bool)(this["IsConfirmOfDeleteStatus"]));
+            }
+            set {
+                this["IsConfirmOfDeleteStatus"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsConfirmOfFavorite {
+            get {
+                return ((bool)(this["IsConfirmOfFavorite"]));
+            }
+            set {
+                this["IsConfirmOfFavorite"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsConfirmOfDestroyFavorite {
+            get {
+                return ((bool)(this["IsConfirmOfDestroyFavorite"]));
+            }
+            set {
+                this["IsConfirmOfDestroyFavorite"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsConfirmOfRetweet {
+            get {
+                return ((bool)(this["IsConfirmOfRetweet"]));
+            }
+            set {
+                this["IsConfirmOfRetweet"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsConfirmOfUnretweet {
+            get {
+                return ((bool)(this["IsConfirmOfUnretweet"]));
+            }
+            set {
+                this["IsConfirmOfUnretweet"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsConfirmOfFollow {
+            get {
+                return ((bool)(this["IsConfirmOfFollow"]));
+            }
+            set {
+                this["IsConfirmOfFollow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsConfirmOfDestroyFollow {
+            get {
+                return ((bool)(this["IsConfirmOfDestroyFollow"]));
+            }
+            set {
+                this["IsConfirmOfDestroyFollow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsConfirmOfBlock {
+            get {
+                return ((bool)(this["IsConfirmOfBlock"]));
+            }
+            set {
+                this["IsConfirmOfBlock"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsConfirmOfDestroyBlock {
+            get {
+                return ((bool)(this["IsConfirmOfDestroyBlock"]));
+            }
+            set {
+                this["IsConfirmOfDestroyBlock"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsConfirmOfMute {
+            get {
+                return ((bool)(this["IsConfirmOfMute"]));
+            }
+            set {
+                this["IsConfirmOfMute"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsConfirmOfDestroyMute {
+            get {
+                return ((bool)(this["IsConfirmOfDestroyMute"]));
+            }
+            set {
+                this["IsConfirmOfDestroyMute"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CanCreateStatusTrayProtrusion {
+            get {
+                return ((bool)(this["CanCreateStatusTrayProtrusion"]));
+            }
+            set {
+                this["CanCreateStatusTrayProtrusion"] = value;
             }
         }
     }
