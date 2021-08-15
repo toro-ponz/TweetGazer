@@ -28,8 +28,6 @@ namespace TweetGazer.Common
             {
                 switch (mode)
                 {
-                    case StreamingMode.User:
-                        return Tokens[suffix].Streaming.UserAsObservable(tweet_mode => "extended").Publish();
                     case StreamingMode.Filter:
                         if (param == null)
                         {

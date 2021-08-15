@@ -272,14 +272,6 @@ namespace TweetGazer.ViewModels
         }
 
         /// <summary>
-        /// ストリーミングを再接続する
-        /// </summary>
-        public void RestartStreaming()
-        {
-            this.MainWindowModel.RestartStreaming();
-        }
-
-        /// <summary>
         /// デバッグコンソールを開く
         /// </summary>
         public void DebugConsoleOpen()
@@ -356,14 +348,6 @@ namespace TweetGazer.ViewModels
         }
 
         /// <summary>
-        /// ストリーミングを開始する
-        /// </summary>
-        public void StartStreaming()
-        {
-            this.MainWindowModel.StartStreaming();
-        }
-
-        /// <summary>
         /// 起動時のログイン
         /// </summary>
         private async void Login()
@@ -407,8 +391,6 @@ namespace TweetGazer.ViewModels
                 DebugConsole.Write(e);
                 return;
             }
-
-            this.StartStreaming();
         }
 
         /// <summary>
