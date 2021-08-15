@@ -75,14 +75,15 @@ csharp_space_between_parentheses = false
 csharp_preserve_single_line_statements = false
 csharp_preserve_single_line_blocks = true
 
-dotnet_naming_rule.pascal_case.symbols  = pascal_case_symbols
-dotnet_naming_rule.pascal_case.style    = pascal_case_style
-dotnet_naming_rule.pascal_case.severity = error
+dotnet_naming_rule.pascal_case.symbols = pascal_case_symbols
+dotnet_naming_rule.pascal_case.style = pascal_case_style
+dotnet_naming_rule.pascal_case.severity = warning
 
 dotnet_naming_symbols.pascal_case_symbols.applicable_kinds           = *
 dotnet_naming_symbols.pascal_case_symbols.applicable_accessibilities = *
 
-dotnet_naming_style.pascal_case_style.capitalization  = pascal_case
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+dotnet_naming_style.pascal_case_style.severity = warning
 
 [*.xaml]
 indent_size = 4

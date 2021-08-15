@@ -50,7 +50,6 @@ namespace TweetGazer.Models.MainWindow
         {
             if (await AccountTokens.AutheticationAsync(this._Session, this.Pin))
             {
-                this.MainWindowViewModel.StartStreaming();
                 this.Close();
             }
             else

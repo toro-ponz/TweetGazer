@@ -92,7 +92,7 @@ namespace TweetGazer.Models
             }
 
             this.SetTitle();
-            this.StartStreaming();
+            this.StartPolling();
             await this.Update();
 
             this.IsInitializing = false;
@@ -380,12 +380,9 @@ namespace TweetGazer.Models
         {
             try
             {
-                await Task.Run(async () =>
-                {
-                    this.TimelineNotice.Add(new TimelineNotice(message, type));
-                    await Task.Delay(5000);
-                    this.RemoveNotice();
-                });
+                this.TimelineNotice.Add(new TimelineNotice(message, type));
+                await Task.Delay(5000);
+                this.RemoveNotice();
             }
             catch (Exception e)
             {
@@ -550,9 +547,9 @@ namespace TweetGazer.Models
         }
 
         /// <summary>
-        /// ストリーミング・タイマーの開始
+        ///ポーリングの開始
         /// </summary>
-        private void StartStreaming()
+        private void StartPolling()
         {
             if (this.Data.CurrentPage.TimelineType != TimelineType.Notification &&
                 this.Data.CurrentPage.TimelineType != TimelineType.NotificationStack &&
@@ -570,6 +567,17 @@ namespace TweetGazer.Models
 
             switch (this.Data.CurrentPage.TimelineType)
             {
+                case TimelineType.Home:
+                    {
+                        // 90秒間隔でホームタイムラインを更新するタイマー
+                        var timer = new Timer();
+                        timer.Elapsed += new ElapsedEventHandler(this.LoadHomeTimelineAsync);
+                        timer.Interval = 90000;
+                        timer.AutoReset = true;
+                        timer.Enabled = true;
+                        this.Timers.Add(timer);
+                        break;
+                    }
                 case TimelineType.List:
                     {
                         // 5秒間隔でリストを更新するタイマー
@@ -604,15 +612,6 @@ namespace TweetGazer.Models
                         break;
                     }
             }
-        }
-
-        /// <summary>
-        /// イベントが流れてきたとき
-        /// </summary>
-        /// <param name="eventMessage">イベント</param>
-        private void ProcessEventMessage(EventMessage eventMessage)
-        {
-            return;
         }
 
         /// <summary>
@@ -695,18 +694,26 @@ namespace TweetGazer.Models
 
             foreach (var status in statuses)
             {
-                var properties = new TimelineItemProperties(this, status);
-
-                if (loadMore)
+                try
                 {
-                    this.TimelineItems.Insert(this.TimelineItems.Count - 1, properties);
-                }
-                else
-                {
-                    this.TimelineItems.Insert(i + insertPosition, properties);
-                }
+                    var properties = new TimelineItemProperties(this, status);
 
-                i++;
+                    if (loadMore)
+                    {
+                        this.TimelineItems.Insert(this.TimelineItems.Count - 1, properties);
+                    }
+                    else
+                    {
+                        this.TimelineItems.Insert(i + insertPosition, properties);
+                    }
+
+                    i++;
+                }
+                catch (Exception e)
+                {
+                    DebugConsole.Write(e);
+                    return false;
+                }
             }
 
             return true;
@@ -770,6 +777,36 @@ namespace TweetGazer.Models
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// ホームタイムラインを読み込む
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void LoadHomeTimelineAsync(object sender, EventArgs e)
+        {
+            if (this.IsLoading)
+            {
+                return;
+            }
+
+            this.IsLoading = true;
+
+            try
+            {
+                var loadedTimeline = await AccountTokens.LoadHomeTimelineAsync(this.Data.TokenSuffix, null, this.Data.SinceId);
+                if (loadedTimeline != null && loadedTimeline.Count != 0)
+                {
+                    this.InsertStatus(loadedTimeline);
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugConsole.Write(ex);
+            }
+
+            this.IsLoading = false;
         }
 
         /// <summary>
