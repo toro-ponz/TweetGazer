@@ -30,4 +30,4 @@
 本ソフトウェアの仕様はすべて自己責任の下行ってください。
 本ソフトウェアを使用することによって生じるいかなる問題についても、開発者はその責を負いません。
 
-Copyright (c) 2017 とろゝ(@toro_ponz) All Rights Reserved.
+Copyright (c) 2021 とろゝ(@toro_ponz) All Rights Reserved.

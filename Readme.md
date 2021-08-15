@@ -32,6 +32,7 @@
 
 ## 使用ライブラリ
 
+ - [ControlzEx](https://github.com/ControlzEx/ControlzEx)
  - [CoreTweet](https://github.com/CoreTweet/CoreTweet)
  - [Gu.Wpf.Media](https://github.com/JohanLarsson/Gu.Wpf.Media)
  - [Lighty](https://github.com/sourcechord/Lighty)
