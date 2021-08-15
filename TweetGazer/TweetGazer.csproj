@@ -105,8 +105,8 @@
     <Reference Include="CoreTweet, Version=1.0.0.483, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CoreTweet.1.0.0.483\lib\net45\CoreTweet.dll</HintPath>
     </Reference>
-    <Reference Include="Gu.Wpf.Media, Version=0.5.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Gu.Wpf.Media.0.5.0.2\lib\net45\Gu.Wpf.Media.dll</HintPath>
+    <Reference Include="Gu.Wpf.Media, Version=0.5.1.0, Culture=neutral, PublicKeyToken=aa972a35ea817caf, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gu.Wpf.Media.0.5.1\lib\net45\Gu.Wpf.Media.dll</HintPath>
     </Reference>
     <Reference Include="Lighty, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Lighty.0.3.0.0\lib\net45\Lighty.dll</HintPath>
